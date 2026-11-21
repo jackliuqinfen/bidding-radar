@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "qualification-check-and-status",
+    "kind": "interactive",
+    "goal": "在公告详情内为一家公司创建资格核对结论，创建人无法确认自己的结论，且没有符合结论时不能置为已选公司参投",
+    "requirementIndexes": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "acceptanceCriteriaIndexes": [
+      4,
+      5,
+      6,
+      9,
+      10
+    ],
+    "steps": [
+      "Sign in",
+      "Open 机会池",
+      "Open the announcement 城东片区道路改造工程",
+      "Press 新增核对",
+      "Save the check item with conclusion 待核 and basis 公告未写明业绩要求"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "机会池"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "城东片区道路改造工程"
+      },
+      {
+        "afterStep": 3,
+        "expectText": "核对项类别"
+      },
+      {
+        "afterStep": 4,
+        "assert": "The screen shows \"待核\""
+      }
+    ]
+  }
+}

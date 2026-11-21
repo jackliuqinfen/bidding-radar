@@ -8,6 +8,7 @@ import Attachments "attachments";
 import Records "records";
 import Audit "audit";
 import Notifications "notifications";
+import Opportunities "opportunities";
 
 module {
   public type Counters = {
@@ -17,6 +18,9 @@ module {
     var nextHistoryId : Nat;
     var nextAuditId : Nat;
     var nextNotificationId : Nat;
+    var nextOpportunityId : Nat;
+    var nextCheckItemId : Nat;
+    var nextStatusChangeId : Nat;
     var sampleSeeded : Bool;
   };
 
@@ -32,6 +36,9 @@ module {
     history : List.List<Records.ChangeEntry>;
     auditLog : List.List<Audit.AuditEntry>;
     notifications : Map.Map<Common.NotificationId, Notifications.Notification>;
+    opportunities : Map.Map<Common.OpportunityId, Opportunities.Opportunity>;
+    checkItems : Map.Map<Common.CheckItemId, Opportunities.CheckItem>;
+    statusChanges : List.List<Opportunities.StatusChange>;
     counters : Counters;
   };
 };

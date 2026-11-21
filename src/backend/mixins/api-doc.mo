@@ -34,6 +34,15 @@ mixin () {
     "## 错误\n\n" #
     "所有业务方法返回 `Result<T, ApiError>`。`ApiError` 变体：`#notSignedIn`、`#notRegistered`、`#pendingApproval`、`#accountRejected`、`#adminOnly`、`#permissionDenied`、`#notFound`、`#conflict`、`#selfVerificationDenied`、`#invalidState`、`#invalidInput`。\n\n" #
     "## 数据查询（OQL）\n\n" #
-    "`schema()` 与 `execute(qJson)` 由 OQL 提供，仅控制器可读；人员身份证号列对 OQL 隐藏。\n";
+    "`schema()` 与 `execute(qJson)` 由 OQL 提供，仅控制器可读；人员身份证号列对 OQL 隐藏。\n\n" #
+    "## 机会池（招标公告与资格核对）\n\n" #
+    "- 公告录入：`createOpportunityDraft` 保存草稿（仅创建人可见可改），`updateOpportunityDraft` 修改草稿，`submitOpportunity` 提交进入机会池（状态 待核对）。公告正文与来源链接必填，缺失时返回 `#invalidInput` 并说明缺项。\n" #
+    "- 公告状态：待核对、已选公司参投、不参与、已截止。`changeOpportunityStatus` 必须填写原因并记录状态变更（时间、操作人、原因），可通过 `getOpportunityStatusHistory` 读取；置为 已选公司参投 时至少需一条 符合 的核对结论，否则返回 `#invalidState`。草稿不能变更状态，须先提交。\n" #
+    "- 列表：`listOpportunities` 按项目类型、状态、报名截止时间区间、关键词（项目名称/招标人）筛选，可按报名截止时间或录入时间排序；草稿仅创建人可见。列表项含剩余天数与已核对公司数。\n" #
+    "- 资格核对：`createCheckItem` / `updateCheckItem` 需该公司 编辑 权限；结论为 符合/不符合/待核，依据说明必填，可引用公告条款片段与公司档案（记录引用时的档案状态）。引用 待核/待补 档案的核对项不能为 符合；公告未写明或资料缺失默认 待核。\n" #
+    "- 确认：`confirmCheckItem` 需该公司 核实 权限，创建人不得确认自己提交的结论（返回 `#selfVerificationDenied`）；确认后写入审计并通知公告录入人。已确认的核对项不可再改。\n" #
+    "- 可见性：公告与核对结论对所有已批准成员可见；公司佐证信息（`evidence`）仅在具备该公司 查看 权限时返回，否则为空数组。\n" #
+    "- 待办：`getOpportunityTodo` 返回临近报名截止（7 天内）的公告与待确认的核对结论。\n" #
+    "- 示例数据：`seedSampleData` 同时生成 3 条【虚构】招标公告（已截止、待核对、已选公司参投各一条）与若干【虚构】资格核对结论，覆盖 符合/不符合/待核 并引用已有示例公司档案；保持幂等。\n";
   };
 };

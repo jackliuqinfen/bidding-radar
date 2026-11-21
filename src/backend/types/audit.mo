@@ -26,6 +26,12 @@ module {
     #viewDashboard;
     #viewAuditLog;
     #seedSampleData;
+    #createOpportunity;
+    #submitOpportunity;
+    #changeOpportunityStatus;
+    #createCheckItem;
+    #editCheckItem;
+    #confirmCheckItem;
   };
 
   /// #success = 成功, #denied = 拒绝

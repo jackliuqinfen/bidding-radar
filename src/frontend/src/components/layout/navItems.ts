@@ -4,6 +4,7 @@ import {
   Home,
   LayoutDashboard,
   ScrollText,
+  Target,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -20,6 +21,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { to: "/", label: "首页", icon: Home, mobile: true },
   { to: "/dashboard", label: "缺口看板", icon: LayoutDashboard, mobile: true },
+  { to: "/opportunities", label: "机会池", icon: Target, mobile: true },
   { to: "/companies", label: "公司档案", icon: Building2, mobile: true },
   { to: "/personnel", label: "人员档案", icon: UsersRound, mobile: true },
   {

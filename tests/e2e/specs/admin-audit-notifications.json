@@ -4,16 +4,8 @@
     "id": "admin-audit-notifications",
     "kind": "interactive",
     "goal": "The admin opens user permissions, the audit log and the notification center",
-    "requirementIndexes": [
-      30,
-      31,
-      32,
-      33,
-      34
-    ],
-    "acceptanceCriteriaIndexes": [
-      13
-    ],
+    "requirementIndexes": [],
+    "acceptanceCriteriaIndexes": [],
     "steps": [
       "Sign in",
       "Open the 用户与权限 page from the navigation",

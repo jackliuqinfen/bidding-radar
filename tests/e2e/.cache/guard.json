@@ -10,7 +10,7 @@
         "e7f78ab207dff451",
         "f2f1c5f497f13ea3"
       ],
-      "last": "passed"
+      "last": "failed"
     },
     "admin-sample-data-and-dashboard": {
       "plan": [
@@ -37,19 +37,98 @@
         "e6325abdbe4e3aee",
         "e6c5b6f4f007ac34"
       ],
-      "last": "passed"
+      "last": "failed"
+    },
+    "announcement-entry-validation": {
+      "plan": [
+        "113362076725100d",
+        "3ae72a8bfeb2316c",
+        "56a6677dbb60a162",
+        "5d59195e7bf1d3a0",
+        "60deddfb4b7bd8db",
+        "656eeecfac8d4c70",
+        "73f92565ad9bf586",
+        "db8da806a26a42e3"
+      ],
+      "last": "failed"
+    },
+    "existing-archive-still-works": {
+      "plan": [
+        "35959be4208d6e9e",
+        "56a6677dbb60a162"
+      ],
+      "last": "failed"
+    },
+    "qualification-check-and-status": {
+      "plan": [
+        "1982a5d22d9ead8d",
+        "48a725d0585f49dc",
+        "4e3ff0acaf9cdb94",
+        "5e39871c6fc18d04",
+        "6552655ff8dad153",
+        "7a3111a5ab071d9e",
+        "7ee8d6e292c1367e",
+        "7fc9dbe10dc3a466",
+        "8495a649e57bbecf",
+        "a17a796281c856c9",
+        "aaf497243f72adbe",
+        "ba369557e5f14743",
+        "c0a109e7b9471f4b",
+        "dec76647fb9ef881",
+        "e16e1c24e74758a4",
+        "ed1f09574eb5d95c"
+      ],
+      "last": "failed"
+    },
+    "second-member-company-isolation": {
+      "plan": [
+        "30f68eaf78a8078c",
+        "35959be4208d6e9e",
+        "6f4e0aa5c5e2bcd9",
+        "7dd6dd053e524377",
+        "8db6e60bfa58f404",
+        "a2664fcc7b02e779"
+      ],
+      "last": "failed"
     },
     "second-user-pending": {
       "plan": [
         "8c9dee9a7ab60a5f",
         "d0fbbc59cd34c1e3"
       ],
-      "last": "passed"
+      "last": "failed"
+    },
+    "seed-and-browse-pool": {
+      "plan": [
+        "24e35b9b1a8b4ee0",
+        "2e0e9da73af31ec9",
+        "35959be4208d6e9e",
+        "4fef38d59b67c962",
+        "5246859b6ba356ba",
+        "5d59195e7bf1d3a0",
+        "6119a0dd832b9dc8",
+        "6fc43575ffe69dea",
+        "9e26e6d38f554183",
+        "b3f0afd7bd8266e6",
+        "b8f7f2e0f2e429aa",
+        "bdba90a2d19f628f",
+        "c463ed51a43a9d25",
+        "e8c6ad93cd81ca71",
+        "ea576d88f141b98b",
+        "ec3076239c6fd603",
+        "fa25c9e59f6446d0"
+      ],
+      "last": "failed"
     }
   },
   "order": [
     "admin-sample-data-and-dashboard",
     "second-user-pending",
-    "admin-audit-notifications"
+    "admin-audit-notifications",
+    "seed-and-browse-pool",
+    "announcement-entry-validation",
+    "qualification-check-and-status",
+    "second-member-company-isolation",
+    "existing-archive-still-works"
   ]
 }

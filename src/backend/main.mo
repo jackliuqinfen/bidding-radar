@@ -1,6 +1,6 @@
 import Map "mo:core/Map";
 import List "mo:core/List";
-import Nat "mo:core/Nat";
+import _Nat "mo:core/Nat";
 import Principal "mo:core/Principal";
 import AccessControl "mo:caffeineai-authorization/access-control";
 import MixinAuthorization "mo:caffeineai-authorization/MixinAuthorization";
@@ -9,12 +9,12 @@ import OQL "mo:caffeineai-oql";
 import Expose "mo:caffeineai-oql/Expose";
 import Entity "mo:caffeineai-oql/Entity";
 import MapEntity "mo:caffeineai-oql/MapEntity";
-import RecordValue "mo:caffeineai-oql/RecordValue";
-import NatValue "mo:caffeineai-oql/NatValue";
-import IntValue "mo:caffeineai-oql/IntValue";
-import TextValue "mo:caffeineai-oql/TextValue";
-import PrincipalValue "mo:caffeineai-oql/PrincipalValue";
-import BoolValue "mo:caffeineai-oql/BoolValue";
+import _RecordValue "mo:caffeineai-oql/RecordValue";
+import _NatValue "mo:caffeineai-oql/NatValue";
+import _IntValue "mo:caffeineai-oql/IntValue";
+import _TextValue "mo:caffeineai-oql/TextValue";
+import _PrincipalValue "mo:caffeineai-oql/PrincipalValue";
+import _BoolValue "mo:caffeineai-oql/BoolValue";
 import Common "types/common";
 import Accounts "types/accounts";
 import Companies "types/companies";
@@ -22,6 +22,7 @@ import Attachments "types/attachments";
 import Records "types/records";
 import Audit "types/audit";
 import Notifications "types/notifications";
+import Opportunities "types/opportunities";
 import State "types/state";
 import AccountsApi "mixins/accounts-api";
 import PermissionsApi "mixins/permissions-api";
@@ -31,6 +32,7 @@ import AttachmentsApi "mixins/attachments-api";
 import AuditApi "mixins/audit-api";
 import NotificationsApi "mixins/notifications-api";
 import DashboardApi "mixins/dashboard-api";
+import OpportunitiesApi "mixins/opportunities-api";
 import SampleApi "mixins/sample-api";
 import ApiDocMixin "mixins/api-doc";
 
@@ -47,6 +49,9 @@ actor {
   let history : List.List<Records.ChangeEntry>;
   let auditLog : List.List<Audit.AuditEntry>;
   let notifications : Map.Map<Common.NotificationId, Notifications.Notification>;
+  let opportunities : Map.Map<Common.OpportunityId, Opportunities.Opportunity>;
+  let checkItems : Map.Map<Common.CheckItemId, Opportunities.CheckItem>;
+  let statusChanges : List.List<Opportunities.StatusChange>;
   let counters : State.Counters;
 
   transient let state : State.State = {
@@ -59,6 +64,9 @@ actor {
     history;
     auditLog;
     notifications;
+    opportunities;
+    checkItems;
+    statusChanges;
     counters;
   };
 
@@ -141,6 +149,7 @@ actor {
           message = "";
           companyId = ?0;
           recordId = ?0;
+          opportunityId = ?0;
           createdAt = 0;
           read = false;
           dedupKey = ?"";
@@ -158,6 +167,47 @@ actor {
         })
         .controllerOnly()
         .build(),
+      opportunities.toEntityManual("opportunity", "Opportunity", "id")
+        .sample({
+          id = 0;
+          projectName = "";
+          tenderer = "";
+          projectType = #construction;
+          sourceName = "";
+          sourceUrl = "";
+          publishDate = 0;
+          registrationDeadline = 0;
+          bidOpenTime = 0;
+          budgetYuan = ?0;
+          body = "";
+          clauses = [];
+          status = #pendingReview;
+          draft = false;
+          createdBy = anyPrincipal;
+          createdAt = 0;
+          lastModifiedBy = anyPrincipal;
+          lastModifiedAt = 0;
+        })
+        .controllerOnly()
+        .build(),
+      checkItems.toEntityManual("checkItem", "CheckItem", "id")
+        .sample({
+          id = 0;
+          opportunityId = 0;
+          companyId = 0;
+          kind = #qualification;
+          clauseExcerpt = "";
+          conclusion = #pending;
+          basis = "";
+          evidence = [];
+          createdBy = anyPrincipal;
+          createdAt = 0;
+          lastModifiedBy = anyPrincipal;
+          lastModifiedAt = 0;
+          confirmation = null;
+        })
+        .controllerOnly()
+        .build(),
     ];
   });
 
@@ -169,6 +219,7 @@ actor {
   include AuditApi(state);
   include NotificationsApi(state);
   include DashboardApi(state);
+  include OpportunitiesApi(state);
   include SampleApi(state);
   include ApiDocMixin();
 };

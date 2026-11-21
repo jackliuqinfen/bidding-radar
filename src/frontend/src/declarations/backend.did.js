@@ -188,7 +188,7 @@ export const ApiError = IDL.Variant({
   'notRegistered' : IDL.Null,
   'accountRejected' : IDL.Null,
 });
-export const ApiResult_20 = IDL.Variant({
+export const ApiResult_26 = IDL.Variant({
   'ok' : AttachmentView,
   'err' : ApiError,
 });
@@ -212,7 +212,7 @@ export const AccountView = IDL.Record({
   'decidedAt' : IDL.Opt(Timestamp),
   'approvalLabel' : IDL.Text,
 });
-export const ApiResult_4 = IDL.Variant({
+export const ApiResult_6 = IDL.Variant({
   'ok' : AccountView,
   'err' : ApiError,
 });
@@ -220,6 +220,106 @@ export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
+});
+export const OpportunityId = IDL.Nat;
+export const OpportunityStatus = IDL.Variant({
+  'pendingReview' : IDL.Null,
+  'closed' : IDL.Null,
+  'selected' : IDL.Null,
+  'declined' : IDL.Null,
+});
+export const ClauseKind = IDL.Variant({
+  'deposit' : IDL.Null,
+  'personnel' : IDL.Null,
+  'performance' : IDL.Null,
+  'qualification' : IDL.Null,
+});
+export const Clause = IDL.Record({ 'kind' : ClauseKind, 'excerpt' : IDL.Text });
+export const OpportunityView = IDL.Record({
+  'id' : OpportunityId,
+  'status' : OpportunityStatus,
+  'projectName' : IDL.Text,
+  'tenderer' : IDL.Text,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : IDL.Text,
+  'createdAt' : Timestamp,
+  'createdBy' : IDL.Principal,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : IDL.Text,
+  'clauses' : IDL.Vec(Clause),
+  'sourceName' : IDL.Text,
+  'checkedCompanyCount' : IDL.Nat,
+  'budgetYuan' : IDL.Opt(IDL.Nat),
+  'projectTypeLabel' : IDL.Text,
+  'createdByName' : IDL.Text,
+  'lastModifiedAt' : Timestamp,
+  'lastModifiedBy' : IDL.Principal,
+  'registrationDeadline' : Timestamp,
+  'daysRemaining' : IDL.Nat,
+  'statusLabel' : IDL.Text,
+  'draft' : IDL.Bool,
+  'lastModifiedByName' : IDL.Text,
+});
+export const ApiResult_2 = IDL.Variant({
+  'ok' : OpportunityView,
+  'err' : ApiError,
+});
+export const CheckItemId = IDL.Nat;
+export const CheckItemKind = IDL.Variant({
+  'other' : IDL.Null,
+  'deposit' : IDL.Null,
+  'personnel' : IDL.Null,
+  'performance' : IDL.Null,
+  'capital' : IDL.Null,
+  'qualification' : IDL.Null,
+});
+export const CheckConclusion = IDL.Variant({
+  'conform' : IDL.Null,
+  'pending' : IDL.Null,
+  'nonConform' : IDL.Null,
+});
+export const EvidenceRef = IDL.Record({
+  'statusAtCitation' : RecordStatus,
+  'recordId' : RecordId,
+});
+export const ConfirmationView = IDL.Record({
+  'confirmedAt' : Timestamp,
+  'confirmerName' : IDL.Text,
+  'confirmer' : IDL.Principal,
+});
+export const CheckItemView = IDL.Record({
+  'id' : IDL.Nat,
+  'clauseExcerpt' : IDL.Text,
+  'kind' : CheckItemKind,
+  'createdAt' : Timestamp,
+  'createdBy' : IDL.Principal,
+  'conclusion' : CheckConclusion,
+  'opportunityId' : OpportunityId,
+  'kindLabel' : IDL.Text,
+  'evidence' : IDL.Vec(EvidenceRef),
+  'createdByName' : IDL.Text,
+  'companyName' : IDL.Text,
+  'basis' : IDL.Text,
+  'confirmation' : IDL.Opt(ConfirmationView),
+  'lastModifiedAt' : Timestamp,
+  'lastModifiedBy' : IDL.Principal,
+  'lastModifiedByName' : IDL.Text,
+  'conclusionLabel' : IDL.Text,
+  'companyId' : CompanyId,
+});
+export const ApiResult_4 = IDL.Variant({
+  'ok' : CheckItemView,
+  'err' : ApiError,
+});
+export const CheckItemInput = IDL.Record({
+  'clauseExcerpt' : IDL.Text,
+  'kind' : CheckItemKind,
+  'conclusion' : CheckConclusion,
+  'opportunityId' : OpportunityId,
+  'evidence' : IDL.Vec(EvidenceRef),
+  'basis' : IDL.Text,
+  'companyId' : CompanyId,
 });
 export const CompanyInput = IDL.Record({
   'creditCode' : IDL.Text,
@@ -239,9 +339,22 @@ export const CompanyView = IDL.Record({
   'registeredPlace' : IDL.Text,
   'maintainer' : IDL.Principal,
 });
-export const ApiResult_2 = IDL.Variant({
+export const ApiResult_3 = IDL.Variant({
   'ok' : CompanyView,
   'err' : ApiError,
+});
+export const OpportunityInput = IDL.Record({
+  'projectName' : IDL.Text,
+  'tenderer' : IDL.Text,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : IDL.Text,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : IDL.Text,
+  'clauses' : IDL.Vec(Clause),
+  'sourceName' : IDL.Text,
+  'budgetYuan' : IDL.Opt(IDL.Nat),
+  'registrationDeadline' : Timestamp,
 });
 export const RecordInput = IDL.Record({
   'data' : RecordData,
@@ -258,7 +371,7 @@ export const DownloadInfo = IDL.Record({
   'version' : IDL.Nat,
   'sensitive' : IDL.Bool,
 });
-export const ApiResult_19 = IDL.Variant({
+export const ApiResult_25 = IDL.Variant({
   'ok' : DownloadInfo,
   'err' : ApiError,
 });
@@ -300,7 +413,7 @@ export const CompanyDetail = IDL.Record({
   'counts' : GapCounts,
   'companyId' : CompanyId,
 });
-export const ApiResult_18 = IDL.Variant({
+export const ApiResult_24 = IDL.Variant({
   'ok' : CompanyDetail,
   'err' : ApiError,
 });
@@ -310,7 +423,7 @@ export const CompanyGapRow = IDL.Record({
   'counts' : GapCounts,
   'companyId' : CompanyId,
 });
-export const ApiResult_17 = IDL.Variant({
+export const ApiResult_23 = IDL.Variant({
   'ok' : IDL.Vec(CompanyGapRow),
   'err' : ApiError,
 });
@@ -322,7 +435,7 @@ export const HomeSummary = IDL.Record({
   'pendingAccounts' : IDL.Vec(AccountView),
   'toVerify' : IDL.Vec(RecordView),
 });
-export const ApiResult_16 = IDL.Variant({
+export const ApiResult_22 = IDL.Variant({
   'ok' : HomeSummary,
   'err' : ApiError,
 });
@@ -338,8 +451,44 @@ export const CompanyPermissionGrant = IDL.Record({
   'companyName' : IDL.Text,
   'companyId' : CompanyId,
 });
-export const ApiResult_15 = IDL.Variant({
+export const ApiResult_21 = IDL.Variant({
   'ok' : IDL.Vec(CompanyPermissionGrant),
+  'err' : ApiError,
+});
+export const StatusChangeView = IDL.Record({
+  'at' : Timestamp,
+  'id' : IDL.Nat,
+  'fromStatusLabel' : IDL.Text,
+  'toStatus' : OpportunityStatus,
+  'operator' : IDL.Principal,
+  'fromStatus' : OpportunityStatus,
+  'operatorName' : IDL.Text,
+  'toStatusLabel' : IDL.Text,
+  'reason' : IDL.Text,
+});
+export const ApiResult_20 = IDL.Variant({
+  'ok' : IDL.Vec(StatusChangeView),
+  'err' : ApiError,
+});
+export const OpportunityListItem = IDL.Record({
+  'id' : OpportunityId,
+  'status' : OpportunityStatus,
+  'projectName' : IDL.Text,
+  'tenderer' : IDL.Text,
+  'projectType' : ProjectType,
+  'checkedCompanyCount' : IDL.Nat,
+  'budgetYuan' : IDL.Opt(IDL.Nat),
+  'projectTypeLabel' : IDL.Text,
+  'registrationDeadline' : Timestamp,
+  'daysRemaining' : IDL.Nat,
+  'statusLabel' : IDL.Text,
+});
+export const OpportunityTodo = IDL.Record({
+  'pendingConfirmations' : IDL.Vec(CheckItemView),
+  'closingSoon' : IDL.Vec(OpportunityListItem),
+});
+export const ApiResult_19 = IDL.Variant({
+  'ok' : OpportunityTodo,
   'err' : ApiError,
 });
 export const HistoryId = IDL.Nat;
@@ -367,21 +516,21 @@ export const ChangeEntryView = IDL.Record({
   'editorName' : IDL.Text,
   'changes' : IDL.Vec(FieldChange),
 });
-export const ApiResult_14 = IDL.Variant({
+export const ApiResult_18 = IDL.Variant({
   'ok' : IDL.Vec(ChangeEntryView),
   'err' : ApiError,
 });
-export const ApiResult_13 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : ApiError });
+export const ApiResult_17 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : ApiError });
 export const UserPermissions = IDL.Record({
   'grants' : IDL.Vec(CompanyPermissionGrant),
   'displayName' : IDL.Text,
   'user' : IDL.Principal,
 });
-export const ApiResult_12 = IDL.Variant({
+export const ApiResult_16 = IDL.Variant({
   'ok' : UserPermissions,
   'err' : ApiError,
 });
-export const ApiResult_11 = IDL.Variant({
+export const ApiResult_15 = IDL.Variant({
   'ok' : IDL.Vec(AccountView),
   'err' : ApiError,
 });
@@ -396,24 +545,30 @@ export const AuditAction = IDL.Variant({
   'changeAccountRole' : IDL.Null,
   'createRecord' : IDL.Null,
   'rejectAccount' : IDL.Null,
+  'createCheckItem' : IDL.Null,
   'viewRecord' : IDL.Null,
+  'changeOpportunityStatus' : IDL.Null,
   'viewHistory' : IDL.Null,
   'viewAuditLog' : IDL.Null,
   'viewCompany' : IDL.Null,
   'createCompany' : IDL.Null,
+  'editCheckItem' : IDL.Null,
   'viewList' : IDL.Null,
+  'confirmCheckItem' : IDL.Null,
   'seedSampleData' : IDL.Null,
   'changePermissions' : IDL.Null,
   'uploadAttachment' : IDL.Null,
   'signIn' : IDL.Null,
   'editCompany' : IDL.Null,
   'resetToPending' : IDL.Null,
+  'submitOpportunity' : IDL.Null,
   'replaceAttachment' : IDL.Null,
   'editRecord' : IDL.Null,
   'register' : IDL.Null,
   'approveAsAdmin' : IDL.Null,
   'viewSensitive' : IDL.Null,
   'verifyRecord' : IDL.Null,
+  'createOpportunity' : IDL.Null,
 });
 export const AuditFilter = IDL.Record({
   'result' : IDL.Opt(AuditResult),
@@ -442,8 +597,12 @@ export const AuditPage = IDL.Record({
   'total' : IDL.Nat,
   'entries' : IDL.Vec(AuditEntryView),
 });
-export const ApiResult_10 = IDL.Variant({ 'ok' : AuditPage, 'err' : ApiError });
-export const ApiResult_9 = IDL.Variant({
+export const ApiResult_14 = IDL.Variant({ 'ok' : AuditPage, 'err' : ApiError });
+export const ApiResult_13 = IDL.Variant({
+  'ok' : IDL.Vec(CheckItemView),
+  'err' : ApiError,
+});
+export const ApiResult_12 = IDL.Variant({
   'ok' : IDL.Vec(CompanyView),
   'err' : ApiError,
 });
@@ -453,6 +612,7 @@ export const NotificationKind = IDL.Variant({
   'verified' : IDL.Null,
   'expired' : IDL.Null,
   'permissionChanged' : IDL.Null,
+  'checkItemConfirmed' : IDL.Null,
   'resetToPending' : IDL.Null,
   'accountApproved' : IDL.Null,
   'pendingUser' : IDL.Null,
@@ -463,20 +623,38 @@ export const NotificationView = IDL.Record({
   'kind' : NotificationKind,
   'createdAt' : Timestamp,
   'read' : IDL.Bool,
+  'opportunityId' : IDL.Opt(OpportunityId),
   'kindLabel' : IDL.Text,
   'message' : IDL.Text,
   'recordId' : IDL.Opt(RecordId),
   'companyId' : IDL.Opt(CompanyId),
 });
-export const ApiResult_8 = IDL.Variant({
+export const ApiResult_11 = IDL.Variant({
   'ok' : IDL.Vec(NotificationView),
   'err' : ApiError,
 });
-export const ApiResult_7 = IDL.Variant({
+export const SortField = IDL.Variant({
+  'createdAt' : IDL.Null,
+  'deadline' : IDL.Null,
+});
+export const OpportunityFilter = IDL.Record({
+  'status' : IDL.Opt(OpportunityStatus),
+  'descending' : IDL.Bool,
+  'projectType' : IDL.Opt(ProjectType),
+  'deadlineTo' : IDL.Opt(Timestamp),
+  'sortBy' : IDL.Opt(SortField),
+  'deadlineFrom' : IDL.Opt(Timestamp),
+  'search' : IDL.Opt(IDL.Text),
+});
+export const ApiResult_10 = IDL.Variant({
+  'ok' : IDL.Vec(OpportunityListItem),
+  'err' : ApiError,
+});
+export const ApiResult_9 = IDL.Variant({
   'ok' : IDL.Vec(RecordView),
   'err' : ApiError,
 });
-export const ApiResult_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : ApiError });
+export const ApiResult_8 = IDL.Variant({ 'ok' : IDL.Null, 'err' : ApiError });
 export const ReplaceAttachmentInput = IDL.Record({
   'blob' : ExternalBlob,
   'note' : IDL.Text,
@@ -486,17 +664,39 @@ export const ReplaceAttachmentInput = IDL.Record({
 });
 export const SampleReport = IDL.Record({
   'records' : IDL.Nat,
+  'opportunities' : IDL.Nat,
+  'checkItems' : IDL.Nat,
   'attachments' : IDL.Nat,
   'alreadySeeded' : IDL.Bool,
   'companies' : IDL.Nat,
 });
-export const ApiResult_5 = IDL.Variant({
+export const ApiResult_7 = IDL.Variant({
   'ok' : SampleReport,
   'err' : ApiError,
 });
-export const ApiResult_3 = IDL.Variant({
+export const ApiResult_5 = IDL.Variant({
   'ok' : CompanyPermissionGrant,
   'err' : ApiError,
+});
+export const CheckItemUpdate = IDL.Record({
+  'clauseExcerpt' : IDL.Text,
+  'kind' : CheckItemKind,
+  'conclusion' : CheckConclusion,
+  'evidence' : IDL.Vec(EvidenceRef),
+  'basis' : IDL.Text,
+});
+export const OpportunityUpdate = IDL.Record({
+  'projectName' : IDL.Text,
+  'tenderer' : IDL.Text,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : IDL.Text,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : IDL.Text,
+  'clauses' : IDL.Vec(Clause),
+  'sourceName' : IDL.Text,
+  'budgetYuan' : IDL.Opt(IDL.Nat),
+  'registrationDeadline' : Timestamp,
 });
 export const RecordUpdate = IDL.Record({
   'data' : RecordData,
@@ -535,50 +735,74 @@ export const idlService = IDL.Service({
   '_initialize_access_control' : IDL.Func([], [], []),
   '_internet_identity_sign_in_finish' : IDL.Func([], [Result__1], []),
   '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
-  'addAttachment' : IDL.Func([NewAttachmentInput], [ApiResult_20], []),
-  'approveAccount' : IDL.Func([IDL.Principal, AccountRole], [ApiResult_4], []),
+  'addAttachment' : IDL.Func([NewAttachmentInput], [ApiResult_26], []),
+  'approveAccount' : IDL.Func([IDL.Principal, AccountRole], [ApiResult_6], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'createCompany' : IDL.Func([CompanyInput], [ApiResult_2], []),
+  'changeOpportunityStatus' : IDL.Func(
+      [OpportunityId, OpportunityStatus, IDL.Text],
+      [ApiResult_2],
+      [],
+    ),
+  'confirmCheckItem' : IDL.Func([CheckItemId], [ApiResult_4], []),
+  'createCheckItem' : IDL.Func([CheckItemInput], [ApiResult_4], []),
+  'createCompany' : IDL.Func([CompanyInput], [ApiResult_3], []),
+  'createOpportunityDraft' : IDL.Func([OpportunityInput], [ApiResult_2], []),
   'createRecord' : IDL.Func([RecordInput], [ApiResult_1], []),
   'downloadAttachment' : IDL.Func(
       [AttachmentId, IDL.Opt(IDL.Nat)],
-      [ApiResult_19],
+      [ApiResult_25],
       [],
     ),
   'execute' : IDL.Func([IDL.Text], [Result], ['query']),
   'getApiDoc' : IDL.Func([], [IDL.Text], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getCompany' : IDL.Func([CompanyId], [ApiResult_2], []),
-  'getCompanyDetail' : IDL.Func([CompanyId, RecordFilter], [ApiResult_18], []),
-  'getGapDashboard' : IDL.Func([], [ApiResult_17], []),
-  'getHomeSummary' : IDL.Func([], [ApiResult_16], []),
+  'getCompany' : IDL.Func([CompanyId], [ApiResult_3], []),
+  'getCompanyDetail' : IDL.Func([CompanyId, RecordFilter], [ApiResult_24], []),
+  'getGapDashboard' : IDL.Func([], [ApiResult_23], []),
+  'getHomeSummary' : IDL.Func([], [ApiResult_22], []),
   'getMyAccount' : IDL.Func([], [IDL.Opt(AccountView)], ['query']),
-  'getMyPermissions' : IDL.Func([], [ApiResult_15], []),
+  'getMyPermissions' : IDL.Func([], [ApiResult_21], []),
+  'getOpportunity' : IDL.Func([OpportunityId], [ApiResult_2], []),
+  'getOpportunityStatusHistory' : IDL.Func([OpportunityId], [ApiResult_20], []),
+  'getOpportunityTodo' : IDL.Func([], [ApiResult_19], []),
   'getRecord' : IDL.Func([RecordId], [ApiResult_1], []),
-  'getRecordHistory' : IDL.Func([RecordId], [ApiResult_14], []),
-  'getUnreadCount' : IDL.Func([], [ApiResult_13], ['query']),
-  'getUserPermissions' : IDL.Func([IDL.Principal], [ApiResult_12], []),
+  'getRecordHistory' : IDL.Func([RecordId], [ApiResult_18], []),
+  'getUnreadCount' : IDL.Func([], [ApiResult_17], ['query']),
+  'getUserPermissions' : IDL.Func([IDL.Principal], [ApiResult_16], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-  'listAccounts' : IDL.Func([], [ApiResult_11], []),
-  'listAuditLog' : IDL.Func([AuditFilter], [ApiResult_10], []),
-  'listCompanies' : IDL.Func([], [ApiResult_9], []),
-  'listNotifications' : IDL.Func([], [ApiResult_8], ['query']),
-  'listRecords' : IDL.Func([RecordFilter], [ApiResult_7], []),
-  'markAllNotificationsRead' : IDL.Func([], [ApiResult_6], []),
-  'markNotificationRead' : IDL.Func([NotificationId], [ApiResult_6], []),
-  'registerAccount' : IDL.Func([IDL.Text], [ApiResult_4], []),
-  'rejectAccount' : IDL.Func([IDL.Principal], [ApiResult_4], []),
+  'listAccounts' : IDL.Func([], [ApiResult_15], []),
+  'listAuditLog' : IDL.Func([AuditFilter], [ApiResult_14], []),
+  'listCheckItems' : IDL.Func([OpportunityId], [ApiResult_13], []),
+  'listCompanies' : IDL.Func([], [ApiResult_12], []),
+  'listNotifications' : IDL.Func([], [ApiResult_11], ['query']),
+  'listOpportunities' : IDL.Func([OpportunityFilter], [ApiResult_10], []),
+  'listRecords' : IDL.Func([RecordFilter], [ApiResult_9], []),
+  'markAllNotificationsRead' : IDL.Func([], [ApiResult_8], []),
+  'markNotificationRead' : IDL.Func([NotificationId], [ApiResult_8], []),
+  'registerAccount' : IDL.Func([IDL.Text], [ApiResult_6], []),
+  'rejectAccount' : IDL.Func([IDL.Principal], [ApiResult_6], []),
   'replaceAttachment' : IDL.Func([ReplaceAttachmentInput], [ApiResult_1], []),
   'schema' : IDL.Func([], [IDL.Text], ['query']),
-  'seedSampleData' : IDL.Func([], [ApiResult_5], []),
-  'setAccountRole' : IDL.Func([IDL.Principal, AccountRole], [ApiResult_4], []),
+  'seedSampleData' : IDL.Func([], [ApiResult_7], []),
+  'setAccountRole' : IDL.Func([IDL.Principal, AccountRole], [ApiResult_6], []),
   'setUserCompanyPermissions' : IDL.Func(
       [IDL.Principal, CompanyId, PermissionSet],
-      [ApiResult_3],
+      [ApiResult_5],
       [],
     ),
   'signIn' : IDL.Func([], [IDL.Opt(AccountView)], []),
-  'updateCompany' : IDL.Func([CompanyId, CompanyInput], [ApiResult_2], []),
+  'submitOpportunity' : IDL.Func([OpportunityId], [ApiResult_2], []),
+  'updateCheckItem' : IDL.Func(
+      [CheckItemId, CheckItemUpdate],
+      [ApiResult_4],
+      [],
+    ),
+  'updateCompany' : IDL.Func([CompanyId, CompanyInput], [ApiResult_3], []),
+  'updateOpportunityDraft' : IDL.Func(
+      [OpportunityId, OpportunityUpdate],
+      [ApiResult_2],
+      [],
+    ),
   'updateRecord' : IDL.Func(
       [RecordId, IDL.Nat, RecordUpdate],
       [ApiResult_1],
@@ -771,7 +995,7 @@ export const idlFactory = ({ IDL }) => {
     'notRegistered' : IDL.Null,
     'accountRejected' : IDL.Null,
   });
-  const ApiResult_20 = IDL.Variant({ 'ok' : AttachmentView, 'err' : ApiError });
+  const ApiResult_26 = IDL.Variant({ 'ok' : AttachmentView, 'err' : ApiError });
   const AccountRole = IDL.Variant({ 'member' : IDL.Null, 'admin' : IDL.Null });
   const ApprovalState = IDL.Variant({
     'pending' : IDL.Null,
@@ -789,11 +1013,105 @@ export const idlFactory = ({ IDL }) => {
     'decidedAt' : IDL.Opt(Timestamp),
     'approvalLabel' : IDL.Text,
   });
-  const ApiResult_4 = IDL.Variant({ 'ok' : AccountView, 'err' : ApiError });
+  const ApiResult_6 = IDL.Variant({ 'ok' : AccountView, 'err' : ApiError });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
+  });
+  const OpportunityId = IDL.Nat;
+  const OpportunityStatus = IDL.Variant({
+    'pendingReview' : IDL.Null,
+    'closed' : IDL.Null,
+    'selected' : IDL.Null,
+    'declined' : IDL.Null,
+  });
+  const ClauseKind = IDL.Variant({
+    'deposit' : IDL.Null,
+    'personnel' : IDL.Null,
+    'performance' : IDL.Null,
+    'qualification' : IDL.Null,
+  });
+  const Clause = IDL.Record({ 'kind' : ClauseKind, 'excerpt' : IDL.Text });
+  const OpportunityView = IDL.Record({
+    'id' : OpportunityId,
+    'status' : OpportunityStatus,
+    'projectName' : IDL.Text,
+    'tenderer' : IDL.Text,
+    'projectType' : ProjectType,
+    'publishDate' : Timestamp,
+    'body' : IDL.Text,
+    'createdAt' : Timestamp,
+    'createdBy' : IDL.Principal,
+    'bidOpenTime' : Timestamp,
+    'sourceUrl' : IDL.Text,
+    'clauses' : IDL.Vec(Clause),
+    'sourceName' : IDL.Text,
+    'checkedCompanyCount' : IDL.Nat,
+    'budgetYuan' : IDL.Opt(IDL.Nat),
+    'projectTypeLabel' : IDL.Text,
+    'createdByName' : IDL.Text,
+    'lastModifiedAt' : Timestamp,
+    'lastModifiedBy' : IDL.Principal,
+    'registrationDeadline' : Timestamp,
+    'daysRemaining' : IDL.Nat,
+    'statusLabel' : IDL.Text,
+    'draft' : IDL.Bool,
+    'lastModifiedByName' : IDL.Text,
+  });
+  const ApiResult_2 = IDL.Variant({ 'ok' : OpportunityView, 'err' : ApiError });
+  const CheckItemId = IDL.Nat;
+  const CheckItemKind = IDL.Variant({
+    'other' : IDL.Null,
+    'deposit' : IDL.Null,
+    'personnel' : IDL.Null,
+    'performance' : IDL.Null,
+    'capital' : IDL.Null,
+    'qualification' : IDL.Null,
+  });
+  const CheckConclusion = IDL.Variant({
+    'conform' : IDL.Null,
+    'pending' : IDL.Null,
+    'nonConform' : IDL.Null,
+  });
+  const EvidenceRef = IDL.Record({
+    'statusAtCitation' : RecordStatus,
+    'recordId' : RecordId,
+  });
+  const ConfirmationView = IDL.Record({
+    'confirmedAt' : Timestamp,
+    'confirmerName' : IDL.Text,
+    'confirmer' : IDL.Principal,
+  });
+  const CheckItemView = IDL.Record({
+    'id' : IDL.Nat,
+    'clauseExcerpt' : IDL.Text,
+    'kind' : CheckItemKind,
+    'createdAt' : Timestamp,
+    'createdBy' : IDL.Principal,
+    'conclusion' : CheckConclusion,
+    'opportunityId' : OpportunityId,
+    'kindLabel' : IDL.Text,
+    'evidence' : IDL.Vec(EvidenceRef),
+    'createdByName' : IDL.Text,
+    'companyName' : IDL.Text,
+    'basis' : IDL.Text,
+    'confirmation' : IDL.Opt(ConfirmationView),
+    'lastModifiedAt' : Timestamp,
+    'lastModifiedBy' : IDL.Principal,
+    'lastModifiedByName' : IDL.Text,
+    'conclusionLabel' : IDL.Text,
+    'companyId' : CompanyId,
+  });
+  const ApiResult_4 = IDL.Variant({ 'ok' : CheckItemView, 'err' : ApiError });
+  const CheckItemInput = IDL.Record({
+    'clauseExcerpt' : IDL.Text,
+    'kind' : CheckItemKind,
+    'conclusion' : CheckConclusion,
+    'opportunityId' : OpportunityId,
+    'evidence' : IDL.Vec(EvidenceRef),
+    'basis' : IDL.Text,
+    'companyId' : CompanyId,
   });
   const CompanyInput = IDL.Record({
     'creditCode' : IDL.Text,
@@ -813,7 +1131,20 @@ export const idlFactory = ({ IDL }) => {
     'registeredPlace' : IDL.Text,
     'maintainer' : IDL.Principal,
   });
-  const ApiResult_2 = IDL.Variant({ 'ok' : CompanyView, 'err' : ApiError });
+  const ApiResult_3 = IDL.Variant({ 'ok' : CompanyView, 'err' : ApiError });
+  const OpportunityInput = IDL.Record({
+    'projectName' : IDL.Text,
+    'tenderer' : IDL.Text,
+    'projectType' : ProjectType,
+    'publishDate' : Timestamp,
+    'body' : IDL.Text,
+    'bidOpenTime' : Timestamp,
+    'sourceUrl' : IDL.Text,
+    'clauses' : IDL.Vec(Clause),
+    'sourceName' : IDL.Text,
+    'budgetYuan' : IDL.Opt(IDL.Nat),
+    'registrationDeadline' : Timestamp,
+  });
   const RecordInput = IDL.Record({
     'data' : RecordData,
     'maintainer' : IDL.Principal,
@@ -829,7 +1160,7 @@ export const idlFactory = ({ IDL }) => {
     'version' : IDL.Nat,
     'sensitive' : IDL.Bool,
   });
-  const ApiResult_19 = IDL.Variant({ 'ok' : DownloadInfo, 'err' : ApiError });
+  const ApiResult_25 = IDL.Variant({ 'ok' : DownloadInfo, 'err' : ApiError });
   const Value = IDL.Variant({
     'int' : IDL.Int,
     'nat' : IDL.Nat,
@@ -868,14 +1199,14 @@ export const idlFactory = ({ IDL }) => {
     'counts' : GapCounts,
     'companyId' : CompanyId,
   });
-  const ApiResult_18 = IDL.Variant({ 'ok' : CompanyDetail, 'err' : ApiError });
+  const ApiResult_24 = IDL.Variant({ 'ok' : CompanyDetail, 'err' : ApiError });
   const CompanyGapRow = IDL.Record({
     'canView' : IDL.Bool,
     'companyName' : IDL.Text,
     'counts' : GapCounts,
     'companyId' : CompanyId,
   });
-  const ApiResult_17 = IDL.Variant({
+  const ApiResult_23 = IDL.Variant({
     'ok' : IDL.Vec(CompanyGapRow),
     'err' : ApiError,
   });
@@ -887,7 +1218,7 @@ export const idlFactory = ({ IDL }) => {
     'pendingAccounts' : IDL.Vec(AccountView),
     'toVerify' : IDL.Vec(RecordView),
   });
-  const ApiResult_16 = IDL.Variant({ 'ok' : HomeSummary, 'err' : ApiError });
+  const ApiResult_22 = IDL.Variant({ 'ok' : HomeSummary, 'err' : ApiError });
   const PermissionSet = IDL.Record({
     'edit' : IDL.Bool,
     'view' : IDL.Bool,
@@ -900,8 +1231,44 @@ export const idlFactory = ({ IDL }) => {
     'companyName' : IDL.Text,
     'companyId' : CompanyId,
   });
-  const ApiResult_15 = IDL.Variant({
+  const ApiResult_21 = IDL.Variant({
     'ok' : IDL.Vec(CompanyPermissionGrant),
+    'err' : ApiError,
+  });
+  const StatusChangeView = IDL.Record({
+    'at' : Timestamp,
+    'id' : IDL.Nat,
+    'fromStatusLabel' : IDL.Text,
+    'toStatus' : OpportunityStatus,
+    'operator' : IDL.Principal,
+    'fromStatus' : OpportunityStatus,
+    'operatorName' : IDL.Text,
+    'toStatusLabel' : IDL.Text,
+    'reason' : IDL.Text,
+  });
+  const ApiResult_20 = IDL.Variant({
+    'ok' : IDL.Vec(StatusChangeView),
+    'err' : ApiError,
+  });
+  const OpportunityListItem = IDL.Record({
+    'id' : OpportunityId,
+    'status' : OpportunityStatus,
+    'projectName' : IDL.Text,
+    'tenderer' : IDL.Text,
+    'projectType' : ProjectType,
+    'checkedCompanyCount' : IDL.Nat,
+    'budgetYuan' : IDL.Opt(IDL.Nat),
+    'projectTypeLabel' : IDL.Text,
+    'registrationDeadline' : Timestamp,
+    'daysRemaining' : IDL.Nat,
+    'statusLabel' : IDL.Text,
+  });
+  const OpportunityTodo = IDL.Record({
+    'pendingConfirmations' : IDL.Vec(CheckItemView),
+    'closingSoon' : IDL.Vec(OpportunityListItem),
+  });
+  const ApiResult_19 = IDL.Variant({
+    'ok' : OpportunityTodo,
     'err' : ApiError,
   });
   const HistoryId = IDL.Nat;
@@ -929,21 +1296,21 @@ export const idlFactory = ({ IDL }) => {
     'editorName' : IDL.Text,
     'changes' : IDL.Vec(FieldChange),
   });
-  const ApiResult_14 = IDL.Variant({
+  const ApiResult_18 = IDL.Variant({
     'ok' : IDL.Vec(ChangeEntryView),
     'err' : ApiError,
   });
-  const ApiResult_13 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : ApiError });
+  const ApiResult_17 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : ApiError });
   const UserPermissions = IDL.Record({
     'grants' : IDL.Vec(CompanyPermissionGrant),
     'displayName' : IDL.Text,
     'user' : IDL.Principal,
   });
-  const ApiResult_12 = IDL.Variant({
+  const ApiResult_16 = IDL.Variant({
     'ok' : UserPermissions,
     'err' : ApiError,
   });
-  const ApiResult_11 = IDL.Variant({
+  const ApiResult_15 = IDL.Variant({
     'ok' : IDL.Vec(AccountView),
     'err' : ApiError,
   });
@@ -958,24 +1325,30 @@ export const idlFactory = ({ IDL }) => {
     'changeAccountRole' : IDL.Null,
     'createRecord' : IDL.Null,
     'rejectAccount' : IDL.Null,
+    'createCheckItem' : IDL.Null,
     'viewRecord' : IDL.Null,
+    'changeOpportunityStatus' : IDL.Null,
     'viewHistory' : IDL.Null,
     'viewAuditLog' : IDL.Null,
     'viewCompany' : IDL.Null,
     'createCompany' : IDL.Null,
+    'editCheckItem' : IDL.Null,
     'viewList' : IDL.Null,
+    'confirmCheckItem' : IDL.Null,
     'seedSampleData' : IDL.Null,
     'changePermissions' : IDL.Null,
     'uploadAttachment' : IDL.Null,
     'signIn' : IDL.Null,
     'editCompany' : IDL.Null,
     'resetToPending' : IDL.Null,
+    'submitOpportunity' : IDL.Null,
     'replaceAttachment' : IDL.Null,
     'editRecord' : IDL.Null,
     'register' : IDL.Null,
     'approveAsAdmin' : IDL.Null,
     'viewSensitive' : IDL.Null,
     'verifyRecord' : IDL.Null,
+    'createOpportunity' : IDL.Null,
   });
   const AuditFilter = IDL.Record({
     'result' : IDL.Opt(AuditResult),
@@ -1004,8 +1377,12 @@ export const idlFactory = ({ IDL }) => {
     'total' : IDL.Nat,
     'entries' : IDL.Vec(AuditEntryView),
   });
-  const ApiResult_10 = IDL.Variant({ 'ok' : AuditPage, 'err' : ApiError });
-  const ApiResult_9 = IDL.Variant({
+  const ApiResult_14 = IDL.Variant({ 'ok' : AuditPage, 'err' : ApiError });
+  const ApiResult_13 = IDL.Variant({
+    'ok' : IDL.Vec(CheckItemView),
+    'err' : ApiError,
+  });
+  const ApiResult_12 = IDL.Variant({
     'ok' : IDL.Vec(CompanyView),
     'err' : ApiError,
   });
@@ -1015,6 +1392,7 @@ export const idlFactory = ({ IDL }) => {
     'verified' : IDL.Null,
     'expired' : IDL.Null,
     'permissionChanged' : IDL.Null,
+    'checkItemConfirmed' : IDL.Null,
     'resetToPending' : IDL.Null,
     'accountApproved' : IDL.Null,
     'pendingUser' : IDL.Null,
@@ -1025,20 +1403,38 @@ export const idlFactory = ({ IDL }) => {
     'kind' : NotificationKind,
     'createdAt' : Timestamp,
     'read' : IDL.Bool,
+    'opportunityId' : IDL.Opt(OpportunityId),
     'kindLabel' : IDL.Text,
     'message' : IDL.Text,
     'recordId' : IDL.Opt(RecordId),
     'companyId' : IDL.Opt(CompanyId),
   });
-  const ApiResult_8 = IDL.Variant({
+  const ApiResult_11 = IDL.Variant({
     'ok' : IDL.Vec(NotificationView),
     'err' : ApiError,
   });
-  const ApiResult_7 = IDL.Variant({
+  const SortField = IDL.Variant({
+    'createdAt' : IDL.Null,
+    'deadline' : IDL.Null,
+  });
+  const OpportunityFilter = IDL.Record({
+    'status' : IDL.Opt(OpportunityStatus),
+    'descending' : IDL.Bool,
+    'projectType' : IDL.Opt(ProjectType),
+    'deadlineTo' : IDL.Opt(Timestamp),
+    'sortBy' : IDL.Opt(SortField),
+    'deadlineFrom' : IDL.Opt(Timestamp),
+    'search' : IDL.Opt(IDL.Text),
+  });
+  const ApiResult_10 = IDL.Variant({
+    'ok' : IDL.Vec(OpportunityListItem),
+    'err' : ApiError,
+  });
+  const ApiResult_9 = IDL.Variant({
     'ok' : IDL.Vec(RecordView),
     'err' : ApiError,
   });
-  const ApiResult_6 = IDL.Variant({ 'ok' : IDL.Null, 'err' : ApiError });
+  const ApiResult_8 = IDL.Variant({ 'ok' : IDL.Null, 'err' : ApiError });
   const ReplaceAttachmentInput = IDL.Record({
     'blob' : ExternalBlob,
     'note' : IDL.Text,
@@ -1048,14 +1444,36 @@ export const idlFactory = ({ IDL }) => {
   });
   const SampleReport = IDL.Record({
     'records' : IDL.Nat,
+    'opportunities' : IDL.Nat,
+    'checkItems' : IDL.Nat,
     'attachments' : IDL.Nat,
     'alreadySeeded' : IDL.Bool,
     'companies' : IDL.Nat,
   });
-  const ApiResult_5 = IDL.Variant({ 'ok' : SampleReport, 'err' : ApiError });
-  const ApiResult_3 = IDL.Variant({
+  const ApiResult_7 = IDL.Variant({ 'ok' : SampleReport, 'err' : ApiError });
+  const ApiResult_5 = IDL.Variant({
     'ok' : CompanyPermissionGrant,
     'err' : ApiError,
+  });
+  const CheckItemUpdate = IDL.Record({
+    'clauseExcerpt' : IDL.Text,
+    'kind' : CheckItemKind,
+    'conclusion' : CheckConclusion,
+    'evidence' : IDL.Vec(EvidenceRef),
+    'basis' : IDL.Text,
+  });
+  const OpportunityUpdate = IDL.Record({
+    'projectName' : IDL.Text,
+    'tenderer' : IDL.Text,
+    'projectType' : ProjectType,
+    'publishDate' : Timestamp,
+    'body' : IDL.Text,
+    'bidOpenTime' : Timestamp,
+    'sourceUrl' : IDL.Text,
+    'clauses' : IDL.Vec(Clause),
+    'sourceName' : IDL.Text,
+    'budgetYuan' : IDL.Opt(IDL.Nat),
+    'registrationDeadline' : Timestamp,
   });
   const RecordUpdate = IDL.Record({
     'data' : RecordData,
@@ -1094,62 +1512,90 @@ export const idlFactory = ({ IDL }) => {
     '_initialize_access_control' : IDL.Func([], [], []),
     '_internet_identity_sign_in_finish' : IDL.Func([], [Result__1], []),
     '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
-    'addAttachment' : IDL.Func([NewAttachmentInput], [ApiResult_20], []),
+    'addAttachment' : IDL.Func([NewAttachmentInput], [ApiResult_26], []),
     'approveAccount' : IDL.Func(
         [IDL.Principal, AccountRole],
-        [ApiResult_4],
+        [ApiResult_6],
         [],
       ),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'createCompany' : IDL.Func([CompanyInput], [ApiResult_2], []),
+    'changeOpportunityStatus' : IDL.Func(
+        [OpportunityId, OpportunityStatus, IDL.Text],
+        [ApiResult_2],
+        [],
+      ),
+    'confirmCheckItem' : IDL.Func([CheckItemId], [ApiResult_4], []),
+    'createCheckItem' : IDL.Func([CheckItemInput], [ApiResult_4], []),
+    'createCompany' : IDL.Func([CompanyInput], [ApiResult_3], []),
+    'createOpportunityDraft' : IDL.Func([OpportunityInput], [ApiResult_2], []),
     'createRecord' : IDL.Func([RecordInput], [ApiResult_1], []),
     'downloadAttachment' : IDL.Func(
         [AttachmentId, IDL.Opt(IDL.Nat)],
-        [ApiResult_19],
+        [ApiResult_25],
         [],
       ),
     'execute' : IDL.Func([IDL.Text], [Result], ['query']),
     'getApiDoc' : IDL.Func([], [IDL.Text], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getCompany' : IDL.Func([CompanyId], [ApiResult_2], []),
+    'getCompany' : IDL.Func([CompanyId], [ApiResult_3], []),
     'getCompanyDetail' : IDL.Func(
         [CompanyId, RecordFilter],
-        [ApiResult_18],
+        [ApiResult_24],
         [],
       ),
-    'getGapDashboard' : IDL.Func([], [ApiResult_17], []),
-    'getHomeSummary' : IDL.Func([], [ApiResult_16], []),
+    'getGapDashboard' : IDL.Func([], [ApiResult_23], []),
+    'getHomeSummary' : IDL.Func([], [ApiResult_22], []),
     'getMyAccount' : IDL.Func([], [IDL.Opt(AccountView)], ['query']),
-    'getMyPermissions' : IDL.Func([], [ApiResult_15], []),
+    'getMyPermissions' : IDL.Func([], [ApiResult_21], []),
+    'getOpportunity' : IDL.Func([OpportunityId], [ApiResult_2], []),
+    'getOpportunityStatusHistory' : IDL.Func(
+        [OpportunityId],
+        [ApiResult_20],
+        [],
+      ),
+    'getOpportunityTodo' : IDL.Func([], [ApiResult_19], []),
     'getRecord' : IDL.Func([RecordId], [ApiResult_1], []),
-    'getRecordHistory' : IDL.Func([RecordId], [ApiResult_14], []),
-    'getUnreadCount' : IDL.Func([], [ApiResult_13], ['query']),
-    'getUserPermissions' : IDL.Func([IDL.Principal], [ApiResult_12], []),
+    'getRecordHistory' : IDL.Func([RecordId], [ApiResult_18], []),
+    'getUnreadCount' : IDL.Func([], [ApiResult_17], ['query']),
+    'getUserPermissions' : IDL.Func([IDL.Principal], [ApiResult_16], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-    'listAccounts' : IDL.Func([], [ApiResult_11], []),
-    'listAuditLog' : IDL.Func([AuditFilter], [ApiResult_10], []),
-    'listCompanies' : IDL.Func([], [ApiResult_9], []),
-    'listNotifications' : IDL.Func([], [ApiResult_8], ['query']),
-    'listRecords' : IDL.Func([RecordFilter], [ApiResult_7], []),
-    'markAllNotificationsRead' : IDL.Func([], [ApiResult_6], []),
-    'markNotificationRead' : IDL.Func([NotificationId], [ApiResult_6], []),
-    'registerAccount' : IDL.Func([IDL.Text], [ApiResult_4], []),
-    'rejectAccount' : IDL.Func([IDL.Principal], [ApiResult_4], []),
+    'listAccounts' : IDL.Func([], [ApiResult_15], []),
+    'listAuditLog' : IDL.Func([AuditFilter], [ApiResult_14], []),
+    'listCheckItems' : IDL.Func([OpportunityId], [ApiResult_13], []),
+    'listCompanies' : IDL.Func([], [ApiResult_12], []),
+    'listNotifications' : IDL.Func([], [ApiResult_11], ['query']),
+    'listOpportunities' : IDL.Func([OpportunityFilter], [ApiResult_10], []),
+    'listRecords' : IDL.Func([RecordFilter], [ApiResult_9], []),
+    'markAllNotificationsRead' : IDL.Func([], [ApiResult_8], []),
+    'markNotificationRead' : IDL.Func([NotificationId], [ApiResult_8], []),
+    'registerAccount' : IDL.Func([IDL.Text], [ApiResult_6], []),
+    'rejectAccount' : IDL.Func([IDL.Principal], [ApiResult_6], []),
     'replaceAttachment' : IDL.Func([ReplaceAttachmentInput], [ApiResult_1], []),
     'schema' : IDL.Func([], [IDL.Text], ['query']),
-    'seedSampleData' : IDL.Func([], [ApiResult_5], []),
+    'seedSampleData' : IDL.Func([], [ApiResult_7], []),
     'setAccountRole' : IDL.Func(
         [IDL.Principal, AccountRole],
-        [ApiResult_4],
+        [ApiResult_6],
         [],
       ),
     'setUserCompanyPermissions' : IDL.Func(
         [IDL.Principal, CompanyId, PermissionSet],
-        [ApiResult_3],
+        [ApiResult_5],
         [],
       ),
     'signIn' : IDL.Func([], [IDL.Opt(AccountView)], []),
-    'updateCompany' : IDL.Func([CompanyId, CompanyInput], [ApiResult_2], []),
+    'submitOpportunity' : IDL.Func([OpportunityId], [ApiResult_2], []),
+    'updateCheckItem' : IDL.Func(
+        [CheckItemId, CheckItemUpdate],
+        [ApiResult_4],
+        [],
+      ),
+    'updateCompany' : IDL.Func([CompanyId, CompanyInput], [ApiResult_3], []),
+    'updateOpportunityDraft' : IDL.Func(
+        [OpportunityId, OpportunityUpdate],
+        [ApiResult_2],
+        [],
+      ),
     'updateRecord' : IDL.Func(
         [RecordId, IDL.Nat, RecordUpdate],
         [ApiResult_1],

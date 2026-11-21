@@ -35,13 +35,39 @@
         "8ff68a8481b9374c071bc2d96a120c987b51298a9bd80df0a038a85492eda6f6.json"
       ],
       "ranAfter": [],
-      "ranWith": [],
-      "passedTree": "5c418c08d3188ded34993c18d30f1b2f094c6c0d",
-      "visitedPaths": [
-        "/",
-        "/companies",
-        "/dashboard"
-      ]
+      "ranWith": []
+    },
+    "announcement-entry-validation": {
+      "flowId": "announcement-entry-validation",
+      "specDigest": "c42355757ef46405f51564d660530fc6a7f041e573b6bd4c6909c36ab9258fec",
+      "status": "record-failed",
+      "recordedAt": "2026-11-21T04:09:02.527Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": []
+    },
+    "existing-archive-still-works": {
+      "flowId": "existing-archive-still-works",
+      "specDigest": "fcdaad1428f0519eb607f00b7be5c80017449178dbb5cb0dfedde838c9a33efa",
+      "status": "record-failed",
+      "recordedAt": "2026-11-21T04:09:02.528Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": []
+    },
+    "qualification-check-and-status": {
+      "flowId": "qualification-check-and-status",
+      "specDigest": "7689d4462b51955dc2dbf1fb65aa7a1fc17423e920462a8429cf8d363162e8e8",
+      "status": "record-failed",
+      "recordedAt": "2026-11-21T04:09:02.527Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": []
+    },
+    "second-member-company-isolation": {
+      "flowId": "second-member-company-isolation",
+      "specDigest": "8f6712ed44cac03123d8aafe44bd509535dbc00b3387300ae1d1d75af8f86baf",
+      "status": "record-failed",
+      "recordedAt": "2026-11-21T04:09:02.527Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": []
     },
     "second-user-pending": {
       "flowId": "second-user-pending",
@@ -61,6 +87,14 @@
         "admin-audit-notifications",
         "admin-sample-data-and-dashboard"
       ]
+    },
+    "seed-and-browse-pool": {
+      "flowId": "seed-and-browse-pool",
+      "specDigest": "71036dfdc193199c5e06c2d20fc64515c0db2e5c5188f59cd12c8f05c0e7a3ef",
+      "status": "record-failed",
+      "recordedAt": "2026-11-21T04:09:02.526Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": []
     }
   }
 }

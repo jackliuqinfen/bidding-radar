@@ -22,8 +22,32 @@ type Account__509884088 =
     principal : Principal;
     registeredAt : Int
   };
+type Account__766381141 =
+  {
+    approval : ApprovalState__536984434;
+    decidedAt : ?Int;
+    decidedBy : ?Principal;
+    displayName : Text;
+    principal : Principal;
+    registeredAt : Int
+  };
 type ApprovalState__322262387 = {#approved; #pending; #rejected};
+type ApprovalState__536984434 = {#approved; #pending; #rejected};
 type ApprovalState__693649776 = {#approved; #pending; #rejected};
+type ArchiveRecord__410359098 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    createdBy : Principal;
+    data : RecordData__235974878;
+    id : Nat;
+    lastModifiedAt : Int;
+    lastModifiedBy : Principal;
+    maintainer : Principal;
+    remarks : Text;
+    verification : ?{verifiedAt : Int; verifier : Principal};
+    version : Nat
+  };
 type ArchiveRecord__488729706 =
   {
     companyId : CompanyId__78853864;
@@ -73,6 +97,16 @@ type AttachmentVersion__532876429 =
     uploader : Principal;
     version : Nat
   };
+type AttachmentVersion__886220246 =
+  {
+    blob : ExternalBlob__220559234;
+    fileName : Text;
+    isSample : Bool;
+    note : Text;
+    uploadedAt : Int;
+    uploader : Principal;
+    version : Nat
+  };
 type Attachment__652805751 =
   {
     companyId : Nat;
@@ -90,6 +124,15 @@ type Attachment__831262237 =
     recordId : RecordId__634517021;
     sensitive : Bool;
     versions : [AttachmentVersion__532876429]
+  };
+type Attachment__975988777 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    id : Nat;
+    recordId : Nat;
+    sensitive : Bool;
+    versions : [AttachmentVersion__886220246]
   };
 type AuditAction__1023686566 =
   {
@@ -123,10 +166,15 @@ type AuditAction__595905663 =
     #approveAccount;
     #approveAsAdmin;
     #changeAccountRole;
+    #changeOpportunityStatus;
     #changePermissions;
+    #confirmCheckItem;
+    #createCheckItem;
     #createCompany;
+    #createOpportunity;
     #createRecord;
     #downloadAttachment;
+    #editCheckItem;
     #editCompany;
     #editRecord;
     #register;
@@ -135,6 +183,40 @@ type AuditAction__595905663 =
     #resetToPending;
     #seedSampleData;
     #signIn;
+    #submitOpportunity;
+    #uploadAttachment;
+    #verifyRecord;
+    #viewAuditLog;
+    #viewCompany;
+    #viewDashboard;
+    #viewHistory;
+    #viewList;
+    #viewRecord;
+    #viewSensitive
+  };
+type AuditAction__644559825 =
+  {
+    #approveAccount;
+    #approveAsAdmin;
+    #changeAccountRole;
+    #changeOpportunityStatus;
+    #changePermissions;
+    #confirmCheckItem;
+    #createCheckItem;
+    #createCompany;
+    #createOpportunity;
+    #createRecord;
+    #downloadAttachment;
+    #editCheckItem;
+    #editCompany;
+    #editRecord;
+    #register;
+    #rejectAccount;
+    #replaceAttachment;
+    #resetToPending;
+    #seedSampleData;
+    #signIn;
+    #submitOpportunity;
     #uploadAttachment;
     #verifyRecord;
     #viewAuditLog;
@@ -154,6 +236,17 @@ type AuditEntry__60967837 =
     id : AuditId__344307203;
     operator : Principal;
     result : AuditResult__58434283;
+    target : Text
+  };
+type AuditEntry__839517175 =
+  {
+    action : AuditAction__644559825;
+    at : Int;
+    companyId : ?Nat;
+    denialReason : ?Text;
+    id : Nat;
+    operator : Principal;
+    result : {#denied; #success};
     target : Text
   };
 type AuditEntry__938417449 =
@@ -187,6 +280,15 @@ type ChangeAction__555073091 =
     #update;
     #verify
   };
+type ChangeAction__869841493 =
+  {
+    #attachmentAdded;
+    #attachmentReplaced;
+    #create;
+    #resetToPending;
+    #update;
+    #verify
+  };
 type ChangeEntry__590166194 =
   {
     action : ChangeAction__505138649;
@@ -196,6 +298,17 @@ type ChangeEntry__590166194 =
     editor : Principal;
     id : HistoryId__837803635;
     recordId : RecordId__634517021;
+    resultingVersion : Nat
+  };
+type ChangeEntry__727830307 =
+  {
+    action : ChangeAction__869841493;
+    at : Int;
+    changes : [{after : Text; before : Text; field : Text}];
+    companyId : Nat;
+    editor : Principal;
+    id : Nat;
+    recordId : Nat;
     resultingVersion : Nat
   };
 type ChangeEntry__867844235 =
@@ -209,6 +322,51 @@ type ChangeEntry__867844235 =
     recordId : Nat;
     resultingVersion : Nat
   };
+type CheckConclusion__311357333 = {#conform; #nonConform; #pending};
+type CheckConclusion__59603227 = {#conform; #nonConform; #pending};
+type CheckItemId__636792248 = Nat;
+type CheckItemKind__1065946749 =
+  {#capital; #deposit; #other; #performance; #personnel; #qualification};
+type CheckItemKind__361621672 =
+  {#capital; #deposit; #other; #performance; #personnel; #qualification};
+type CheckItem__350656111 =
+  {
+    basis : Text;
+    clauseExcerpt : Text;
+    companyId : Nat;
+    conclusion : CheckConclusion__59603227;
+    confirmation : ?Confirmation__1053671203;
+    createdAt : Int;
+    createdBy : Principal;
+    evidence : [EvidenceRef__556961286];
+    id : Nat;
+    kind : CheckItemKind__361621672;
+    lastModifiedAt : Int;
+    lastModifiedBy : Principal;
+    opportunityId : Nat
+  };
+type CheckItem__37992944 =
+  {
+    basis : Text;
+    clauseExcerpt : Text;
+    companyId : CompanyId__78853864;
+    conclusion : CheckConclusion__311357333;
+    confirmation : ?Confirmation__57387628;
+    createdAt : Timestamp__301639476;
+    createdBy : Principal;
+    evidence : [EvidenceRef__260923238];
+    id : Nat;
+    kind : CheckItemKind__1065946749;
+    lastModifiedAt : Timestamp__301639476;
+    lastModifiedBy : Principal;
+    opportunityId : OpportunityId__1013478634
+  };
+type ClauseKind__273003501 =
+  {#deposit; #performance; #personnel; #qualification};
+type ClauseKind__862193473 =
+  {#deposit; #performance; #personnel; #qualification};
+type Clause__431148314 = {excerpt : Text; kind : ClauseKind__862193473};
+type Clause__682562077 = {excerpt : Text; kind : ClauseKind__273003501};
 type CompanyId__78853864 = Nat;
 type CompanyTrackData__259161532 =
   {
@@ -217,6 +375,19 @@ type CompanyTrackData__259161532 =
     owner : Text;
     projectName : Text;
     projectType : ?ProjectType__641202575
+  };
+type Company__33294761 =
+  {
+    contact : Text;
+    createdAt : Int;
+    createdBy : Principal;
+    creditCode : Text;
+    id : Nat;
+    maintainer : Principal;
+    name : Text;
+    registeredPlace : Text;
+    updatedAt : Int;
+    updatedBy : Principal
   };
 type Company__458145639 =
   {
@@ -244,6 +415,9 @@ type Company__89447538 =
     updatedAt : Timestamp__301639476;
     updatedBy : Principal
   };
+type Confirmation__1053671203 = {confirmedAt : Int; confirmer : Principal};
+type Confirmation__57387628 =
+  {confirmedAt : Timestamp__301639476; confirmer : Principal};
 type Counters__138551672 =
   {
     var nextAttachmentId : Nat;
@@ -254,8 +428,28 @@ type Counters__138551672 =
     var nextRecordId : Nat;
     var sampleSeeded : Bool
   };
+type Counters__671750897 =
+  {
+    var nextAttachmentId : Nat;
+    var nextAuditId : Nat;
+    var nextCheckItemId : Nat;
+    var nextCompanyId : Nat;
+    var nextHistoryId : Nat;
+    var nextNotificationId : Nat;
+    var nextOpportunityId : Nat;
+    var nextRecordId : Nat;
+    var nextStatusChangeId : Nat;
+    var sampleSeeded : Bool
+  };
 type Data__1061330525<K, V> =
   {var count : Nat__565224867; kvs : [var ?(K, V)]};
+type EvidenceRef__260923238 =
+  {
+    recordId : RecordId__634517021;
+    statusAtCitation : RecordStatus__1057278547
+  };
+type EvidenceRef__556961286 =
+  {recordId : Nat; statusAtCitation : RecordStatus__1046262987};
 type ExternalBlob__220559234 = Blob;
 type FieldChange__399925595 = {after : Text; before : Text; field : Text};
 type HistoryId__837803635 = Nat;
@@ -298,13 +492,43 @@ type NewActor__769816496 =
       Map__175655829<Principal, Map__175655829<Nat, PermissionSet__93711593>>;
     records : Map__175655829<Nat, ArchiveRecord__829907480>
   };
+type NewActor__821137126 =
+  {
+    accessControlState : AccessControlState__201339279;
+    accounts : Map__175655829<Principal, Account__766381141>;
+    attachments : Map__175655829<Nat, Attachment__975988777>;
+    auditLog : List__837846721<AuditEntry__839517175>;
+    checkItems : Map__175655829<Nat, CheckItem__350656111>;
+    companies : Map__175655829<Nat, Company__33294761>;
+    counters : Counters__671750897;
+    history : List__837846721<ChangeEntry__727830307>;
+    notifications : Map__175655829<Nat, Notification__304920456>;
+    opportunities : Map__175655829<Nat, Opportunity__822309967>;
+    permissions :
+      Map__175655829<Principal, Map__175655829<Nat, PermissionSet__623200208>>;
+    records : Map__175655829<Nat, ArchiveRecord__410359098>;
+    statusChanges : List__837846721<StatusChange__436039421>
+  };
 type Node__1010487028<K, V> =
   {#internal : Internal__1060388275<K, V>; #leaf : Leaf__8515789<K, V>};
 type NotificationId__307495059 = Nat;
+type NotificationKind__1053736042 =
+  {
+    #accountApproved;
+    #accountRejected;
+    #checkItemConfirmed;
+    #expired;
+    #nearExpiry;
+    #pendingUser;
+    #permissionChanged;
+    #resetToPending;
+    #verified
+  };
 type NotificationKind__631533211 =
   {
     #accountApproved;
     #accountRejected;
+    #checkItemConfirmed;
     #expired;
     #nearExpiry;
     #pendingUser;
@@ -331,9 +555,23 @@ type Notification__264708741 =
     id : NotificationId__307495059;
     kind : NotificationKind__631533211;
     message : Text;
+    opportunityId : ?OpportunityId__1013478634;
     read : Bool;
     recipient : Principal;
     recordId : ?RecordId__634517021
+  };
+type Notification__304920456 =
+  {
+    companyId : ?Nat;
+    createdAt : Int;
+    dedupKey : ?Text;
+    id : Nat;
+    kind : NotificationKind__1053736042;
+    message : Text;
+    opportunityId : ?Nat;
+    read : Bool;
+    recipient : Principal;
+    recordId : ?Nat
   };
 type Notification__561474068 =
   {
@@ -347,8 +585,259 @@ type Notification__561474068 =
     recipient : Principal;
     recordId : ?Nat
   };
+type OldAccount__717420069 =
+  {
+    approval : OldApprovalState__78001086;
+    decidedAt : ?Int;
+    decidedBy : ?Principal;
+    displayName : Text;
+    principal : Principal;
+    registeredAt : Int
+  };
+type OldActor__216947015 =
+  {
+    accessControlState : AccessControlState__201339279;
+    accounts : Map__175655829<Principal, OldAccount__717420069>;
+    attachments : Map__175655829<Nat, OldAttachment__1066627793>;
+    auditLog : List__837846721<OldAuditEntry__784333495>;
+    companies : Map__175655829<Nat, OldCompany__846790998>;
+    counters : OldCounters__950937440;
+    history : List__837846721<OldChangeEntry__136176543>;
+    notifications : Map__175655829<Nat, OldNotification__2876477>;
+    permissions :
+      Map__175655829<Principal,
+                      Map__175655829<Nat, OldPermissionSet__150885962>>;
+    records : Map__175655829<Nat, OldArchiveRecord__277129217>
+  };
 type OldActor__512397517 = {};
+type OldApprovalState__78001086 = {#approved; #pending; #rejected};
+type OldArchiveRecord__277129217 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    createdBy : Principal;
+    data : OldRecordData__738169318;
+    id : Nat;
+    lastModifiedAt : Int;
+    lastModifiedBy : Principal;
+    maintainer : Principal;
+    remarks : Text;
+    verification : ?{verifiedAt : Int; verifier : Principal};
+    version : Nat
+  };
+type OldAttachmentVersion__838937202 =
+  {
+    blob : ExternalBlob__220559234;
+    fileName : Text;
+    isSample : Bool;
+    note : Text;
+    uploadedAt : Int;
+    uploader : Principal;
+    version : Nat
+  };
+type OldAttachment__1066627793 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    id : Nat;
+    recordId : Nat;
+    sensitive : Bool;
+    versions : [OldAttachmentVersion__838937202]
+  };
+type OldAuditAction__989806665 =
+  {
+    #approveAccount;
+    #approveAsAdmin;
+    #changeAccountRole;
+    #changePermissions;
+    #createCompany;
+    #createRecord;
+    #downloadAttachment;
+    #editCompany;
+    #editRecord;
+    #register;
+    #rejectAccount;
+    #replaceAttachment;
+    #resetToPending;
+    #seedSampleData;
+    #signIn;
+    #uploadAttachment;
+    #verifyRecord;
+    #viewAuditLog;
+    #viewCompany;
+    #viewDashboard;
+    #viewHistory;
+    #viewList;
+    #viewRecord;
+    #viewSensitive
+  };
+type OldAuditEntry__784333495 =
+  {
+    action : OldAuditAction__989806665;
+    at : Int;
+    companyId : ?Nat;
+    denialReason : ?Text;
+    id : Nat;
+    operator : Principal;
+    result : {#denied; #success};
+    target : Text
+  };
+type OldChangeAction__1033344201 =
+  {
+    #attachmentAdded;
+    #attachmentReplaced;
+    #create;
+    #resetToPending;
+    #update;
+    #verify
+  };
+type OldChangeEntry__136176543 =
+  {
+    action : OldChangeAction__1033344201;
+    at : Int;
+    changes : [{after : Text; before : Text; field : Text}];
+    companyId : Nat;
+    editor : Principal;
+    id : Nat;
+    recordId : Nat;
+    resultingVersion : Nat
+  };
+type OldCompany__846790998 =
+  {
+    contact : Text;
+    createdAt : Int;
+    createdBy : Principal;
+    creditCode : Text;
+    id : Nat;
+    maintainer : Principal;
+    name : Text;
+    registeredPlace : Text;
+    updatedAt : Int;
+    updatedBy : Principal
+  };
+type OldCounters__950937440 =
+  {
+    var nextAttachmentId : Nat;
+    var nextAuditId : Nat;
+    var nextCompanyId : Nat;
+    var nextHistoryId : Nat;
+    var nextNotificationId : Nat;
+    var nextRecordId : Nat;
+    var sampleSeeded : Bool
+  };
+type OldNotificationKind__634509409 =
+  {
+    #accountApproved;
+    #accountRejected;
+    #expired;
+    #nearExpiry;
+    #pendingUser;
+    #permissionChanged;
+    #resetToPending;
+    #verified
+  };
+type OldNotification__2876477 =
+  {
+    companyId : ?Nat;
+    createdAt : Int;
+    dedupKey : ?Text;
+    id : Nat;
+    kind : OldNotificationKind__634509409;
+    message : Text;
+    read : Bool;
+    recipient : Principal;
+    recordId : ?Nat
+  };
+type OldPermissionSet__150885962 =
+  {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
+type OldProjectType__864024416 = {#construction; #goodsEquipment; #service};
+type OldRecordData__738169318 =
+  {
+    #companyTrack :
+      {
+        completionDate : ?Int;
+        contractAmountFen : ?Nat;
+        owner : Text;
+        projectName : Text;
+        projectType : ?OldProjectType__864024416
+      };
+    #license :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        name : Text;
+        number : Text;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #person : {idNumber : Text; name : Text; phone : Text; position : Text};
+    #personCert :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        number : Text;
+        personId : Nat;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #personTrack :
+      {
+        completionDate : ?Int;
+        personId : Nat;
+        projectName : Text;
+        role : Text
+      }
+  };
+type OpportunityId__1013478634 = Nat;
+type OpportunityStatus__282851735 =
+  {#closed; #declined; #pendingReview; #selected};
+type OpportunityStatus__679276785 =
+  {#closed; #declined; #pendingReview; #selected};
+type Opportunity__273793721 =
+  {
+    bidOpenTime : Timestamp__301639476;
+    body : Text;
+    budgetYuan : ?Nat;
+    clauses : [Clause__431148314];
+    createdAt : Timestamp__301639476;
+    createdBy : Principal;
+    draft : Bool;
+    id : OpportunityId__1013478634;
+    lastModifiedAt : Timestamp__301639476;
+    lastModifiedBy : Principal;
+    projectName : Text;
+    projectType : ProjectType__894830872;
+    publishDate : Timestamp__301639476;
+    registrationDeadline : Timestamp__301639476;
+    sourceName : Text;
+    sourceUrl : Text;
+    status : OpportunityStatus__679276785;
+    tenderer : Text
+  };
+type Opportunity__822309967 =
+  {
+    bidOpenTime : Int;
+    body : Text;
+    budgetYuan : ?Nat;
+    clauses : [Clause__682562077];
+    createdAt : Int;
+    createdBy : Principal;
+    draft : Bool;
+    id : Nat;
+    lastModifiedAt : Int;
+    lastModifiedBy : Principal;
+    projectName : Text;
+    projectType : ProjectType__707643820;
+    publishDate : Int;
+    registrationDeadline : Int;
+    sourceName : Text;
+    sourceUrl : Text;
+    status : OpportunityStatus__282851735;
+    tenderer : Text
+  };
 type PermissionSet__528301251 =
+  {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
+type PermissionSet__623200208 =
   {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
 type PermissionSet__93711593 =
   {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
@@ -372,6 +861,45 @@ type PersonTrackData__199920517 =
   };
 type ProjectType__384943185 = {#construction; #goodsEquipment; #service};
 type ProjectType__641202575 = {#construction; #goodsEquipment; #service};
+type ProjectType__707643820 = {#construction; #goodsEquipment; #service};
+type ProjectType__894830872 = ProjectType__641202575;
+type RecordData__235974878 =
+  {
+    #companyTrack :
+      {
+        completionDate : ?Int;
+        contractAmountFen : ?Nat;
+        owner : Text;
+        projectName : Text;
+        projectType : ?ProjectType__707643820
+      };
+    #license :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        name : Text;
+        number : Text;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #person : {idNumber : Text; name : Text; phone : Text; position : Text};
+    #personCert :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        number : Text;
+        personId : Nat;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #personTrack :
+      {
+        completionDate : ?Int;
+        personId : Nat;
+        projectName : Text;
+        role : Text
+      }
+  };
 type RecordData__275589159 =
   {
     #companyTrack : CompanyTrackData__259161532;
@@ -418,12 +946,35 @@ type RecordData__572047402 =
       }
   };
 type RecordId__634517021 = Nat;
+type RecordStatus__1046262987 = {#missing; #pendingReview; #verified};
+type RecordStatus__1057278547 = {#missing; #pendingReview; #verified};
+type StatusChange__436039421 =
+  {
+    at : Int;
+    fromStatus : OpportunityStatus__282851735;
+    id : Nat;
+    operator : Principal;
+    opportunityId : Nat;
+    reason : Text;
+    toStatus : OpportunityStatus__282851735
+  };
+type StatusChange__491520379 =
+  {
+    at : Timestamp__301639476;
+    fromStatus : OpportunityStatus__679276785;
+    id : Nat;
+    operator : Principal;
+    opportunityId : OpportunityId__1013478634;
+    reason : Text;
+    toStatus : OpportunityStatus__679276785
+  };
 type Timestamp__301639476 = Int;
 type UserRole__91647283 = {#admin; #guest; #user};
 type Verification__1025185870 =
   {verifiedAt : Timestamp__301639476; verifier : Principal};
 {
-  "00000000_000000" : OldActor__512397517 -> NewActor__769816496
+  "00000000_000000" : OldActor__512397517 -> NewActor__769816496;
+  "20261121_000000" : (old : OldActor__216947015) -> NewActor__821137126
 }
 actor  {
   stable accessControlState :
@@ -448,6 +999,11 @@ actor  {
       var blocks : [var [var ?AuditEntry__60967837]];
       var elementIndex : Nat__565224867
     };
+  stable checkItems :
+    {
+      var root : Node__1010487028<CheckItemId__636792248, CheckItem__37992944>;
+      var size : Nat__565224867
+    };
   stable companies :
     {
       var root : Node__1010487028<CompanyId__78853864, Company__89447538>;
@@ -457,10 +1013,13 @@ actor  {
     {
       var nextAttachmentId : Nat;
       var nextAuditId : Nat;
+      var nextCheckItemId : Nat;
       var nextCompanyId : Nat;
       var nextHistoryId : Nat;
       var nextNotificationId : Nat;
+      var nextOpportunityId : Nat;
       var nextRecordId : Nat;
+      var nextStatusChangeId : Nat;
       var sampleSeeded : Bool
     };
   stable history :
@@ -473,6 +1032,12 @@ actor  {
     {
       var root :
         Node__1010487028<NotificationId__307495059, Notification__264708741>;
+      var size : Nat__565224867
+    };
+  stable opportunities :
+    {
+      var root :
+        Node__1010487028<OpportunityId__1013478634, Opportunity__273793721>;
       var size : Nat__565224867
     };
   stable permissions :
@@ -488,5 +1053,11 @@ actor  {
       var root :
         Node__1010487028<RecordId__634517021, ArchiveRecord__488729706>;
       var size : Nat__565224867
+    };
+  stable statusChanges :
+    {
+      var blockIndex : Nat__565224867;
+      var blocks : [var [var ?StatusChange__491520379]];
+      var elementIndex : Nat__565224867
     }
 };

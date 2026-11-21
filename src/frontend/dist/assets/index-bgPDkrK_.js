@@ -33247,7 +33247,7 @@ var ApiError = Variant({
 	"notRegistered": Null,
 	"accountRejected": Null
 });
-var ApiResult_20 = Variant({
+var ApiResult_26 = Variant({
 	"ok": AttachmentView,
 	"err": ApiError
 });
@@ -33271,7 +33271,7 @@ var AccountView = Record({
 	"decidedAt": Opt(Timestamp),
 	"approvalLabel": Text
 });
-var ApiResult_4 = Variant({
+var ApiResult_6 = Variant({
 	"ok": AccountView,
 	"err": ApiError
 });
@@ -33279,6 +33279,107 @@ var UserRole = Variant({
 	"admin": Null,
 	"user": Null,
 	"guest": Null
+});
+var OpportunityId = Nat;
+var OpportunityStatus$1 = Variant({
+	"pendingReview": Null,
+	"closed": Null,
+	"selected": Null,
+	"declined": Null
+});
+var Clause = Record({
+	"kind": Variant({
+		"deposit": Null,
+		"personnel": Null,
+		"performance": Null,
+		"qualification": Null
+	}),
+	"excerpt": Text
+});
+var ApiResult_2 = Variant({
+	"ok": Record({
+		"id": OpportunityId,
+		"status": OpportunityStatus$1,
+		"projectName": Text,
+		"tenderer": Text,
+		"projectType": ProjectType$1,
+		"publishDate": Timestamp,
+		"body": Text,
+		"createdAt": Timestamp,
+		"createdBy": Principal,
+		"bidOpenTime": Timestamp,
+		"sourceUrl": Text,
+		"clauses": Vec(Clause),
+		"sourceName": Text,
+		"checkedCompanyCount": Nat,
+		"budgetYuan": Opt(Nat),
+		"projectTypeLabel": Text,
+		"createdByName": Text,
+		"lastModifiedAt": Timestamp,
+		"lastModifiedBy": Principal,
+		"registrationDeadline": Timestamp,
+		"daysRemaining": Nat,
+		"statusLabel": Text,
+		"draft": Bool,
+		"lastModifiedByName": Text
+	}),
+	"err": ApiError
+});
+var CheckItemId = Nat;
+var CheckItemKind$1 = Variant({
+	"other": Null,
+	"deposit": Null,
+	"personnel": Null,
+	"performance": Null,
+	"capital": Null,
+	"qualification": Null
+});
+var CheckConclusion$1 = Variant({
+	"conform": Null,
+	"pending": Null,
+	"nonConform": Null
+});
+var EvidenceRef = Record({
+	"statusAtCitation": RecordStatus$1,
+	"recordId": RecordId
+});
+var ConfirmationView = Record({
+	"confirmedAt": Timestamp,
+	"confirmerName": Text,
+	"confirmer": Principal
+});
+var CheckItemView = Record({
+	"id": Nat,
+	"clauseExcerpt": Text,
+	"kind": CheckItemKind$1,
+	"createdAt": Timestamp,
+	"createdBy": Principal,
+	"conclusion": CheckConclusion$1,
+	"opportunityId": OpportunityId,
+	"kindLabel": Text,
+	"evidence": Vec(EvidenceRef),
+	"createdByName": Text,
+	"companyName": Text,
+	"basis": Text,
+	"confirmation": Opt(ConfirmationView),
+	"lastModifiedAt": Timestamp,
+	"lastModifiedBy": Principal,
+	"lastModifiedByName": Text,
+	"conclusionLabel": Text,
+	"companyId": CompanyId
+});
+var ApiResult_4 = Variant({
+	"ok": CheckItemView,
+	"err": ApiError
+});
+var CheckItemInput = Record({
+	"clauseExcerpt": Text,
+	"kind": CheckItemKind$1,
+	"conclusion": CheckConclusion$1,
+	"opportunityId": OpportunityId,
+	"evidence": Vec(EvidenceRef),
+	"basis": Text,
+	"companyId": CompanyId
 });
 var CompanyInput = Record({
 	"creditCode": Text,
@@ -33298,9 +33399,22 @@ var CompanyView = Record({
 	"registeredPlace": Text,
 	"maintainer": Principal
 });
-var ApiResult_2 = Variant({
+var ApiResult_3 = Variant({
 	"ok": CompanyView,
 	"err": ApiError
+});
+var OpportunityInput = Record({
+	"projectName": Text,
+	"tenderer": Text,
+	"projectType": ProjectType$1,
+	"publishDate": Timestamp,
+	"body": Text,
+	"bidOpenTime": Timestamp,
+	"sourceUrl": Text,
+	"clauses": Vec(Clause),
+	"sourceName": Text,
+	"budgetYuan": Opt(Nat),
+	"registrationDeadline": Timestamp
 });
 var RecordInput = Record({
 	"data": RecordData,
@@ -33312,7 +33426,7 @@ var ApiResult_1 = Variant({
 	"ok": RecordView,
 	"err": ApiError
 });
-var ApiResult_19 = Variant({
+var ApiResult_25 = Variant({
 	"ok": Record({
 		"blob": ExternalBlob,
 		"fileName": Text,
@@ -33354,7 +33468,7 @@ var GapCounts = Record({
 	"expired": Nat,
 	"missing": Nat
 });
-var ApiResult_18 = Variant({
+var ApiResult_24 = Variant({
 	"ok": Record({
 		"records": Vec(RecordView),
 		"canView": Bool,
@@ -33371,11 +33485,11 @@ var CompanyGapRow = Record({
 	"counts": GapCounts,
 	"companyId": CompanyId
 });
-var ApiResult_17 = Variant({
+var ApiResult_23 = Variant({
 	"ok": Vec(CompanyGapRow),
 	"err": ApiError
 });
-var ApiResult_16 = Variant({
+var ApiResult_22 = Variant({
 	"ok": Record({
 		"unreadNotifications": Nat,
 		"myAttention": Vec(RecordView),
@@ -33398,11 +33512,45 @@ var CompanyPermissionGrant = Record({
 	"companyName": Text,
 	"companyId": CompanyId
 });
-var ApiResult_15 = Variant({
+var ApiResult_21 = Variant({
 	"ok": Vec(CompanyPermissionGrant),
 	"err": ApiError
 });
-var ApiResult_14 = Variant({
+var ApiResult_20 = Variant({
+	"ok": Vec(Record({
+		"at": Timestamp,
+		"id": Nat,
+		"fromStatusLabel": Text,
+		"toStatus": OpportunityStatus$1,
+		"operator": Principal,
+		"fromStatus": OpportunityStatus$1,
+		"operatorName": Text,
+		"toStatusLabel": Text,
+		"reason": Text
+	})),
+	"err": ApiError
+});
+var OpportunityListItem = Record({
+	"id": OpportunityId,
+	"status": OpportunityStatus$1,
+	"projectName": Text,
+	"tenderer": Text,
+	"projectType": ProjectType$1,
+	"checkedCompanyCount": Nat,
+	"budgetYuan": Opt(Nat),
+	"projectTypeLabel": Text,
+	"registrationDeadline": Timestamp,
+	"daysRemaining": Nat,
+	"statusLabel": Text
+});
+var ApiResult_19 = Variant({
+	"ok": Record({
+		"pendingConfirmations": Vec(CheckItemView),
+		"closingSoon": Vec(OpportunityListItem)
+	}),
+	"err": ApiError
+});
+var ApiResult_18 = Variant({
 	"ok": Vec(Record({
 		"at": Timestamp,
 		"id": Nat,
@@ -33427,11 +33575,11 @@ var ApiResult_14 = Variant({
 	})),
 	"err": ApiError
 });
-var ApiResult_13 = Variant({
+var ApiResult_17 = Variant({
 	"ok": Nat,
 	"err": ApiError
 });
-var ApiResult_12 = Variant({
+var ApiResult_16 = Variant({
 	"ok": Record({
 		"grants": Vec(CompanyPermissionGrant),
 		"displayName": Text,
@@ -33439,7 +33587,7 @@ var ApiResult_12 = Variant({
 	}),
 	"err": ApiError
 });
-var ApiResult_11 = Variant({
+var ApiResult_15 = Variant({
 	"ok": Vec(AccountView),
 	"err": ApiError
 });
@@ -33454,24 +33602,30 @@ var AuditAction$1 = Variant({
 	"changeAccountRole": Null,
 	"createRecord": Null,
 	"rejectAccount": Null,
+	"createCheckItem": Null,
 	"viewRecord": Null,
+	"changeOpportunityStatus": Null,
 	"viewHistory": Null,
 	"viewAuditLog": Null,
 	"viewCompany": Null,
 	"createCompany": Null,
+	"editCheckItem": Null,
 	"viewList": Null,
+	"confirmCheckItem": Null,
 	"seedSampleData": Null,
 	"changePermissions": Null,
 	"uploadAttachment": Null,
 	"signIn": Null,
 	"editCompany": Null,
 	"resetToPending": Null,
+	"submitOpportunity": Null,
 	"replaceAttachment": Null,
 	"editRecord": Null,
 	"register": Null,
 	"approveAsAdmin": Null,
 	"viewSensitive": Null,
-	"verifyRecord": Null
+	"verifyRecord": Null,
+	"createOpportunity": Null
 });
 var AuditFilter = Record({
 	"result": Opt(AuditResult$1),
@@ -33481,7 +33635,7 @@ var AuditFilter = Record({
 	"limit": Nat,
 	"companyId": Opt(CompanyId)
 });
-var ApiResult_10 = Variant({
+var ApiResult_14 = Variant({
 	"ok": Record({
 		"total": Nat,
 		"entries": Vec(Record({
@@ -33501,12 +33655,16 @@ var ApiResult_10 = Variant({
 	}),
 	"err": ApiError
 });
-var ApiResult_9 = Variant({
+var ApiResult_13 = Variant({
+	"ok": Vec(CheckItemView),
+	"err": ApiError
+});
+var ApiResult_12 = Variant({
 	"ok": Vec(CompanyView),
 	"err": ApiError
 });
 var NotificationId = Nat;
-var ApiResult_8 = Variant({
+var ApiResult_11 = Variant({
 	"ok": Vec(Record({
 		"id": NotificationId,
 		"kind": Variant({
@@ -33514,6 +33672,7 @@ var ApiResult_8 = Variant({
 			"verified": Null,
 			"expired": Null,
 			"permissionChanged": Null,
+			"checkItemConfirmed": Null,
 			"resetToPending": Null,
 			"accountApproved": Null,
 			"pendingUser": Null,
@@ -33521,6 +33680,7 @@ var ApiResult_8 = Variant({
 		}),
 		"createdAt": Timestamp,
 		"read": Bool,
+		"opportunityId": Opt(OpportunityId),
 		"kindLabel": Text,
 		"message": Text,
 		"recordId": Opt(RecordId),
@@ -33528,11 +33688,28 @@ var ApiResult_8 = Variant({
 	})),
 	"err": ApiError
 });
-var ApiResult_7 = Variant({
+var SortField$1 = Variant({
+	"createdAt": Null,
+	"deadline": Null
+});
+var OpportunityFilter = Record({
+	"status": Opt(OpportunityStatus$1),
+	"descending": Bool,
+	"projectType": Opt(ProjectType$1),
+	"deadlineTo": Opt(Timestamp),
+	"sortBy": Opt(SortField$1),
+	"deadlineFrom": Opt(Timestamp),
+	"search": Opt(Text)
+});
+var ApiResult_10 = Variant({
+	"ok": Vec(OpportunityListItem),
+	"err": ApiError
+});
+var ApiResult_9 = Variant({
 	"ok": Vec(RecordView),
 	"err": ApiError
 });
-var ApiResult_6 = Variant({
+var ApiResult_8 = Variant({
 	"ok": Null,
 	"err": ApiError
 });
@@ -33543,18 +33720,40 @@ var ReplaceAttachmentInput = Record({
 	"attachmentId": AttachmentId,
 	"expectedRecordVersion": Nat
 });
-var ApiResult_5 = Variant({
+var ApiResult_7 = Variant({
 	"ok": Record({
 		"records": Nat,
+		"opportunities": Nat,
+		"checkItems": Nat,
 		"attachments": Nat,
 		"alreadySeeded": Bool,
 		"companies": Nat
 	}),
 	"err": ApiError
 });
-var ApiResult_3 = Variant({
+var ApiResult_5 = Variant({
 	"ok": CompanyPermissionGrant,
 	"err": ApiError
+});
+var CheckItemUpdate = Record({
+	"clauseExcerpt": Text,
+	"kind": CheckItemKind$1,
+	"conclusion": CheckConclusion$1,
+	"evidence": Vec(EvidenceRef),
+	"basis": Text
+});
+var OpportunityUpdate = Record({
+	"projectName": Text,
+	"tenderer": Text,
+	"projectType": ProjectType$1,
+	"publishDate": Timestamp,
+	"body": Text,
+	"bidOpenTime": Timestamp,
+	"sourceUrl": Text,
+	"clauses": Vec(Clause),
+	"sourceName": Text,
+	"budgetYuan": Opt(Nat),
+	"registrationDeadline": Timestamp
 });
 var RecordUpdate = Record({
 	"data": RecordData,
@@ -33575,46 +33774,62 @@ Service({
 	"_initialize_access_control": Func([], [], []),
 	"_internet_identity_sign_in_finish": Func([], [Result__1], []),
 	"_internet_identity_sign_in_start": Func([], [Vec(Nat8)], []),
-	"addAttachment": Func([NewAttachmentInput], [ApiResult_20], []),
-	"approveAccount": Func([Principal, AccountRole$1], [ApiResult_4], []),
+	"addAttachment": Func([NewAttachmentInput], [ApiResult_26], []),
+	"approveAccount": Func([Principal, AccountRole$1], [ApiResult_6], []),
 	"assignCallerUserRole": Func([Principal, UserRole], [], []),
-	"createCompany": Func([CompanyInput], [ApiResult_2], []),
+	"changeOpportunityStatus": Func([
+		OpportunityId,
+		OpportunityStatus$1,
+		Text
+	], [ApiResult_2], []),
+	"confirmCheckItem": Func([CheckItemId], [ApiResult_4], []),
+	"createCheckItem": Func([CheckItemInput], [ApiResult_4], []),
+	"createCompany": Func([CompanyInput], [ApiResult_3], []),
+	"createOpportunityDraft": Func([OpportunityInput], [ApiResult_2], []),
 	"createRecord": Func([RecordInput], [ApiResult_1], []),
-	"downloadAttachment": Func([AttachmentId, Opt(Nat)], [ApiResult_19], []),
+	"downloadAttachment": Func([AttachmentId, Opt(Nat)], [ApiResult_25], []),
 	"execute": Func([Text], [Result], ["query"]),
 	"getApiDoc": Func([], [Text], ["query"]),
 	"getCallerUserRole": Func([], [UserRole], ["query"]),
-	"getCompany": Func([CompanyId], [ApiResult_2], []),
-	"getCompanyDetail": Func([CompanyId, RecordFilter], [ApiResult_18], []),
-	"getGapDashboard": Func([], [ApiResult_17], []),
-	"getHomeSummary": Func([], [ApiResult_16], []),
+	"getCompany": Func([CompanyId], [ApiResult_3], []),
+	"getCompanyDetail": Func([CompanyId, RecordFilter], [ApiResult_24], []),
+	"getGapDashboard": Func([], [ApiResult_23], []),
+	"getHomeSummary": Func([], [ApiResult_22], []),
 	"getMyAccount": Func([], [Opt(AccountView)], ["query"]),
-	"getMyPermissions": Func([], [ApiResult_15], []),
+	"getMyPermissions": Func([], [ApiResult_21], []),
+	"getOpportunity": Func([OpportunityId], [ApiResult_2], []),
+	"getOpportunityStatusHistory": Func([OpportunityId], [ApiResult_20], []),
+	"getOpportunityTodo": Func([], [ApiResult_19], []),
 	"getRecord": Func([RecordId], [ApiResult_1], []),
-	"getRecordHistory": Func([RecordId], [ApiResult_14], []),
-	"getUnreadCount": Func([], [ApiResult_13], ["query"]),
-	"getUserPermissions": Func([Principal], [ApiResult_12], []),
+	"getRecordHistory": Func([RecordId], [ApiResult_18], []),
+	"getUnreadCount": Func([], [ApiResult_17], ["query"]),
+	"getUserPermissions": Func([Principal], [ApiResult_16], []),
 	"isCallerAdmin": Func([], [Bool], ["query"]),
-	"listAccounts": Func([], [ApiResult_11], []),
-	"listAuditLog": Func([AuditFilter], [ApiResult_10], []),
-	"listCompanies": Func([], [ApiResult_9], []),
-	"listNotifications": Func([], [ApiResult_8], ["query"]),
-	"listRecords": Func([RecordFilter], [ApiResult_7], []),
-	"markAllNotificationsRead": Func([], [ApiResult_6], []),
-	"markNotificationRead": Func([NotificationId], [ApiResult_6], []),
-	"registerAccount": Func([Text], [ApiResult_4], []),
-	"rejectAccount": Func([Principal], [ApiResult_4], []),
+	"listAccounts": Func([], [ApiResult_15], []),
+	"listAuditLog": Func([AuditFilter], [ApiResult_14], []),
+	"listCheckItems": Func([OpportunityId], [ApiResult_13], []),
+	"listCompanies": Func([], [ApiResult_12], []),
+	"listNotifications": Func([], [ApiResult_11], ["query"]),
+	"listOpportunities": Func([OpportunityFilter], [ApiResult_10], []),
+	"listRecords": Func([RecordFilter], [ApiResult_9], []),
+	"markAllNotificationsRead": Func([], [ApiResult_8], []),
+	"markNotificationRead": Func([NotificationId], [ApiResult_8], []),
+	"registerAccount": Func([Text], [ApiResult_6], []),
+	"rejectAccount": Func([Principal], [ApiResult_6], []),
 	"replaceAttachment": Func([ReplaceAttachmentInput], [ApiResult_1], []),
 	"schema": Func([], [Text], ["query"]),
-	"seedSampleData": Func([], [ApiResult_5], []),
-	"setAccountRole": Func([Principal, AccountRole$1], [ApiResult_4], []),
+	"seedSampleData": Func([], [ApiResult_7], []),
+	"setAccountRole": Func([Principal, AccountRole$1], [ApiResult_6], []),
 	"setUserCompanyPermissions": Func([
 		Principal,
 		CompanyId,
 		PermissionSet
-	], [ApiResult_3], []),
+	], [ApiResult_5], []),
 	"signIn": Func([], [Opt(AccountView)], []),
-	"updateCompany": Func([CompanyId, CompanyInput], [ApiResult_2], []),
+	"submitOpportunity": Func([OpportunityId], [ApiResult_2], []),
+	"updateCheckItem": Func([CheckItemId, CheckItemUpdate], [ApiResult_4], []),
+	"updateCompany": Func([CompanyId, CompanyInput], [ApiResult_3], []),
+	"updateOpportunityDraft": Func([OpportunityId, OpportunityUpdate], [ApiResult_2], []),
 	"updateRecord": Func([
 		RecordId,
 		Nat,
@@ -33805,7 +34020,7 @@ var idlFactory = ({ IDL }) => {
 		"notRegistered": IDL.Null,
 		"accountRejected": IDL.Null
 	});
-	const ApiResult_20 = IDL.Variant({
+	const ApiResult_26 = IDL.Variant({
 		"ok": AttachmentView,
 		"err": ApiError
 	});
@@ -33829,7 +34044,7 @@ var idlFactory = ({ IDL }) => {
 		"decidedAt": IDL.Opt(Timestamp),
 		"approvalLabel": IDL.Text
 	});
-	const ApiResult_4 = IDL.Variant({
+	const ApiResult_6 = IDL.Variant({
 		"ok": AccountView,
 		"err": ApiError
 	});
@@ -33837,6 +34052,109 @@ var idlFactory = ({ IDL }) => {
 		"admin": IDL.Null,
 		"user": IDL.Null,
 		"guest": IDL.Null
+	});
+	const OpportunityId = IDL.Nat;
+	const OpportunityStatus = IDL.Variant({
+		"pendingReview": IDL.Null,
+		"closed": IDL.Null,
+		"selected": IDL.Null,
+		"declined": IDL.Null
+	});
+	const ClauseKind = IDL.Variant({
+		"deposit": IDL.Null,
+		"personnel": IDL.Null,
+		"performance": IDL.Null,
+		"qualification": IDL.Null
+	});
+	const Clause = IDL.Record({
+		"kind": ClauseKind,
+		"excerpt": IDL.Text
+	});
+	const OpportunityView = IDL.Record({
+		"id": OpportunityId,
+		"status": OpportunityStatus,
+		"projectName": IDL.Text,
+		"tenderer": IDL.Text,
+		"projectType": ProjectType,
+		"publishDate": Timestamp,
+		"body": IDL.Text,
+		"createdAt": Timestamp,
+		"createdBy": IDL.Principal,
+		"bidOpenTime": Timestamp,
+		"sourceUrl": IDL.Text,
+		"clauses": IDL.Vec(Clause),
+		"sourceName": IDL.Text,
+		"checkedCompanyCount": IDL.Nat,
+		"budgetYuan": IDL.Opt(IDL.Nat),
+		"projectTypeLabel": IDL.Text,
+		"createdByName": IDL.Text,
+		"lastModifiedAt": Timestamp,
+		"lastModifiedBy": IDL.Principal,
+		"registrationDeadline": Timestamp,
+		"daysRemaining": IDL.Nat,
+		"statusLabel": IDL.Text,
+		"draft": IDL.Bool,
+		"lastModifiedByName": IDL.Text
+	});
+	const ApiResult_2 = IDL.Variant({
+		"ok": OpportunityView,
+		"err": ApiError
+	});
+	const CheckItemId = IDL.Nat;
+	const CheckItemKind = IDL.Variant({
+		"other": IDL.Null,
+		"deposit": IDL.Null,
+		"personnel": IDL.Null,
+		"performance": IDL.Null,
+		"capital": IDL.Null,
+		"qualification": IDL.Null
+	});
+	const CheckConclusion = IDL.Variant({
+		"conform": IDL.Null,
+		"pending": IDL.Null,
+		"nonConform": IDL.Null
+	});
+	const EvidenceRef = IDL.Record({
+		"statusAtCitation": RecordStatus,
+		"recordId": RecordId
+	});
+	const ConfirmationView = IDL.Record({
+		"confirmedAt": Timestamp,
+		"confirmerName": IDL.Text,
+		"confirmer": IDL.Principal
+	});
+	const CheckItemView = IDL.Record({
+		"id": IDL.Nat,
+		"clauseExcerpt": IDL.Text,
+		"kind": CheckItemKind,
+		"createdAt": Timestamp,
+		"createdBy": IDL.Principal,
+		"conclusion": CheckConclusion,
+		"opportunityId": OpportunityId,
+		"kindLabel": IDL.Text,
+		"evidence": IDL.Vec(EvidenceRef),
+		"createdByName": IDL.Text,
+		"companyName": IDL.Text,
+		"basis": IDL.Text,
+		"confirmation": IDL.Opt(ConfirmationView),
+		"lastModifiedAt": Timestamp,
+		"lastModifiedBy": IDL.Principal,
+		"lastModifiedByName": IDL.Text,
+		"conclusionLabel": IDL.Text,
+		"companyId": CompanyId
+	});
+	const ApiResult_4 = IDL.Variant({
+		"ok": CheckItemView,
+		"err": ApiError
+	});
+	const CheckItemInput = IDL.Record({
+		"clauseExcerpt": IDL.Text,
+		"kind": CheckItemKind,
+		"conclusion": CheckConclusion,
+		"opportunityId": OpportunityId,
+		"evidence": IDL.Vec(EvidenceRef),
+		"basis": IDL.Text,
+		"companyId": CompanyId
 	});
 	const CompanyInput = IDL.Record({
 		"creditCode": IDL.Text,
@@ -33856,9 +34174,22 @@ var idlFactory = ({ IDL }) => {
 		"registeredPlace": IDL.Text,
 		"maintainer": IDL.Principal
 	});
-	const ApiResult_2 = IDL.Variant({
+	const ApiResult_3 = IDL.Variant({
 		"ok": CompanyView,
 		"err": ApiError
+	});
+	const OpportunityInput = IDL.Record({
+		"projectName": IDL.Text,
+		"tenderer": IDL.Text,
+		"projectType": ProjectType,
+		"publishDate": Timestamp,
+		"body": IDL.Text,
+		"bidOpenTime": Timestamp,
+		"sourceUrl": IDL.Text,
+		"clauses": IDL.Vec(Clause),
+		"sourceName": IDL.Text,
+		"budgetYuan": IDL.Opt(IDL.Nat),
+		"registrationDeadline": Timestamp
 	});
 	const RecordInput = IDL.Record({
 		"data": RecordData,
@@ -33878,7 +34209,7 @@ var idlFactory = ({ IDL }) => {
 		"version": IDL.Nat,
 		"sensitive": IDL.Bool
 	});
-	const ApiResult_19 = IDL.Variant({
+	const ApiResult_25 = IDL.Variant({
 		"ok": DownloadInfo,
 		"err": ApiError
 	});
@@ -33923,7 +34254,7 @@ var idlFactory = ({ IDL }) => {
 		"counts": GapCounts,
 		"companyId": CompanyId
 	});
-	const ApiResult_18 = IDL.Variant({
+	const ApiResult_24 = IDL.Variant({
 		"ok": CompanyDetail,
 		"err": ApiError
 	});
@@ -33933,7 +34264,7 @@ var idlFactory = ({ IDL }) => {
 		"counts": GapCounts,
 		"companyId": CompanyId
 	});
-	const ApiResult_17 = IDL.Variant({
+	const ApiResult_23 = IDL.Variant({
 		"ok": IDL.Vec(CompanyGapRow),
 		"err": ApiError
 	});
@@ -33945,7 +34276,7 @@ var idlFactory = ({ IDL }) => {
 		"pendingAccounts": IDL.Vec(AccountView),
 		"toVerify": IDL.Vec(RecordView)
 	});
-	const ApiResult_16 = IDL.Variant({
+	const ApiResult_22 = IDL.Variant({
 		"ok": HomeSummary,
 		"err": ApiError
 	});
@@ -33961,8 +34292,44 @@ var idlFactory = ({ IDL }) => {
 		"companyName": IDL.Text,
 		"companyId": CompanyId
 	});
-	const ApiResult_15 = IDL.Variant({
+	const ApiResult_21 = IDL.Variant({
 		"ok": IDL.Vec(CompanyPermissionGrant),
+		"err": ApiError
+	});
+	const StatusChangeView = IDL.Record({
+		"at": Timestamp,
+		"id": IDL.Nat,
+		"fromStatusLabel": IDL.Text,
+		"toStatus": OpportunityStatus,
+		"operator": IDL.Principal,
+		"fromStatus": OpportunityStatus,
+		"operatorName": IDL.Text,
+		"toStatusLabel": IDL.Text,
+		"reason": IDL.Text
+	});
+	const ApiResult_20 = IDL.Variant({
+		"ok": IDL.Vec(StatusChangeView),
+		"err": ApiError
+	});
+	const OpportunityListItem = IDL.Record({
+		"id": OpportunityId,
+		"status": OpportunityStatus,
+		"projectName": IDL.Text,
+		"tenderer": IDL.Text,
+		"projectType": ProjectType,
+		"checkedCompanyCount": IDL.Nat,
+		"budgetYuan": IDL.Opt(IDL.Nat),
+		"projectTypeLabel": IDL.Text,
+		"registrationDeadline": Timestamp,
+		"daysRemaining": IDL.Nat,
+		"statusLabel": IDL.Text
+	});
+	const OpportunityTodo = IDL.Record({
+		"pendingConfirmations": IDL.Vec(CheckItemView),
+		"closingSoon": IDL.Vec(OpportunityListItem)
+	});
+	const ApiResult_19 = IDL.Variant({
+		"ok": OpportunityTodo,
 		"err": ApiError
 	});
 	const HistoryId = IDL.Nat;
@@ -33990,11 +34357,11 @@ var idlFactory = ({ IDL }) => {
 		"editorName": IDL.Text,
 		"changes": IDL.Vec(FieldChange)
 	});
-	const ApiResult_14 = IDL.Variant({
+	const ApiResult_18 = IDL.Variant({
 		"ok": IDL.Vec(ChangeEntryView),
 		"err": ApiError
 	});
-	const ApiResult_13 = IDL.Variant({
+	const ApiResult_17 = IDL.Variant({
 		"ok": IDL.Nat,
 		"err": ApiError
 	});
@@ -34003,11 +34370,11 @@ var idlFactory = ({ IDL }) => {
 		"displayName": IDL.Text,
 		"user": IDL.Principal
 	});
-	const ApiResult_12 = IDL.Variant({
+	const ApiResult_16 = IDL.Variant({
 		"ok": UserPermissions,
 		"err": ApiError
 	});
-	const ApiResult_11 = IDL.Variant({
+	const ApiResult_15 = IDL.Variant({
 		"ok": IDL.Vec(AccountView),
 		"err": ApiError
 	});
@@ -34022,24 +34389,30 @@ var idlFactory = ({ IDL }) => {
 		"changeAccountRole": IDL.Null,
 		"createRecord": IDL.Null,
 		"rejectAccount": IDL.Null,
+		"createCheckItem": IDL.Null,
 		"viewRecord": IDL.Null,
+		"changeOpportunityStatus": IDL.Null,
 		"viewHistory": IDL.Null,
 		"viewAuditLog": IDL.Null,
 		"viewCompany": IDL.Null,
 		"createCompany": IDL.Null,
+		"editCheckItem": IDL.Null,
 		"viewList": IDL.Null,
+		"confirmCheckItem": IDL.Null,
 		"seedSampleData": IDL.Null,
 		"changePermissions": IDL.Null,
 		"uploadAttachment": IDL.Null,
 		"signIn": IDL.Null,
 		"editCompany": IDL.Null,
 		"resetToPending": IDL.Null,
+		"submitOpportunity": IDL.Null,
 		"replaceAttachment": IDL.Null,
 		"editRecord": IDL.Null,
 		"register": IDL.Null,
 		"approveAsAdmin": IDL.Null,
 		"viewSensitive": IDL.Null,
-		"verifyRecord": IDL.Null
+		"verifyRecord": IDL.Null,
+		"createOpportunity": IDL.Null
 	});
 	const AuditFilter = IDL.Record({
 		"result": IDL.Opt(AuditResult),
@@ -34068,11 +34441,15 @@ var idlFactory = ({ IDL }) => {
 		"total": IDL.Nat,
 		"entries": IDL.Vec(AuditEntryView)
 	});
-	const ApiResult_10 = IDL.Variant({
+	const ApiResult_14 = IDL.Variant({
 		"ok": AuditPage,
 		"err": ApiError
 	});
-	const ApiResult_9 = IDL.Variant({
+	const ApiResult_13 = IDL.Variant({
+		"ok": IDL.Vec(CheckItemView),
+		"err": ApiError
+	});
+	const ApiResult_12 = IDL.Variant({
 		"ok": IDL.Vec(CompanyView),
 		"err": ApiError
 	});
@@ -34082,6 +34459,7 @@ var idlFactory = ({ IDL }) => {
 		"verified": IDL.Null,
 		"expired": IDL.Null,
 		"permissionChanged": IDL.Null,
+		"checkItemConfirmed": IDL.Null,
 		"resetToPending": IDL.Null,
 		"accountApproved": IDL.Null,
 		"pendingUser": IDL.Null,
@@ -34092,20 +34470,38 @@ var idlFactory = ({ IDL }) => {
 		"kind": NotificationKind,
 		"createdAt": Timestamp,
 		"read": IDL.Bool,
+		"opportunityId": IDL.Opt(OpportunityId),
 		"kindLabel": IDL.Text,
 		"message": IDL.Text,
 		"recordId": IDL.Opt(RecordId),
 		"companyId": IDL.Opt(CompanyId)
 	});
-	const ApiResult_8 = IDL.Variant({
+	const ApiResult_11 = IDL.Variant({
 		"ok": IDL.Vec(NotificationView),
 		"err": ApiError
 	});
-	const ApiResult_7 = IDL.Variant({
+	const SortField = IDL.Variant({
+		"createdAt": IDL.Null,
+		"deadline": IDL.Null
+	});
+	const OpportunityFilter = IDL.Record({
+		"status": IDL.Opt(OpportunityStatus),
+		"descending": IDL.Bool,
+		"projectType": IDL.Opt(ProjectType),
+		"deadlineTo": IDL.Opt(Timestamp),
+		"sortBy": IDL.Opt(SortField),
+		"deadlineFrom": IDL.Opt(Timestamp),
+		"search": IDL.Opt(IDL.Text)
+	});
+	const ApiResult_10 = IDL.Variant({
+		"ok": IDL.Vec(OpportunityListItem),
+		"err": ApiError
+	});
+	const ApiResult_9 = IDL.Variant({
 		"ok": IDL.Vec(RecordView),
 		"err": ApiError
 	});
-	const ApiResult_6 = IDL.Variant({
+	const ApiResult_8 = IDL.Variant({
 		"ok": IDL.Null,
 		"err": ApiError
 	});
@@ -34118,17 +34514,39 @@ var idlFactory = ({ IDL }) => {
 	});
 	const SampleReport = IDL.Record({
 		"records": IDL.Nat,
+		"opportunities": IDL.Nat,
+		"checkItems": IDL.Nat,
 		"attachments": IDL.Nat,
 		"alreadySeeded": IDL.Bool,
 		"companies": IDL.Nat
 	});
-	const ApiResult_5 = IDL.Variant({
+	const ApiResult_7 = IDL.Variant({
 		"ok": SampleReport,
 		"err": ApiError
 	});
-	const ApiResult_3 = IDL.Variant({
+	const ApiResult_5 = IDL.Variant({
 		"ok": CompanyPermissionGrant,
 		"err": ApiError
+	});
+	const CheckItemUpdate = IDL.Record({
+		"clauseExcerpt": IDL.Text,
+		"kind": CheckItemKind,
+		"conclusion": CheckConclusion,
+		"evidence": IDL.Vec(EvidenceRef),
+		"basis": IDL.Text
+	});
+	const OpportunityUpdate = IDL.Record({
+		"projectName": IDL.Text,
+		"tenderer": IDL.Text,
+		"projectType": ProjectType,
+		"publishDate": Timestamp,
+		"body": IDL.Text,
+		"bidOpenTime": Timestamp,
+		"sourceUrl": IDL.Text,
+		"clauses": IDL.Vec(Clause),
+		"sourceName": IDL.Text,
+		"budgetYuan": IDL.Opt(IDL.Nat),
+		"registrationDeadline": Timestamp
 	});
 	const RecordUpdate = IDL.Record({
 		"data": RecordData,
@@ -34149,46 +34567,62 @@ var idlFactory = ({ IDL }) => {
 		"_initialize_access_control": IDL.Func([], [], []),
 		"_internet_identity_sign_in_finish": IDL.Func([], [Result__1], []),
 		"_internet_identity_sign_in_start": IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
-		"addAttachment": IDL.Func([NewAttachmentInput], [ApiResult_20], []),
-		"approveAccount": IDL.Func([IDL.Principal, AccountRole], [ApiResult_4], []),
+		"addAttachment": IDL.Func([NewAttachmentInput], [ApiResult_26], []),
+		"approveAccount": IDL.Func([IDL.Principal, AccountRole], [ApiResult_6], []),
 		"assignCallerUserRole": IDL.Func([IDL.Principal, UserRole], [], []),
-		"createCompany": IDL.Func([CompanyInput], [ApiResult_2], []),
+		"changeOpportunityStatus": IDL.Func([
+			OpportunityId,
+			OpportunityStatus,
+			IDL.Text
+		], [ApiResult_2], []),
+		"confirmCheckItem": IDL.Func([CheckItemId], [ApiResult_4], []),
+		"createCheckItem": IDL.Func([CheckItemInput], [ApiResult_4], []),
+		"createCompany": IDL.Func([CompanyInput], [ApiResult_3], []),
+		"createOpportunityDraft": IDL.Func([OpportunityInput], [ApiResult_2], []),
 		"createRecord": IDL.Func([RecordInput], [ApiResult_1], []),
-		"downloadAttachment": IDL.Func([AttachmentId, IDL.Opt(IDL.Nat)], [ApiResult_19], []),
+		"downloadAttachment": IDL.Func([AttachmentId, IDL.Opt(IDL.Nat)], [ApiResult_25], []),
 		"execute": IDL.Func([IDL.Text], [Result], ["query"]),
 		"getApiDoc": IDL.Func([], [IDL.Text], ["query"]),
 		"getCallerUserRole": IDL.Func([], [UserRole], ["query"]),
-		"getCompany": IDL.Func([CompanyId], [ApiResult_2], []),
-		"getCompanyDetail": IDL.Func([CompanyId, RecordFilter], [ApiResult_18], []),
-		"getGapDashboard": IDL.Func([], [ApiResult_17], []),
-		"getHomeSummary": IDL.Func([], [ApiResult_16], []),
+		"getCompany": IDL.Func([CompanyId], [ApiResult_3], []),
+		"getCompanyDetail": IDL.Func([CompanyId, RecordFilter], [ApiResult_24], []),
+		"getGapDashboard": IDL.Func([], [ApiResult_23], []),
+		"getHomeSummary": IDL.Func([], [ApiResult_22], []),
 		"getMyAccount": IDL.Func([], [IDL.Opt(AccountView)], ["query"]),
-		"getMyPermissions": IDL.Func([], [ApiResult_15], []),
+		"getMyPermissions": IDL.Func([], [ApiResult_21], []),
+		"getOpportunity": IDL.Func([OpportunityId], [ApiResult_2], []),
+		"getOpportunityStatusHistory": IDL.Func([OpportunityId], [ApiResult_20], []),
+		"getOpportunityTodo": IDL.Func([], [ApiResult_19], []),
 		"getRecord": IDL.Func([RecordId], [ApiResult_1], []),
-		"getRecordHistory": IDL.Func([RecordId], [ApiResult_14], []),
-		"getUnreadCount": IDL.Func([], [ApiResult_13], ["query"]),
-		"getUserPermissions": IDL.Func([IDL.Principal], [ApiResult_12], []),
+		"getRecordHistory": IDL.Func([RecordId], [ApiResult_18], []),
+		"getUnreadCount": IDL.Func([], [ApiResult_17], ["query"]),
+		"getUserPermissions": IDL.Func([IDL.Principal], [ApiResult_16], []),
 		"isCallerAdmin": IDL.Func([], [IDL.Bool], ["query"]),
-		"listAccounts": IDL.Func([], [ApiResult_11], []),
-		"listAuditLog": IDL.Func([AuditFilter], [ApiResult_10], []),
-		"listCompanies": IDL.Func([], [ApiResult_9], []),
-		"listNotifications": IDL.Func([], [ApiResult_8], ["query"]),
-		"listRecords": IDL.Func([RecordFilter], [ApiResult_7], []),
-		"markAllNotificationsRead": IDL.Func([], [ApiResult_6], []),
-		"markNotificationRead": IDL.Func([NotificationId], [ApiResult_6], []),
-		"registerAccount": IDL.Func([IDL.Text], [ApiResult_4], []),
-		"rejectAccount": IDL.Func([IDL.Principal], [ApiResult_4], []),
+		"listAccounts": IDL.Func([], [ApiResult_15], []),
+		"listAuditLog": IDL.Func([AuditFilter], [ApiResult_14], []),
+		"listCheckItems": IDL.Func([OpportunityId], [ApiResult_13], []),
+		"listCompanies": IDL.Func([], [ApiResult_12], []),
+		"listNotifications": IDL.Func([], [ApiResult_11], ["query"]),
+		"listOpportunities": IDL.Func([OpportunityFilter], [ApiResult_10], []),
+		"listRecords": IDL.Func([RecordFilter], [ApiResult_9], []),
+		"markAllNotificationsRead": IDL.Func([], [ApiResult_8], []),
+		"markNotificationRead": IDL.Func([NotificationId], [ApiResult_8], []),
+		"registerAccount": IDL.Func([IDL.Text], [ApiResult_6], []),
+		"rejectAccount": IDL.Func([IDL.Principal], [ApiResult_6], []),
 		"replaceAttachment": IDL.Func([ReplaceAttachmentInput], [ApiResult_1], []),
 		"schema": IDL.Func([], [IDL.Text], ["query"]),
-		"seedSampleData": IDL.Func([], [ApiResult_5], []),
-		"setAccountRole": IDL.Func([IDL.Principal, AccountRole], [ApiResult_4], []),
+		"seedSampleData": IDL.Func([], [ApiResult_7], []),
+		"setAccountRole": IDL.Func([IDL.Principal, AccountRole], [ApiResult_6], []),
 		"setUserCompanyPermissions": IDL.Func([
 			IDL.Principal,
 			CompanyId,
 			PermissionSet
-		], [ApiResult_3], []),
+		], [ApiResult_5], []),
 		"signIn": IDL.Func([], [IDL.Opt(AccountView)], []),
-		"updateCompany": IDL.Func([CompanyId, CompanyInput], [ApiResult_2], []),
+		"submitOpportunity": IDL.Func([OpportunityId], [ApiResult_2], []),
+		"updateCheckItem": IDL.Func([CheckItemId, CheckItemUpdate], [ApiResult_4], []),
+		"updateCompany": IDL.Func([CompanyId, CompanyInput], [ApiResult_3], []),
+		"updateOpportunityDraft": IDL.Func([OpportunityId, OpportunityUpdate], [ApiResult_2], []),
 		"updateRecord": IDL.Func([
 			RecordId,
 			IDL.Nat,
@@ -34227,24 +34661,30 @@ var AuditAction = /* @__PURE__ */ function(AuditAction) {
 	AuditAction["changeAccountRole"] = "changeAccountRole";
 	AuditAction["createRecord"] = "createRecord";
 	AuditAction["rejectAccount"] = "rejectAccount";
+	AuditAction["createCheckItem"] = "createCheckItem";
 	AuditAction["viewRecord"] = "viewRecord";
+	AuditAction["changeOpportunityStatus"] = "changeOpportunityStatus";
 	AuditAction["viewHistory"] = "viewHistory";
 	AuditAction["viewAuditLog"] = "viewAuditLog";
 	AuditAction["viewCompany"] = "viewCompany";
 	AuditAction["createCompany"] = "createCompany";
+	AuditAction["editCheckItem"] = "editCheckItem";
 	AuditAction["viewList"] = "viewList";
+	AuditAction["confirmCheckItem"] = "confirmCheckItem";
 	AuditAction["seedSampleData"] = "seedSampleData";
 	AuditAction["changePermissions"] = "changePermissions";
 	AuditAction["uploadAttachment"] = "uploadAttachment";
 	AuditAction["signIn"] = "signIn";
 	AuditAction["editCompany"] = "editCompany";
 	AuditAction["resetToPending"] = "resetToPending";
+	AuditAction["submitOpportunity"] = "submitOpportunity";
 	AuditAction["replaceAttachment"] = "replaceAttachment";
 	AuditAction["editRecord"] = "editRecord";
 	AuditAction["register"] = "register";
 	AuditAction["approveAsAdmin"] = "approveAsAdmin";
 	AuditAction["viewSensitive"] = "viewSensitive";
 	AuditAction["verifyRecord"] = "verifyRecord";
+	AuditAction["createOpportunity"] = "createOpportunity";
 	return AuditAction;
 }({});
 var AuditResult = /* @__PURE__ */ function(AuditResult) {
@@ -34261,6 +34701,28 @@ var ChangeAction = /* @__PURE__ */ function(ChangeAction) {
 	ChangeAction["resetToPending"] = "resetToPending";
 	return ChangeAction;
 }({});
+var CheckConclusion = /* @__PURE__ */ function(CheckConclusion) {
+	CheckConclusion["conform"] = "conform";
+	CheckConclusion["pending"] = "pending";
+	CheckConclusion["nonConform"] = "nonConform";
+	return CheckConclusion;
+}({});
+var CheckItemKind = /* @__PURE__ */ function(CheckItemKind) {
+	CheckItemKind["other"] = "other";
+	CheckItemKind["deposit"] = "deposit";
+	CheckItemKind["personnel"] = "personnel";
+	CheckItemKind["performance"] = "performance";
+	CheckItemKind["capital"] = "capital";
+	CheckItemKind["qualification"] = "qualification";
+	return CheckItemKind;
+}({});
+var ClauseKind = /* @__PURE__ */ function(ClauseKind) {
+	ClauseKind["deposit"] = "deposit";
+	ClauseKind["personnel"] = "personnel";
+	ClauseKind["performance"] = "performance";
+	ClauseKind["qualification"] = "qualification";
+	return ClauseKind;
+}({});
 var ExpiryFlag = /* @__PURE__ */ function(ExpiryFlag) {
 	ExpiryFlag["nearExpiry"] = "nearExpiry";
 	ExpiryFlag["expired"] = "expired";
@@ -34271,11 +34733,19 @@ var NotificationKind = /* @__PURE__ */ function(NotificationKind) {
 	NotificationKind["verified"] = "verified";
 	NotificationKind["expired"] = "expired";
 	NotificationKind["permissionChanged"] = "permissionChanged";
+	NotificationKind["checkItemConfirmed"] = "checkItemConfirmed";
 	NotificationKind["resetToPending"] = "resetToPending";
 	NotificationKind["accountApproved"] = "accountApproved";
 	NotificationKind["pendingUser"] = "pendingUser";
 	NotificationKind["accountRejected"] = "accountRejected";
 	return NotificationKind;
+}({});
+var OpportunityStatus = /* @__PURE__ */ function(OpportunityStatus) {
+	OpportunityStatus["pendingReview"] = "pendingReview";
+	OpportunityStatus["closed"] = "closed";
+	OpportunityStatus["selected"] = "selected";
+	OpportunityStatus["declined"] = "declined";
+	return OpportunityStatus;
 }({});
 var Permission = /* @__PURE__ */ function(Permission) {
 	Permission["edit"] = "edit";
@@ -34303,6 +34773,11 @@ var RecordStatus = /* @__PURE__ */ function(RecordStatus) {
 	RecordStatus["verified"] = "verified";
 	RecordStatus["missing"] = "missing";
 	return RecordStatus;
+}({});
+var SortField = /* @__PURE__ */ function(SortField) {
+	SortField["createdAt"] = "createdAt";
+	SortField["deadline"] = "deadline";
+	return SortField;
 }({});
 var Backend = class {
 	actor;
@@ -34407,27 +34882,27 @@ var Backend = class {
 	async addAttachment(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.addAttachment(await to_candid_NewAttachmentInput_n12(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_20_n15(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_26_n15(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.addAttachment(await to_candid_NewAttachmentInput_n12(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_20_n15(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_26_n15(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async approveAccount(arg0, arg1) {
 		if (this.processError) try {
 			const result = await this.actor.approveAccount(arg0, to_candid_AccountRole_n43(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.approveAccount(arg0, to_candid_AccountRole_n43(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async assignCallerUserRole(arg0, arg1) {
@@ -34439,56 +34914,108 @@ var Backend = class {
 		}
 		else return await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n50(this._uploadFile, this._downloadFile, arg1));
 	}
+	async changeOpportunityStatus(arg0, arg1, arg2) {
+		if (this.processError) try {
+			const result = await this.actor.changeOpportunityStatus(arg0, to_candid_OpportunityStatus_n51(this._uploadFile, this._downloadFile, arg1), arg2);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.changeOpportunityStatus(arg0, to_candid_OpportunityStatus_n51(this._uploadFile, this._downloadFile, arg1), arg2);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async confirmCheckItem(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.confirmCheckItem(arg0);
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.confirmCheckItem(arg0);
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async createCheckItem(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.createCheckItem(to_candid_CheckItemInput_n71(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.createCheckItem(to_candid_CheckItemInput_n71(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
+		}
+	}
 	async createCompany(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.createCompany(arg0);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.createCompany(arg0);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async createOpportunityDraft(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.createOpportunityDraft(to_candid_OpportunityInput_n81(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.createOpportunityDraft(to_candid_OpportunityInput_n81(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async createRecord(arg0) {
 		if (this.processError) try {
-			const result = await this.actor.createRecord(to_candid_RecordInput_n53(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.createRecord(to_candid_RecordInput_n88(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.createRecord(to_candid_RecordInput_n53(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.createRecord(to_candid_RecordInput_n88(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async downloadAttachment(arg0, arg1) {
 		if (this.processError) try {
-			const result = await this.actor.downloadAttachment(arg0, to_candid_opt_n68(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_19_n69(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.downloadAttachment(arg0, to_candid_opt_n102(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_25_n103(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.downloadAttachment(arg0, to_candid_opt_n68(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_19_n69(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.downloadAttachment(arg0, to_candid_opt_n102(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_25_n103(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async execute(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.execute(arg0);
-			return from_candid_Result_n74(this._uploadFile, this._downloadFile, result);
+			return from_candid_Result_n108(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.execute(arg0);
-			return from_candid_Result_n74(this._uploadFile, this._downloadFile, result);
+			return from_candid_Result_n108(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getApiDoc() {
@@ -34503,144 +35030,183 @@ var Backend = class {
 	async getCallerUserRole() {
 		if (this.processError) try {
 			const result = await this.actor.getCallerUserRole();
-			return from_candid_UserRole_n82(this._uploadFile, this._downloadFile, result);
+			return from_candid_UserRole_n116(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getCallerUserRole();
-			return from_candid_UserRole_n82(this._uploadFile, this._downloadFile, result);
+			return from_candid_UserRole_n116(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getCompany(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.getCompany(arg0);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getCompany(arg0);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getCompanyDetail(arg0, arg1) {
 		if (this.processError) try {
-			const result = await this.actor.getCompanyDetail(arg0, to_candid_RecordFilter_n83(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_18_n88(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.getCompanyDetail(arg0, to_candid_RecordFilter_n117(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_24_n121(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.getCompanyDetail(arg0, to_candid_RecordFilter_n83(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_18_n88(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.getCompanyDetail(arg0, to_candid_RecordFilter_n117(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_24_n121(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getGapDashboard() {
 		if (this.processError) try {
 			const result = await this.actor.getGapDashboard();
-			return from_candid_ApiResult_17_n94(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_23_n127(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getGapDashboard();
-			return from_candid_ApiResult_17_n94(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_23_n127(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getHomeSummary() {
 		if (this.processError) try {
 			const result = await this.actor.getHomeSummary();
-			return from_candid_ApiResult_16_n96(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_22_n129(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getHomeSummary();
-			return from_candid_ApiResult_16_n96(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_22_n129(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getMyAccount() {
 		if (this.processError) try {
 			const result = await this.actor.getMyAccount();
-			return from_candid_opt_n101(this._uploadFile, this._downloadFile, result);
+			return from_candid_opt_n134(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getMyAccount();
-			return from_candid_opt_n101(this._uploadFile, this._downloadFile, result);
+			return from_candid_opt_n134(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getMyPermissions() {
 		if (this.processError) try {
 			const result = await this.actor.getMyPermissions();
-			return from_candid_ApiResult_15_n102(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_21_n135(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getMyPermissions();
-			return from_candid_ApiResult_15_n102(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_21_n135(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async getOpportunity(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.getOpportunity(arg0);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.getOpportunity(arg0);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async getOpportunityStatusHistory(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.getOpportunityStatusHistory(arg0);
+			return from_candid_ApiResult_20_n137(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.getOpportunityStatusHistory(arg0);
+			return from_candid_ApiResult_20_n137(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async getOpportunityTodo() {
+		if (this.processError) try {
+			const result = await this.actor.getOpportunityTodo();
+			return from_candid_ApiResult_19_n142(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.getOpportunityTodo();
+			return from_candid_ApiResult_19_n142(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getRecord(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.getRecord(arg0);
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getRecord(arg0);
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getRecordHistory(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.getRecordHistory(arg0);
-			return from_candid_ApiResult_14_n104(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_18_n150(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getRecordHistory(arg0);
-			return from_candid_ApiResult_14_n104(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_18_n150(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getUnreadCount() {
 		if (this.processError) try {
 			const result = await this.actor.getUnreadCount();
-			return from_candid_ApiResult_13_n110(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_17_n156(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getUnreadCount();
-			return from_candid_ApiResult_13_n110(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_17_n156(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async getUserPermissions(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.getUserPermissions(arg0);
-			return from_candid_ApiResult_12_n112(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_16_n158(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.getUserPermissions(arg0);
-			return from_candid_ApiResult_12_n112(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_16_n158(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async isCallerAdmin() {
@@ -34655,131 +35221,157 @@ var Backend = class {
 	async listAccounts() {
 		if (this.processError) try {
 			const result = await this.actor.listAccounts();
-			return from_candid_ApiResult_11_n114(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_15_n160(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.listAccounts();
-			return from_candid_ApiResult_11_n114(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_15_n160(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async listAuditLog(arg0) {
 		if (this.processError) try {
-			const result = await this.actor.listAuditLog(to_candid_AuditFilter_n116(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_10_n120(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.listAuditLog(to_candid_AuditFilter_n162(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_14_n166(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.listAuditLog(to_candid_AuditFilter_n116(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_10_n120(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.listAuditLog(to_candid_AuditFilter_n162(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_14_n166(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async listCheckItems(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.listCheckItems(arg0);
+			return from_candid_ApiResult_13_n176(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.listCheckItems(arg0);
+			return from_candid_ApiResult_13_n176(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async listCompanies() {
 		if (this.processError) try {
 			const result = await this.actor.listCompanies();
-			return from_candid_ApiResult_9_n130(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_12_n178(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.listCompanies();
-			return from_candid_ApiResult_9_n130(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_12_n178(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async listNotifications() {
 		if (this.processError) try {
 			const result = await this.actor.listNotifications();
-			return from_candid_ApiResult_8_n132(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_11_n180(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.listNotifications();
-			return from_candid_ApiResult_8_n132(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_11_n180(this._uploadFile, this._downloadFile, result);
 		}
 	}
-	async listRecords(arg0) {
+	async listOpportunities(arg0) {
 		if (this.processError) try {
-			const result = await this.actor.listRecords(to_candid_RecordFilter_n83(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_7_n139(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.listOpportunities(to_candid_OpportunityFilter_n188(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_10_n191(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.listRecords(to_candid_RecordFilter_n83(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_7_n139(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.listOpportunities(to_candid_OpportunityFilter_n188(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_10_n191(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async listRecords(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.listRecords(to_candid_RecordFilter_n117(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_9_n193(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.listRecords(to_candid_RecordFilter_n117(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_9_n193(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async markAllNotificationsRead() {
 		if (this.processError) try {
 			const result = await this.actor.markAllNotificationsRead();
-			return from_candid_ApiResult_6_n141(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_8_n195(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.markAllNotificationsRead();
-			return from_candid_ApiResult_6_n141(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_8_n195(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async markNotificationRead(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.markNotificationRead(arg0);
-			return from_candid_ApiResult_6_n141(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_8_n195(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.markNotificationRead(arg0);
-			return from_candid_ApiResult_6_n141(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_8_n195(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async registerAccount(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.registerAccount(arg0);
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.registerAccount(arg0);
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async rejectAccount(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.rejectAccount(arg0);
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.rejectAccount(arg0);
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async replaceAttachment(arg0) {
 		if (this.processError) try {
-			const result = await this.actor.replaceAttachment(await to_candid_ReplaceAttachmentInput_n143(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.replaceAttachment(await to_candid_ReplaceAttachmentInput_n197(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.replaceAttachment(await to_candid_ReplaceAttachmentInput_n143(this._uploadFile, this._downloadFile, arg0));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.replaceAttachment(await to_candid_ReplaceAttachmentInput_n197(this._uploadFile, this._downloadFile, arg0));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async schema() {
@@ -34794,105 +35386,144 @@ var Backend = class {
 	async seedSampleData() {
 		if (this.processError) try {
 			const result = await this.actor.seedSampleData();
-			return from_candid_ApiResult_5_n145(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_7_n199(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.seedSampleData();
-			return from_candid_ApiResult_5_n145(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_7_n199(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async setAccountRole(arg0, arg1) {
 		if (this.processError) try {
 			const result = await this.actor.setAccountRole(arg0, to_candid_AccountRole_n43(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.setAccountRole(arg0, to_candid_AccountRole_n43(this._uploadFile, this._downloadFile, arg1));
-			return from_candid_ApiResult_4_n44(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_6_n44(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async setUserCompanyPermissions(arg0, arg1, arg2) {
 		if (this.processError) try {
 			const result = await this.actor.setUserCompanyPermissions(arg0, arg1, arg2);
-			return from_candid_ApiResult_3_n147(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_5_n201(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.setUserCompanyPermissions(arg0, arg1, arg2);
-			return from_candid_ApiResult_3_n147(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_5_n201(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async signIn() {
 		if (this.processError) try {
 			const result = await this.actor.signIn();
-			return from_candid_opt_n101(this._uploadFile, this._downloadFile, result);
+			return from_candid_opt_n134(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.signIn();
-			return from_candid_opt_n101(this._uploadFile, this._downloadFile, result);
+			return from_candid_opt_n134(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async submitOpportunity(arg0) {
+		if (this.processError) try {
+			const result = await this.actor.submitOpportunity(arg0);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.submitOpportunity(arg0);
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async updateCheckItem(arg0, arg1) {
+		if (this.processError) try {
+			const result = await this.actor.updateCheckItem(arg0, to_candid_CheckItemUpdate_n203(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.updateCheckItem(arg0, to_candid_CheckItemUpdate_n203(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_4_n61(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async updateCompany(arg0, arg1) {
 		if (this.processError) try {
 			const result = await this.actor.updateCompany(arg0, arg1);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.updateCompany(arg0, arg1);
-			return from_candid_ApiResult_2_n51(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_3_n79(this._uploadFile, this._downloadFile, result);
 		}
 	}
-	async updateRecord(arg0, arg1, arg2) {
+	async updateOpportunityDraft(arg0, arg1) {
 		if (this.processError) try {
-			const result = await this.actor.updateRecord(arg0, arg1, to_candid_RecordUpdate_n149(this._uploadFile, this._downloadFile, arg2));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.updateOpportunityDraft(arg0, to_candid_OpportunityUpdate_n205(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
-			const result = await this.actor.updateRecord(arg0, arg1, to_candid_RecordUpdate_n149(this._uploadFile, this._downloadFile, arg2));
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			const result = await this.actor.updateOpportunityDraft(arg0, to_candid_OpportunityUpdate_n205(this._uploadFile, this._downloadFile, arg1));
+			return from_candid_ApiResult_2_n52(this._uploadFile, this._downloadFile, result);
+		}
+	}
+	async updateRecord(arg0, arg1, arg2) {
+		if (this.processError) try {
+			const result = await this.actor.updateRecord(arg0, arg1, to_candid_RecordUpdate_n206(this._uploadFile, this._downloadFile, arg2));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
+		} catch (e) {
+			this.processError(e);
+			throw new Error("unreachable");
+		}
+		else {
+			const result = await this.actor.updateRecord(arg0, arg1, to_candid_RecordUpdate_n206(this._uploadFile, this._downloadFile, arg2));
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async verifyRecord(arg0, arg1) {
 		if (this.processError) try {
 			const result = await this.actor.verifyRecord(arg0, arg1);
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.verifyRecord(arg0, arg1);
-			return from_candid_ApiResult_1_n66(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_1_n100(this._uploadFile, this._downloadFile, result);
 		}
 	}
 	async viewPersonIdNumber(arg0) {
 		if (this.processError) try {
 			const result = await this.actor.viewPersonIdNumber(arg0);
-			return from_candid_ApiResult_n151(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_n208(this._uploadFile, this._downloadFile, result);
 		} catch (e) {
 			this.processError(e);
 			throw new Error("unreachable");
 		}
 		else {
 			const result = await this.actor.viewPersonIdNumber(arg0);
-			return from_candid_ApiResult_n151(this._uploadFile, this._downloadFile, result);
+			return from_candid_ApiResult_n208(this._uploadFile, this._downloadFile, result);
 		}
 	}
 };
@@ -34905,122 +35536,170 @@ function from_candid_AccountView_n46(_uploadFile, _downloadFile, value) {
 function from_candid_ApiError_n17(_uploadFile, _downloadFile, value) {
 	return from_candid_variant_n18(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_10_n120(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n121(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_10_n191(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n192(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_11_n114(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n115(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_11_n180(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n181(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_12_n112(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n113(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_12_n178(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n179(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_13_n110(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n111(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_13_n176(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n177(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_14_n104(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n105(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_14_n166(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n167(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_15_n102(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n103(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_15_n160(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n161(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_16_n96(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n97(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_16_n158(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n159(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_17_n94(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n95(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_17_n156(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n157(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_18_n88(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n89(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_18_n150(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n151(_uploadFile, _downloadFile, value);
 }
-async function from_candid_ApiResult_19_n69(_uploadFile, _downloadFile, value) {
-	return await from_candid_variant_n70(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_19_n142(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n143(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_1_n66(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n67(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_1_n100(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n101(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_20_n15(_uploadFile, _downloadFile, value) {
+function from_candid_ApiResult_20_n137(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n138(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_21_n135(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n136(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_22_n129(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n130(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_23_n127(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n128(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_24_n121(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n122(_uploadFile, _downloadFile, value);
+}
+async function from_candid_ApiResult_25_n103(_uploadFile, _downloadFile, value) {
+	return await from_candid_variant_n104(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_26_n15(_uploadFile, _downloadFile, value) {
 	return from_candid_variant_n16(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_2_n51(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n52(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_2_n52(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n53(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_3_n147(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n148(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_3_n79(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n80(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_4_n44(_uploadFile, _downloadFile, value) {
+function from_candid_ApiResult_4_n61(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n62(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_5_n201(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n202(_uploadFile, _downloadFile, value);
+}
+function from_candid_ApiResult_6_n44(_uploadFile, _downloadFile, value) {
 	return from_candid_variant_n45(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_5_n145(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n146(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_7_n199(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n200(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_6_n141(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n142(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_8_n195(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n196(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_7_n139(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n140(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_9_n193(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n194(_uploadFile, _downloadFile, value);
 }
-function from_candid_ApiResult_8_n132(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n133(_uploadFile, _downloadFile, value);
-}
-function from_candid_ApiResult_9_n130(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n131(_uploadFile, _downloadFile, value);
-}
-function from_candid_ApiResult_n151(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n152(_uploadFile, _downloadFile, value);
+function from_candid_ApiResult_n208(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n209(_uploadFile, _downloadFile, value);
 }
 function from_candid_ApprovalState_n49(_uploadFile, _downloadFile, value) {
 	return "pending" in value ? "pending" : "approved" in value ? "approved" : "rejected" in value ? "rejected" : value;
 }
-function from_candid_AuditAction_n128(_uploadFile, _downloadFile, value) {
-	return "downloadAttachment" in value ? "downloadAttachment" : "viewDashboard" in value ? "viewDashboard" : "approveAccount" in value ? "approveAccount" : "changeAccountRole" in value ? "changeAccountRole" : "createRecord" in value ? "createRecord" : "rejectAccount" in value ? "rejectAccount" : "viewRecord" in value ? "viewRecord" : "viewHistory" in value ? "viewHistory" : "viewAuditLog" in value ? "viewAuditLog" : "viewCompany" in value ? "viewCompany" : "createCompany" in value ? "createCompany" : "viewList" in value ? "viewList" : "seedSampleData" in value ? "seedSampleData" : "changePermissions" in value ? "changePermissions" : "uploadAttachment" in value ? "uploadAttachment" : "signIn" in value ? "signIn" : "editCompany" in value ? "editCompany" : "resetToPending" in value ? "resetToPending" : "replaceAttachment" in value ? "replaceAttachment" : "editRecord" in value ? "editRecord" : "register" in value ? "register" : "approveAsAdmin" in value ? "approveAsAdmin" : "viewSensitive" in value ? "viewSensitive" : "verifyRecord" in value ? "verifyRecord" : value;
+function from_candid_AuditAction_n174(_uploadFile, _downloadFile, value) {
+	return "downloadAttachment" in value ? "downloadAttachment" : "viewDashboard" in value ? "viewDashboard" : "approveAccount" in value ? "approveAccount" : "changeAccountRole" in value ? "changeAccountRole" : "createRecord" in value ? "createRecord" : "rejectAccount" in value ? "rejectAccount" : "createCheckItem" in value ? "createCheckItem" : "viewRecord" in value ? "viewRecord" : "changeOpportunityStatus" in value ? "changeOpportunityStatus" : "viewHistory" in value ? "viewHistory" : "viewAuditLog" in value ? "viewAuditLog" : "viewCompany" in value ? "viewCompany" : "createCompany" in value ? "createCompany" : "editCheckItem" in value ? "editCheckItem" : "viewList" in value ? "viewList" : "confirmCheckItem" in value ? "confirmCheckItem" : "seedSampleData" in value ? "seedSampleData" : "changePermissions" in value ? "changePermissions" : "uploadAttachment" in value ? "uploadAttachment" : "signIn" in value ? "signIn" : "editCompany" in value ? "editCompany" : "resetToPending" in value ? "resetToPending" : "submitOpportunity" in value ? "submitOpportunity" : "replaceAttachment" in value ? "replaceAttachment" : "editRecord" in value ? "editRecord" : "register" in value ? "register" : "approveAsAdmin" in value ? "approveAsAdmin" : "viewSensitive" in value ? "viewSensitive" : "verifyRecord" in value ? "verifyRecord" : "createOpportunity" in value ? "createOpportunity" : value;
 }
-function from_candid_AuditEntryView_n125(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n126(_uploadFile, _downloadFile, value);
+function from_candid_AuditEntryView_n171(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n172(_uploadFile, _downloadFile, value);
 }
-function from_candid_AuditPage_n122(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n123(_uploadFile, _downloadFile, value);
+function from_candid_AuditPage_n168(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n169(_uploadFile, _downloadFile, value);
 }
-function from_candid_AuditResult_n127(_uploadFile, _downloadFile, value) {
+function from_candid_AuditResult_n173(_uploadFile, _downloadFile, value) {
 	return "denied" in value ? "denied" : "success" in value ? "success" : value;
 }
-function from_candid_Cell_n78(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n79(_uploadFile, _downloadFile, value);
+function from_candid_Cell_n112(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n113(_uploadFile, _downloadFile, value);
 }
-function from_candid_ChangeAction_n109(_uploadFile, _downloadFile, value) {
+function from_candid_ChangeAction_n155(_uploadFile, _downloadFile, value) {
 	return "attachmentAdded" in value ? "attachmentAdded" : "create" in value ? "create" : "update" in value ? "update" : "attachmentReplaced" in value ? "attachmentReplaced" : "verify" in value ? "verify" : "resetToPending" in value ? "resetToPending" : value;
 }
-function from_candid_ChangeEntryView_n107(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n108(_uploadFile, _downloadFile, value);
+function from_candid_ChangeEntryView_n153(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n154(_uploadFile, _downloadFile, value);
 }
-function from_candid_CompanyDetail_n90(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n91(_uploadFile, _downloadFile, value);
+function from_candid_CheckConclusion_n66(_uploadFile, _downloadFile, value) {
+	return "conform" in value ? "conform" : "pending" in value ? "pending" : "nonConform" in value ? "nonConform" : value;
+}
+function from_candid_CheckItemKind_n65(_uploadFile, _downloadFile, value) {
+	return "other" in value ? "other" : "deposit" in value ? "deposit" : "personnel" in value ? "personnel" : "performance" in value ? "performance" : "capital" in value ? "capital" : "qualification" in value ? "qualification" : value;
+}
+function from_candid_CheckItemView_n63(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n64(_uploadFile, _downloadFile, value);
+}
+function from_candid_ClauseKind_n60(_uploadFile, _downloadFile, value) {
+	return "deposit" in value ? "deposit" : "personnel" in value ? "personnel" : "performance" in value ? "performance" : "qualification" in value ? "qualification" : value;
+}
+function from_candid_Clause_n58(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n59(_uploadFile, _downloadFile, value);
+}
+function from_candid_CompanyDetail_n123(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n124(_uploadFile, _downloadFile, value);
 }
 function from_candid_CompanyTrackData_n27(_uploadFile, _downloadFile, value) {
 	return from_candid_record_n28(_uploadFile, _downloadFile, value);
 }
-async function from_candid_DownloadInfo_n71(_uploadFile, _downloadFile, value) {
-	return await from_candid_record_n72(_uploadFile, _downloadFile, value);
+async function from_candid_DownloadInfo_n105(_uploadFile, _downloadFile, value) {
+	return await from_candid_record_n106(_uploadFile, _downloadFile, value);
 }
 function from_candid_Error_n10(_uploadFile, _downloadFile, value) {
 	return from_candid_variant_n11(_uploadFile, _downloadFile, value);
 }
+function from_candid_EvidenceRef_n68(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n69(_uploadFile, _downloadFile, value);
+}
 function from_candid_ExpiryFlag_n24(_uploadFile, _downloadFile, value) {
 	return "nearExpiry" in value ? "nearExpiry" : "expired" in value ? "expired" : value;
 }
-async function from_candid_ExternalBlob_n73(_uploadFile, _downloadFile, value) {
+async function from_candid_ExternalBlob_n107(_uploadFile, _downloadFile, value) {
 	return await _downloadFile(value);
 }
-function from_candid_HomeSummary_n98(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n99(_uploadFile, _downloadFile, value);
+function from_candid_HomeSummary_n131(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n132(_uploadFile, _downloadFile, value);
 }
 function from_candid_LicenseData_n36(_uploadFile, _downloadFile, value) {
 	return from_candid_record_n37(_uploadFile, _downloadFile, value);
 }
-function from_candid_NotificationKind_n137(_uploadFile, _downloadFile, value) {
-	return "nearExpiry" in value ? "nearExpiry" : "verified" in value ? "verified" : "expired" in value ? "expired" : "permissionChanged" in value ? "permissionChanged" : "resetToPending" in value ? "resetToPending" : "accountApproved" in value ? "accountApproved" : "pendingUser" in value ? "pendingUser" : "accountRejected" in value ? "accountRejected" : value;
+function from_candid_NotificationKind_n185(_uploadFile, _downloadFile, value) {
+	return "nearExpiry" in value ? "nearExpiry" : "verified" in value ? "verified" : "expired" in value ? "expired" : "permissionChanged" in value ? "permissionChanged" : "checkItemConfirmed" in value ? "checkItemConfirmed" : "resetToPending" in value ? "resetToPending" : "accountApproved" in value ? "accountApproved" : "pendingUser" in value ? "pendingUser" : "accountRejected" in value ? "accountRejected" : value;
 }
-function from_candid_NotificationView_n135(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n136(_uploadFile, _downloadFile, value);
+function from_candid_NotificationView_n183(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n184(_uploadFile, _downloadFile, value);
+}
+function from_candid_OpportunityListItem_n148(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n149(_uploadFile, _downloadFile, value);
+}
+function from_candid_OpportunityStatus_n56(_uploadFile, _downloadFile, value) {
+	return "pendingReview" in value ? "pendingReview" : "closed" in value ? "closed" : "selected" in value ? "selected" : "declined" in value ? "declined" : value;
+}
+function from_candid_OpportunityTodo_n144(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n145(_uploadFile, _downloadFile, value);
+}
+function from_candid_OpportunityView_n54(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n55(_uploadFile, _downloadFile, value);
 }
 function from_candid_Permission_n42(_uploadFile, _downloadFile, value) {
 	return "edit" in value ? "edit" : "view" in value ? "view" : "sensitiveDownload" in value ? "sensitiveDownload" : "verify" in value ? "verify" : value;
@@ -35049,25 +35728,34 @@ function from_candid_RecordView_n20(_uploadFile, _downloadFile, value) {
 function from_candid_Result__1_n8(_uploadFile, _downloadFile, value) {
 	return from_candid_variant_n9(_uploadFile, _downloadFile, value);
 }
-function from_candid_Result_n74(_uploadFile, _downloadFile, value) {
-	return from_candid_record_n75(_uploadFile, _downloadFile, value);
+function from_candid_Result_n108(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n109(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserRole_n82(_uploadFile, _downloadFile, value) {
+function from_candid_StatusChangeView_n140(_uploadFile, _downloadFile, value) {
+	return from_candid_record_n141(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n116(_uploadFile, _downloadFile, value) {
 	return "admin" in value ? "admin" : "user" in value ? "user" : "guest" in value ? "guest" : value;
 }
-function from_candid_Value_n80(_uploadFile, _downloadFile, value) {
-	return from_candid_variant_n81(_uploadFile, _downloadFile, value);
+function from_candid_Value_n114(_uploadFile, _downloadFile, value) {
+	return from_candid_variant_n115(_uploadFile, _downloadFile, value);
 }
 function from_candid__ImmutableObjectStorageRefillResult_n4(_uploadFile, _downloadFile, value) {
 	return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n101(_uploadFile, _downloadFile, value) {
-	return value.length === 0 ? null : from_candid_AccountView_n46(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n129(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n126(_uploadFile, _downloadFile, value) {
 	return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n138(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n134(_uploadFile, _downloadFile, value) {
+	return value.length === 0 ? null : from_candid_AccountView_n46(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n175(_uploadFile, _downloadFile, value) {
+	return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n186(_uploadFile, _downloadFile, value) {
+	return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n187(_uploadFile, _downloadFile, value) {
 	return value.length === 0 ? null : value[0];
 }
 function from_candid_opt_n23(_uploadFile, _downloadFile, value) {
@@ -35091,14 +35779,90 @@ function from_candid_opt_n6(_uploadFile, _downloadFile, value) {
 function from_candid_opt_n7(_uploadFile, _downloadFile, value) {
 	return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n93(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n70(_uploadFile, _downloadFile, value) {
 	return value.length === 0 ? null : value[0];
 }
-function from_candid_record_n108(_uploadFile, _downloadFile, value) {
+async function from_candid_record_n106(_uploadFile, _downloadFile, value) {
+	return {
+		blob: await from_candid_ExternalBlob_n107(_uploadFile, _downloadFile, value.blob),
+		fileName: value.fileName,
+		attachmentId: value.attachmentId,
+		isSample: value.isSample,
+		version: value.version,
+		sensitive: value.sensitive
+	};
+}
+function from_candid_record_n109(_uploadFile, _downloadFile, value) {
+	return {
+		hasMore: value.hasMore,
+		rows: from_candid_vec_n110(_uploadFile, _downloadFile, value.rows)
+	};
+}
+function from_candid_record_n113(_uploadFile, _downloadFile, value) {
+	return {
+		value: from_candid_Value_n114(_uploadFile, _downloadFile, value.value),
+		name: value.name
+	};
+}
+function from_candid_record_n124(_uploadFile, _downloadFile, value) {
+	return {
+		records: from_candid_vec_n125(_uploadFile, _downloadFile, value.records),
+		canView: value.canView,
+		company: record_opt_to_undefined(from_candid_opt_n126(_uploadFile, _downloadFile, value.company)),
+		companyName: value.companyName,
+		counts: value.counts,
+		companyId: value.companyId
+	};
+}
+function from_candid_record_n132(_uploadFile, _downloadFile, value) {
+	return {
+		unreadNotifications: value.unreadNotifications,
+		myAttention: from_candid_vec_n125(_uploadFile, _downloadFile, value.myAttention),
+		role: from_candid_AccountRole_n48(_uploadFile, _downloadFile, value.role),
+		overview: value.overview,
+		pendingAccounts: from_candid_vec_n133(_uploadFile, _downloadFile, value.pendingAccounts),
+		toVerify: from_candid_vec_n125(_uploadFile, _downloadFile, value.toVerify)
+	};
+}
+function from_candid_record_n141(_uploadFile, _downloadFile, value) {
 	return {
 		at: value.at,
 		id: value.id,
-		action: from_candid_ChangeAction_n109(_uploadFile, _downloadFile, value.action),
+		fromStatusLabel: value.fromStatusLabel,
+		toStatus: from_candid_OpportunityStatus_n56(_uploadFile, _downloadFile, value.toStatus),
+		operator: value.operator,
+		fromStatus: from_candid_OpportunityStatus_n56(_uploadFile, _downloadFile, value.fromStatus),
+		operatorName: value.operatorName,
+		toStatusLabel: value.toStatusLabel,
+		reason: value.reason
+	};
+}
+function from_candid_record_n145(_uploadFile, _downloadFile, value) {
+	return {
+		pendingConfirmations: from_candid_vec_n146(_uploadFile, _downloadFile, value.pendingConfirmations),
+		closingSoon: from_candid_vec_n147(_uploadFile, _downloadFile, value.closingSoon)
+	};
+}
+function from_candid_record_n149(_uploadFile, _downloadFile, value) {
+	return {
+		id: value.id,
+		status: from_candid_OpportunityStatus_n56(_uploadFile, _downloadFile, value.status),
+		projectName: value.projectName,
+		tenderer: value.tenderer,
+		projectType: from_candid_ProjectType_n31(_uploadFile, _downloadFile, value.projectType),
+		checkedCompanyCount: value.checkedCompanyCount,
+		budgetYuan: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.budgetYuan)),
+		projectTypeLabel: value.projectTypeLabel,
+		registrationDeadline: value.registrationDeadline,
+		daysRemaining: value.daysRemaining,
+		statusLabel: value.statusLabel
+	};
+}
+function from_candid_record_n154(_uploadFile, _downloadFile, value) {
+	return {
+		at: value.at,
+		id: value.id,
+		action: from_candid_ChangeAction_n155(_uploadFile, _downloadFile, value.action),
 		editor: value.editor,
 		actionLabel: value.actionLabel,
 		recordId: value.recordId,
@@ -35107,38 +35871,39 @@ function from_candid_record_n108(_uploadFile, _downloadFile, value) {
 		changes: value.changes
 	};
 }
-function from_candid_record_n123(_uploadFile, _downloadFile, value) {
+function from_candid_record_n169(_uploadFile, _downloadFile, value) {
 	return {
 		total: value.total,
-		entries: from_candid_vec_n124(_uploadFile, _downloadFile, value.entries)
+		entries: from_candid_vec_n170(_uploadFile, _downloadFile, value.entries)
 	};
 }
-function from_candid_record_n126(_uploadFile, _downloadFile, value) {
+function from_candid_record_n172(_uploadFile, _downloadFile, value) {
 	return {
 		at: value.at,
 		id: value.id,
-		result: from_candid_AuditResult_n127(_uploadFile, _downloadFile, value.result),
+		result: from_candid_AuditResult_n173(_uploadFile, _downloadFile, value.result),
 		denialReason: record_opt_to_undefined(from_candid_opt_n39(_uploadFile, _downloadFile, value.denialReason)),
 		resultLabel: value.resultLabel,
-		action: from_candid_AuditAction_n128(_uploadFile, _downloadFile, value.action),
+		action: from_candid_AuditAction_n174(_uploadFile, _downloadFile, value.action),
 		actionLabel: value.actionLabel,
 		operator: value.operator,
 		operatorName: value.operatorName,
 		target: value.target,
 		companyName: record_opt_to_undefined(from_candid_opt_n39(_uploadFile, _downloadFile, value.companyName)),
-		companyId: record_opt_to_undefined(from_candid_opt_n129(_uploadFile, _downloadFile, value.companyId))
+		companyId: record_opt_to_undefined(from_candid_opt_n175(_uploadFile, _downloadFile, value.companyId))
 	};
 }
-function from_candid_record_n136(_uploadFile, _downloadFile, value) {
+function from_candid_record_n184(_uploadFile, _downloadFile, value) {
 	return {
 		id: value.id,
-		kind: from_candid_NotificationKind_n137(_uploadFile, _downloadFile, value.kind),
+		kind: from_candid_NotificationKind_n185(_uploadFile, _downloadFile, value.kind),
 		createdAt: value.createdAt,
 		read: value.read,
+		opportunityId: record_opt_to_undefined(from_candid_opt_n186(_uploadFile, _downloadFile, value.opportunityId)),
 		kindLabel: value.kindLabel,
 		message: value.message,
-		recordId: record_opt_to_undefined(from_candid_opt_n138(_uploadFile, _downloadFile, value.recordId)),
-		companyId: record_opt_to_undefined(from_candid_opt_n129(_uploadFile, _downloadFile, value.companyId))
+		recordId: record_opt_to_undefined(from_candid_opt_n187(_uploadFile, _downloadFile, value.recordId)),
+		companyId: record_opt_to_undefined(from_candid_opt_n175(_uploadFile, _downloadFile, value.companyId))
 	};
 }
 function from_candid_record_n19(_uploadFile, _downloadFile, value) {
@@ -35234,61 +35999,81 @@ function from_candid_record_n5(_uploadFile, _downloadFile, value) {
 		topped_up_amount: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.topped_up_amount))
 	};
 }
-async function from_candid_record_n72(_uploadFile, _downloadFile, value) {
+function from_candid_record_n55(_uploadFile, _downloadFile, value) {
 	return {
-		blob: await from_candid_ExternalBlob_n73(_uploadFile, _downloadFile, value.blob),
-		fileName: value.fileName,
-		attachmentId: value.attachmentId,
-		isSample: value.isSample,
-		version: value.version,
-		sensitive: value.sensitive
+		id: value.id,
+		status: from_candid_OpportunityStatus_n56(_uploadFile, _downloadFile, value.status),
+		projectName: value.projectName,
+		tenderer: value.tenderer,
+		projectType: from_candid_ProjectType_n31(_uploadFile, _downloadFile, value.projectType),
+		publishDate: value.publishDate,
+		body: value.body,
+		createdAt: value.createdAt,
+		createdBy: value.createdBy,
+		bidOpenTime: value.bidOpenTime,
+		sourceUrl: value.sourceUrl,
+		clauses: from_candid_vec_n57(_uploadFile, _downloadFile, value.clauses),
+		sourceName: value.sourceName,
+		checkedCompanyCount: value.checkedCompanyCount,
+		budgetYuan: record_opt_to_undefined(from_candid_opt_n7(_uploadFile, _downloadFile, value.budgetYuan)),
+		projectTypeLabel: value.projectTypeLabel,
+		createdByName: value.createdByName,
+		lastModifiedAt: value.lastModifiedAt,
+		lastModifiedBy: value.lastModifiedBy,
+		registrationDeadline: value.registrationDeadline,
+		daysRemaining: value.daysRemaining,
+		statusLabel: value.statusLabel,
+		draft: value.draft,
+		lastModifiedByName: value.lastModifiedByName
 	};
 }
-function from_candid_record_n75(_uploadFile, _downloadFile, value) {
+function from_candid_record_n59(_uploadFile, _downloadFile, value) {
 	return {
-		hasMore: value.hasMore,
-		rows: from_candid_vec_n76(_uploadFile, _downloadFile, value.rows)
+		kind: from_candid_ClauseKind_n60(_uploadFile, _downloadFile, value.kind),
+		excerpt: value.excerpt
 	};
 }
-function from_candid_record_n79(_uploadFile, _downloadFile, value) {
+function from_candid_record_n64(_uploadFile, _downloadFile, value) {
 	return {
-		value: from_candid_Value_n80(_uploadFile, _downloadFile, value.value),
-		name: value.name
-	};
-}
-function from_candid_record_n91(_uploadFile, _downloadFile, value) {
-	return {
-		records: from_candid_vec_n92(_uploadFile, _downloadFile, value.records),
-		canView: value.canView,
-		company: record_opt_to_undefined(from_candid_opt_n93(_uploadFile, _downloadFile, value.company)),
+		id: value.id,
+		clauseExcerpt: value.clauseExcerpt,
+		kind: from_candid_CheckItemKind_n65(_uploadFile, _downloadFile, value.kind),
+		createdAt: value.createdAt,
+		createdBy: value.createdBy,
+		conclusion: from_candid_CheckConclusion_n66(_uploadFile, _downloadFile, value.conclusion),
+		opportunityId: value.opportunityId,
+		kindLabel: value.kindLabel,
+		evidence: from_candid_vec_n67(_uploadFile, _downloadFile, value.evidence),
+		createdByName: value.createdByName,
 		companyName: value.companyName,
-		counts: value.counts,
+		basis: value.basis,
+		confirmation: record_opt_to_undefined(from_candid_opt_n70(_uploadFile, _downloadFile, value.confirmation)),
+		lastModifiedAt: value.lastModifiedAt,
+		lastModifiedBy: value.lastModifiedBy,
+		lastModifiedByName: value.lastModifiedByName,
+		conclusionLabel: value.conclusionLabel,
 		companyId: value.companyId
 	};
 }
-function from_candid_record_n99(_uploadFile, _downloadFile, value) {
+function from_candid_record_n69(_uploadFile, _downloadFile, value) {
 	return {
-		unreadNotifications: value.unreadNotifications,
-		myAttention: from_candid_vec_n92(_uploadFile, _downloadFile, value.myAttention),
-		role: from_candid_AccountRole_n48(_uploadFile, _downloadFile, value.role),
-		overview: value.overview,
-		pendingAccounts: from_candid_vec_n100(_uploadFile, _downloadFile, value.pendingAccounts),
-		toVerify: from_candid_vec_n92(_uploadFile, _downloadFile, value.toVerify)
+		statusAtCitation: from_candid_RecordStatus_n22(_uploadFile, _downloadFile, value.statusAtCitation),
+		recordId: value.recordId
 	};
 }
-function from_candid_variant_n103(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n101(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
-		ok: value.ok
+		ok: from_candid_RecordView_n20(_uploadFile, _downloadFile, value.ok)
 	} : "err" in value ? {
 		__kind__: "err",
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n105(_uploadFile, _downloadFile, value) {
+async function from_candid_variant_n104(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
-		ok: from_candid_vec_n106(_uploadFile, _downloadFile, value.ok)
+		ok: await from_candid_DownloadInfo_n105(_uploadFile, _downloadFile, value.ok)
 	} : "err" in value ? {
 		__kind__: "err",
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
@@ -35327,70 +36112,37 @@ function from_candid_variant_n11(_uploadFile, _downloadFile, value) {
 		FrontendOriginMismatch: value.FrontendOriginMismatch
 	} : value;
 }
-function from_candid_variant_n111(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: value.ok
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n113(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: value.ok
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
 function from_candid_variant_n115(_uploadFile, _downloadFile, value) {
+	return "int" in value ? {
+		__kind__: "int",
+		int: value.int
+	} : "nat" in value ? {
+		__kind__: "nat",
+		nat: value.nat
+	} : "float" in value ? {
+		__kind__: "float",
+		float: value.float
+	} : "bool" in value ? {
+		__kind__: "bool",
+		bool: value.bool
+	} : "null" in value ? {
+		__kind__: "null",
+		null: value.null
+	} : "text" in value ? {
+		__kind__: "text",
+		text: value.text
+	} : value;
+}
+function from_candid_variant_n122(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
-		ok: from_candid_vec_n100(_uploadFile, _downloadFile, value.ok)
+		ok: from_candid_CompanyDetail_n123(_uploadFile, _downloadFile, value.ok)
 	} : "err" in value ? {
 		__kind__: "err",
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n121(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_AuditPage_n122(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n131(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: value.ok
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n133(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_vec_n134(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n140(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_vec_n92(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n142(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n128(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
@@ -35399,7 +36151,16 @@ function from_candid_variant_n142(_uploadFile, _downloadFile, value) {
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n146(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n130(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_HomeSummary_n131(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n136(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
@@ -35408,7 +36169,34 @@ function from_candid_variant_n146(_uploadFile, _downloadFile, value) {
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n148(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n138(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n139(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n143(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_OpportunityTodo_n144(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n151(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n152(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n157(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
@@ -35417,7 +36205,7 @@ function from_candid_variant_n148(_uploadFile, _downloadFile, value) {
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n152(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n159(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
@@ -35427,6 +36215,42 @@ function from_candid_variant_n152(_uploadFile, _downloadFile, value) {
 	} : value;
 }
 function from_candid_variant_n16(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: value.ok
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n161(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n133(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n167(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_AuditPage_n168(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n177(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n146(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n179(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
@@ -35471,6 +36295,69 @@ function from_candid_variant_n18(_uploadFile, _downloadFile, value) {
 		accountRejected: value.accountRejected
 	} : value;
 }
+function from_candid_variant_n181(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n182(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n192(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n147(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n194(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_vec_n125(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n196(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: value.ok
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n200(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: value.ok
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n202(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: value.ok
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n209(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: value.ok
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
 function from_candid_variant_n26(_uploadFile, _downloadFile, value) {
 	return "companyTrack" in value ? {
 		__kind__: "companyTrack",
@@ -35498,58 +36385,28 @@ function from_candid_variant_n45(_uploadFile, _downloadFile, value) {
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n52(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n53(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_OpportunityView_n54(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n62(_uploadFile, _downloadFile, value) {
+	return "ok" in value ? {
+		__kind__: "ok",
+		ok: from_candid_CheckItemView_n63(_uploadFile, _downloadFile, value.ok)
+	} : "err" in value ? {
+		__kind__: "err",
+		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
+	} : value;
+}
+function from_candid_variant_n80(_uploadFile, _downloadFile, value) {
 	return "ok" in value ? {
 		__kind__: "ok",
 		ok: value.ok
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n67(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_RecordView_n20(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-async function from_candid_variant_n70(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: await from_candid_DownloadInfo_n71(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
-}
-function from_candid_variant_n81(_uploadFile, _downloadFile, value) {
-	return "int" in value ? {
-		__kind__: "int",
-		int: value.int
-	} : "nat" in value ? {
-		__kind__: "nat",
-		nat: value.nat
-	} : "float" in value ? {
-		__kind__: "float",
-		float: value.float
-	} : "bool" in value ? {
-		__kind__: "bool",
-		bool: value.bool
-	} : "null" in value ? {
-		__kind__: "null",
-		null: value.null
-	} : "text" in value ? {
-		__kind__: "text",
-		text: value.text
-	} : value;
-}
-function from_candid_variant_n89(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_CompanyDetail_n90(_uploadFile, _downloadFile, value.ok)
 	} : "err" in value ? {
 		__kind__: "err",
 		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
@@ -35564,101 +36421,134 @@ function from_candid_variant_n9(_uploadFile, _downloadFile, value) {
 		err: from_candid_Error_n10(_uploadFile, _downloadFile, value.err)
 	} : value;
 }
-function from_candid_variant_n95(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: value.ok
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
+function from_candid_vec_n110(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_vec_n111(_uploadFile, _downloadFile, x));
 }
-function from_candid_variant_n97(_uploadFile, _downloadFile, value) {
-	return "ok" in value ? {
-		__kind__: "ok",
-		ok: from_candid_HomeSummary_n98(_uploadFile, _downloadFile, value.ok)
-	} : "err" in value ? {
-		__kind__: "err",
-		err: from_candid_ApiError_n17(_uploadFile, _downloadFile, value.err)
-	} : value;
+function from_candid_vec_n111(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_Cell_n112(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n100(_uploadFile, _downloadFile, value) {
+function from_candid_vec_n125(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_RecordView_n20(_uploadFile, _downloadFile, x));
+}
+function from_candid_vec_n133(_uploadFile, _downloadFile, value) {
 	return value.map((x) => from_candid_AccountView_n46(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n106(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_ChangeEntryView_n107(_uploadFile, _downloadFile, x));
+function from_candid_vec_n139(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_StatusChangeView_n140(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n124(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_AuditEntryView_n125(_uploadFile, _downloadFile, x));
+function from_candid_vec_n146(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_CheckItemView_n63(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n134(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_NotificationView_n135(_uploadFile, _downloadFile, x));
+function from_candid_vec_n147(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_OpportunityListItem_n148(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n76(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_vec_n77(_uploadFile, _downloadFile, x));
+function from_candid_vec_n152(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_ChangeEntryView_n153(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n77(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_Cell_n78(_uploadFile, _downloadFile, x));
+function from_candid_vec_n170(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_AuditEntryView_n171(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n92(_uploadFile, _downloadFile, value) {
-	return value.map((x) => from_candid_RecordView_n20(_uploadFile, _downloadFile, x));
+function from_candid_vec_n182(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_NotificationView_n183(_uploadFile, _downloadFile, x));
+}
+function from_candid_vec_n57(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_Clause_n58(_uploadFile, _downloadFile, x));
+}
+function from_candid_vec_n67(_uploadFile, _downloadFile, value) {
+	return value.map((x) => from_candid_EvidenceRef_n68(_uploadFile, _downloadFile, x));
 }
 function to_candid_AccountRole_n43(_uploadFile, _downloadFile, value) {
 	return value == "member" ? { member: null } : value == "admin" ? { admin: null } : value;
 }
-function to_candid_AuditAction_n119(_uploadFile, _downloadFile, value) {
-	return value == "downloadAttachment" ? { downloadAttachment: null } : value == "viewDashboard" ? { viewDashboard: null } : value == "approveAccount" ? { approveAccount: null } : value == "changeAccountRole" ? { changeAccountRole: null } : value == "createRecord" ? { createRecord: null } : value == "rejectAccount" ? { rejectAccount: null } : value == "viewRecord" ? { viewRecord: null } : value == "viewHistory" ? { viewHistory: null } : value == "viewAuditLog" ? { viewAuditLog: null } : value == "viewCompany" ? { viewCompany: null } : value == "createCompany" ? { createCompany: null } : value == "viewList" ? { viewList: null } : value == "seedSampleData" ? { seedSampleData: null } : value == "changePermissions" ? { changePermissions: null } : value == "uploadAttachment" ? { uploadAttachment: null } : value == "signIn" ? { signIn: null } : value == "editCompany" ? { editCompany: null } : value == "resetToPending" ? { resetToPending: null } : value == "replaceAttachment" ? { replaceAttachment: null } : value == "editRecord" ? { editRecord: null } : value == "register" ? { register: null } : value == "approveAsAdmin" ? { approveAsAdmin: null } : value == "viewSensitive" ? { viewSensitive: null } : value == "verifyRecord" ? { verifyRecord: null } : value;
+function to_candid_AuditAction_n165(_uploadFile, _downloadFile, value) {
+	return value == "downloadAttachment" ? { downloadAttachment: null } : value == "viewDashboard" ? { viewDashboard: null } : value == "approveAccount" ? { approveAccount: null } : value == "changeAccountRole" ? { changeAccountRole: null } : value == "createRecord" ? { createRecord: null } : value == "rejectAccount" ? { rejectAccount: null } : value == "createCheckItem" ? { createCheckItem: null } : value == "viewRecord" ? { viewRecord: null } : value == "changeOpportunityStatus" ? { changeOpportunityStatus: null } : value == "viewHistory" ? { viewHistory: null } : value == "viewAuditLog" ? { viewAuditLog: null } : value == "viewCompany" ? { viewCompany: null } : value == "createCompany" ? { createCompany: null } : value == "editCheckItem" ? { editCheckItem: null } : value == "viewList" ? { viewList: null } : value == "confirmCheckItem" ? { confirmCheckItem: null } : value == "seedSampleData" ? { seedSampleData: null } : value == "changePermissions" ? { changePermissions: null } : value == "uploadAttachment" ? { uploadAttachment: null } : value == "signIn" ? { signIn: null } : value == "editCompany" ? { editCompany: null } : value == "resetToPending" ? { resetToPending: null } : value == "submitOpportunity" ? { submitOpportunity: null } : value == "replaceAttachment" ? { replaceAttachment: null } : value == "editRecord" ? { editRecord: null } : value == "register" ? { register: null } : value == "approveAsAdmin" ? { approveAsAdmin: null } : value == "viewSensitive" ? { viewSensitive: null } : value == "verifyRecord" ? { verifyRecord: null } : value == "createOpportunity" ? { createOpportunity: null } : value;
 }
-function to_candid_AuditFilter_n116(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n117(_uploadFile, _downloadFile, value);
+function to_candid_AuditFilter_n162(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n163(_uploadFile, _downloadFile, value);
 }
-function to_candid_AuditResult_n118(_uploadFile, _downloadFile, value) {
+function to_candid_AuditResult_n164(_uploadFile, _downloadFile, value) {
 	return value == "denied" ? { denied: null } : value == "success" ? { success: null } : value;
 }
-function to_candid_CompanyTrackData_n63(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n64(_uploadFile, _downloadFile, value);
+function to_candid_CheckConclusion_n74(_uploadFile, _downloadFile, value) {
+	return value == "conform" ? { conform: null } : value == "pending" ? { pending: null } : value == "nonConform" ? { nonConform: null } : value;
 }
-function to_candid_ExpiryFlag_n87(_uploadFile, _downloadFile, value) {
+function to_candid_CheckItemInput_n71(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n72(_uploadFile, _downloadFile, value);
+}
+function to_candid_CheckItemKind_n73(_uploadFile, _downloadFile, value) {
+	return value == "other" ? { other: null } : value == "deposit" ? { deposit: null } : value == "personnel" ? { personnel: null } : value == "performance" ? { performance: null } : value == "capital" ? { capital: null } : value == "qualification" ? { qualification: null } : value;
+}
+function to_candid_CheckItemUpdate_n203(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n204(_uploadFile, _downloadFile, value);
+}
+function to_candid_ClauseKind_n87(_uploadFile, _downloadFile, value) {
+	return value == "deposit" ? { deposit: null } : value == "personnel" ? { personnel: null } : value == "performance" ? { performance: null } : value == "qualification" ? { qualification: null } : value;
+}
+function to_candid_Clause_n85(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n86(_uploadFile, _downloadFile, value);
+}
+function to_candid_CompanyTrackData_n98(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n99(_uploadFile, _downloadFile, value);
+}
+function to_candid_EvidenceRef_n76(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n77(_uploadFile, _downloadFile, value);
+}
+function to_candid_ExpiryFlag_n120(_uploadFile, _downloadFile, value) {
 	return value == "nearExpiry" ? { nearExpiry: null } : value == "expired" ? { expired: null } : value;
 }
 async function to_candid_ExternalBlob_n14(_uploadFile, _downloadFile, value) {
 	return await _uploadFile(value);
 }
-function to_candid_LicenseData_n57(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n58(_uploadFile, _downloadFile, value);
+function to_candid_LicenseData_n92(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n93(_uploadFile, _downloadFile, value);
 }
 async function to_candid_NewAttachmentInput_n12(_uploadFile, _downloadFile, value) {
 	return await to_candid_record_n13(_uploadFile, _downloadFile, value);
 }
-function to_candid_PersonCertData_n61(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n62(_uploadFile, _downloadFile, value);
+function to_candid_OpportunityFilter_n188(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n189(_uploadFile, _downloadFile, value);
 }
-function to_candid_PersonTrackData_n59(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n60(_uploadFile, _downloadFile, value);
+function to_candid_OpportunityInput_n81(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n82(_uploadFile, _downloadFile, value);
 }
-function to_candid_ProjectType_n65(_uploadFile, _downloadFile, value) {
+function to_candid_OpportunityStatus_n51(_uploadFile, _downloadFile, value) {
+	return value == "pendingReview" ? { pendingReview: null } : value == "closed" ? { closed: null } : value == "selected" ? { selected: null } : value == "declined" ? { declined: null } : value;
+}
+function to_candid_OpportunityUpdate_n205(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n82(_uploadFile, _downloadFile, value);
+}
+function to_candid_PersonCertData_n96(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n97(_uploadFile, _downloadFile, value);
+}
+function to_candid_PersonTrackData_n94(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n95(_uploadFile, _downloadFile, value);
+}
+function to_candid_ProjectType_n83(_uploadFile, _downloadFile, value) {
 	return value == "service" ? { service: null } : value == "construction" ? { construction: null } : value == "goodsEquipment" ? { goodsEquipment: null } : value;
 }
-function to_candid_RecordData_n55(_uploadFile, _downloadFile, value) {
-	return to_candid_variant_n56(_uploadFile, _downloadFile, value);
+function to_candid_RecordData_n90(_uploadFile, _downloadFile, value) {
+	return to_candid_variant_n91(_uploadFile, _downloadFile, value);
 }
-function to_candid_RecordFilter_n83(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n84(_uploadFile, _downloadFile, value);
+function to_candid_RecordFilter_n117(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n118(_uploadFile, _downloadFile, value);
 }
-function to_candid_RecordInput_n53(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n54(_uploadFile, _downloadFile, value);
+function to_candid_RecordInput_n88(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n89(_uploadFile, _downloadFile, value);
 }
-function to_candid_RecordKind_n86(_uploadFile, _downloadFile, value) {
+function to_candid_RecordKind_n119(_uploadFile, _downloadFile, value) {
 	return value == "companyTrack" ? { companyTrack: null } : value == "person" ? { person: null } : value == "personCert" ? { personCert: null } : value == "personTrack" ? { personTrack: null } : value == "license" ? { license: null } : value;
 }
-function to_candid_RecordStatus_n85(_uploadFile, _downloadFile, value) {
+function to_candid_RecordStatus_n78(_uploadFile, _downloadFile, value) {
 	return value == "pendingReview" ? { pendingReview: null } : value == "verified" ? { verified: null } : value == "missing" ? { missing: null } : value;
 }
-function to_candid_RecordUpdate_n149(_uploadFile, _downloadFile, value) {
-	return to_candid_record_n150(_uploadFile, _downloadFile, value);
+function to_candid_RecordUpdate_n206(_uploadFile, _downloadFile, value) {
+	return to_candid_record_n207(_uploadFile, _downloadFile, value);
 }
-async function to_candid_ReplaceAttachmentInput_n143(_uploadFile, _downloadFile, value) {
-	return await to_candid_record_n144(_uploadFile, _downloadFile, value);
+async function to_candid_ReplaceAttachmentInput_n197(_uploadFile, _downloadFile, value) {
+	return await to_candid_record_n198(_uploadFile, _downloadFile, value);
+}
+function to_candid_SortField_n190(_uploadFile, _downloadFile, value) {
+	return value == "createdAt" ? { createdAt: null } : value == "deadline" ? { deadline: null } : value;
 }
 function to_candid_UserRole_n50(_uploadFile, _downloadFile, value) {
 	return value == "admin" ? { admin: null } : value == "user" ? { user: null } : value == "guest" ? { guest: null } : value;
@@ -35669,16 +36559,18 @@ function to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _dow
 function to_candid_opt_n1(_uploadFile, _downloadFile, value) {
 	return value === null ? candid_none() : candid_some(to_candid__ImmutableObjectStorageRefillInformation_n2(_uploadFile, _downloadFile, value));
 }
-function to_candid_opt_n68(_uploadFile, _downloadFile, value) {
+function to_candid_opt_n102(_uploadFile, _downloadFile, value) {
 	return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_record_n117(_uploadFile, _downloadFile, value) {
+function to_candid_record_n118(_uploadFile, _downloadFile, value) {
 	return {
-		result: value.result ? candid_some(to_candid_AuditResult_n118(_uploadFile, _downloadFile, value.result)) : candid_none(),
-		action: value.action ? candid_some(to_candid_AuditAction_n119(_uploadFile, _downloadFile, value.action)) : candid_none(),
-		operator: value.operator ? candid_some(value.operator) : candid_none(),
-		offset: value.offset,
-		limit: value.limit,
+		status: value.status ? candid_some(to_candid_RecordStatus_n78(_uploadFile, _downloadFile, value.status)) : candid_none(),
+		kind: value.kind ? candid_some(to_candid_RecordKind_n119(_uploadFile, _downloadFile, value.kind)) : candid_none(),
+		search: value.search ? candid_some(value.search) : candid_none(),
+		personId: value.personId ? candid_some(value.personId) : candid_none(),
+		maintainer: value.maintainer ? candid_some(value.maintainer) : candid_none(),
+		category: value.category ? candid_some(value.category) : candid_none(),
+		expiry: value.expiry ? candid_some(to_candid_ExpiryFlag_n120(_uploadFile, _downloadFile, value.expiry)) : candid_none(),
 		companyId: value.companyId ? candid_some(value.companyId) : candid_none()
 	};
 }
@@ -35691,7 +36583,28 @@ async function to_candid_record_n13(_uploadFile, _downloadFile, value) {
 		sensitive: value.sensitive
 	};
 }
-async function to_candid_record_n144(_uploadFile, _downloadFile, value) {
+function to_candid_record_n163(_uploadFile, _downloadFile, value) {
+	return {
+		result: value.result ? candid_some(to_candid_AuditResult_n164(_uploadFile, _downloadFile, value.result)) : candid_none(),
+		action: value.action ? candid_some(to_candid_AuditAction_n165(_uploadFile, _downloadFile, value.action)) : candid_none(),
+		operator: value.operator ? candid_some(value.operator) : candid_none(),
+		offset: value.offset,
+		limit: value.limit,
+		companyId: value.companyId ? candid_some(value.companyId) : candid_none()
+	};
+}
+function to_candid_record_n189(_uploadFile, _downloadFile, value) {
+	return {
+		status: value.status ? candid_some(to_candid_OpportunityStatus_n51(_uploadFile, _downloadFile, value.status)) : candid_none(),
+		descending: value.descending,
+		projectType: value.projectType ? candid_some(to_candid_ProjectType_n83(_uploadFile, _downloadFile, value.projectType)) : candid_none(),
+		deadlineTo: value.deadlineTo ? candid_some(value.deadlineTo) : candid_none(),
+		sortBy: value.sortBy ? candid_some(to_candid_SortField_n190(_uploadFile, _downloadFile, value.sortBy)) : candid_none(),
+		deadlineFrom: value.deadlineFrom ? candid_some(value.deadlineFrom) : candid_none(),
+		search: value.search ? candid_some(value.search) : candid_none()
+	};
+}
+async function to_candid_record_n198(_uploadFile, _downloadFile, value) {
 	return {
 		blob: await to_candid_ExternalBlob_n14(_uploadFile, _downloadFile, value.blob),
 		note: value.note,
@@ -35700,9 +36613,18 @@ async function to_candid_record_n144(_uploadFile, _downloadFile, value) {
 		expectedRecordVersion: value.expectedRecordVersion
 	};
 }
-function to_candid_record_n150(_uploadFile, _downloadFile, value) {
+function to_candid_record_n204(_uploadFile, _downloadFile, value) {
 	return {
-		data: to_candid_RecordData_n55(_uploadFile, _downloadFile, value.data),
+		clauseExcerpt: value.clauseExcerpt,
+		kind: to_candid_CheckItemKind_n73(_uploadFile, _downloadFile, value.kind),
+		conclusion: to_candid_CheckConclusion_n74(_uploadFile, _downloadFile, value.conclusion),
+		evidence: to_candid_vec_n75(_uploadFile, _downloadFile, value.evidence),
+		basis: value.basis
+	};
+}
+function to_candid_record_n207(_uploadFile, _downloadFile, value) {
+	return {
+		data: to_candid_RecordData_n90(_uploadFile, _downloadFile, value.data),
 		maintainer: value.maintainer,
 		remarks: value.remarks
 	};
@@ -35710,15 +36632,53 @@ function to_candid_record_n150(_uploadFile, _downloadFile, value) {
 function to_candid_record_n3(_uploadFile, _downloadFile, value) {
 	return { proposed_top_up_amount: value.proposed_top_up_amount ? candid_some(value.proposed_top_up_amount) : candid_none() };
 }
-function to_candid_record_n54(_uploadFile, _downloadFile, value) {
+function to_candid_record_n72(_uploadFile, _downloadFile, value) {
 	return {
-		data: to_candid_RecordData_n55(_uploadFile, _downloadFile, value.data),
+		clauseExcerpt: value.clauseExcerpt,
+		kind: to_candid_CheckItemKind_n73(_uploadFile, _downloadFile, value.kind),
+		conclusion: to_candid_CheckConclusion_n74(_uploadFile, _downloadFile, value.conclusion),
+		opportunityId: value.opportunityId,
+		evidence: to_candid_vec_n75(_uploadFile, _downloadFile, value.evidence),
+		basis: value.basis,
+		companyId: value.companyId
+	};
+}
+function to_candid_record_n77(_uploadFile, _downloadFile, value) {
+	return {
+		statusAtCitation: to_candid_RecordStatus_n78(_uploadFile, _downloadFile, value.statusAtCitation),
+		recordId: value.recordId
+	};
+}
+function to_candid_record_n82(_uploadFile, _downloadFile, value) {
+	return {
+		projectName: value.projectName,
+		tenderer: value.tenderer,
+		projectType: to_candid_ProjectType_n83(_uploadFile, _downloadFile, value.projectType),
+		publishDate: value.publishDate,
+		body: value.body,
+		bidOpenTime: value.bidOpenTime,
+		sourceUrl: value.sourceUrl,
+		clauses: to_candid_vec_n84(_uploadFile, _downloadFile, value.clauses),
+		sourceName: value.sourceName,
+		budgetYuan: value.budgetYuan ? candid_some(value.budgetYuan) : candid_none(),
+		registrationDeadline: value.registrationDeadline
+	};
+}
+function to_candid_record_n86(_uploadFile, _downloadFile, value) {
+	return {
+		kind: to_candid_ClauseKind_n87(_uploadFile, _downloadFile, value.kind),
+		excerpt: value.excerpt
+	};
+}
+function to_candid_record_n89(_uploadFile, _downloadFile, value) {
+	return {
+		data: to_candid_RecordData_n90(_uploadFile, _downloadFile, value.data),
 		maintainer: value.maintainer,
 		remarks: value.remarks,
 		companyId: value.companyId
 	};
 }
-function to_candid_record_n58(_uploadFile, _downloadFile, value) {
+function to_candid_record_n93(_uploadFile, _downloadFile, value) {
 	return {
 		validFrom: value.validFrom ? candid_some(value.validFrom) : candid_none(),
 		name: value.name,
@@ -35728,7 +36688,7 @@ function to_candid_record_n58(_uploadFile, _downloadFile, value) {
 		issuingAuthority: value.issuingAuthority
 	};
 }
-function to_candid_record_n60(_uploadFile, _downloadFile, value) {
+function to_candid_record_n95(_uploadFile, _downloadFile, value) {
 	return {
 		completionDate: value.completionDate ? candid_some(value.completionDate) : candid_none(),
 		projectName: value.projectName,
@@ -35736,7 +36696,7 @@ function to_candid_record_n60(_uploadFile, _downloadFile, value) {
 		personId: value.personId
 	};
 }
-function to_candid_record_n62(_uploadFile, _downloadFile, value) {
+function to_candid_record_n97(_uploadFile, _downloadFile, value) {
 	return {
 		validFrom: value.validFrom ? candid_some(value.validFrom) : candid_none(),
 		validTo: value.validTo ? candid_some(value.validTo) : candid_none(),
@@ -35746,29 +36706,23 @@ function to_candid_record_n62(_uploadFile, _downloadFile, value) {
 		issuingAuthority: value.issuingAuthority
 	};
 }
-function to_candid_record_n64(_uploadFile, _downloadFile, value) {
+function to_candid_record_n99(_uploadFile, _downloadFile, value) {
 	return {
 		completionDate: value.completionDate ? candid_some(value.completionDate) : candid_none(),
 		projectName: value.projectName,
-		projectType: value.projectType ? candid_some(to_candid_ProjectType_n65(_uploadFile, _downloadFile, value.projectType)) : candid_none(),
+		projectType: value.projectType ? candid_some(to_candid_ProjectType_n83(_uploadFile, _downloadFile, value.projectType)) : candid_none(),
 		owner: value.owner,
 		contractAmountFen: value.contractAmountFen ? candid_some(value.contractAmountFen) : candid_none()
 	};
 }
-function to_candid_record_n84(_uploadFile, _downloadFile, value) {
-	return {
-		status: value.status ? candid_some(to_candid_RecordStatus_n85(_uploadFile, _downloadFile, value.status)) : candid_none(),
-		kind: value.kind ? candid_some(to_candid_RecordKind_n86(_uploadFile, _downloadFile, value.kind)) : candid_none(),
-		search: value.search ? candid_some(value.search) : candid_none(),
-		personId: value.personId ? candid_some(value.personId) : candid_none(),
-		maintainer: value.maintainer ? candid_some(value.maintainer) : candid_none(),
-		category: value.category ? candid_some(value.category) : candid_none(),
-		expiry: value.expiry ? candid_some(to_candid_ExpiryFlag_n87(_uploadFile, _downloadFile, value.expiry)) : candid_none(),
-		companyId: value.companyId ? candid_some(value.companyId) : candid_none()
-	};
+function to_candid_variant_n91(_uploadFile, _downloadFile, value) {
+	return value.__kind__ === "companyTrack" ? { companyTrack: to_candid_CompanyTrackData_n98(_uploadFile, _downloadFile, value.companyTrack) } : value.__kind__ === "person" ? { person: value.person } : value.__kind__ === "personCert" ? { personCert: to_candid_PersonCertData_n96(_uploadFile, _downloadFile, value.personCert) } : value.__kind__ === "personTrack" ? { personTrack: to_candid_PersonTrackData_n94(_uploadFile, _downloadFile, value.personTrack) } : value.__kind__ === "license" ? { license: to_candid_LicenseData_n92(_uploadFile, _downloadFile, value.license) } : value;
 }
-function to_candid_variant_n56(_uploadFile, _downloadFile, value) {
-	return value.__kind__ === "companyTrack" ? { companyTrack: to_candid_CompanyTrackData_n63(_uploadFile, _downloadFile, value.companyTrack) } : value.__kind__ === "person" ? { person: value.person } : value.__kind__ === "personCert" ? { personCert: to_candid_PersonCertData_n61(_uploadFile, _downloadFile, value.personCert) } : value.__kind__ === "personTrack" ? { personTrack: to_candid_PersonTrackData_n59(_uploadFile, _downloadFile, value.personTrack) } : value.__kind__ === "license" ? { license: to_candid_LicenseData_n57(_uploadFile, _downloadFile, value.license) } : value;
+function to_candid_vec_n75(_uploadFile, _downloadFile, value) {
+	return value.map((x) => to_candid_EvidenceRef_n76(_uploadFile, _downloadFile, x));
+}
+function to_candid_vec_n84(_uploadFile, _downloadFile, value) {
+	return value.map((x) => to_candid_Clause_n85(_uploadFile, _downloadFile, x));
 }
 function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
 	const agent = options.agent || HttpAgent.createSync({ ...options.agentOptions });
@@ -38633,6 +39587,34 @@ var createLucideIcon = (iconName, iconNode) => {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var ArrowDownWideNarrow = createLucideIcon("arrow-down-wide-narrow", [
+	["path", {
+		d: "m3 16 4 4 4-4",
+		key: "1co6wj"
+	}],
+	["path", {
+		d: "M7 20V4",
+		key: "1yoxec"
+	}],
+	["path", {
+		d: "M11 4h10",
+		key: "1w87gc"
+	}],
+	["path", {
+		d: "M11 8h7",
+		key: "djye34"
+	}],
+	["path", {
+		d: "M11 12h4",
+		key: "q8tih4"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "m12 19-7-7 7-7",
 	key: "1l729n"
@@ -38640,6 +39622,101 @@ var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "M19 12H5",
 	key: "x3x0zl"
 }]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var ArrowRight = createLucideIcon("arrow-right", [["path", {
+	d: "M5 12h14",
+	key: "1ays0h"
+}], ["path", {
+	d: "m12 5 7 7-7 7",
+	key: "xquz4c"
+}]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var ArrowUpNarrowWide = createLucideIcon("arrow-up-narrow-wide", [
+	["path", {
+		d: "m3 8 4-4 4 4",
+		key: "11wl7u"
+	}],
+	["path", {
+		d: "M7 4v16",
+		key: "1glfcx"
+	}],
+	["path", {
+		d: "M11 12h4",
+		key: "q8tih4"
+	}],
+	["path", {
+		d: "M11 16h7",
+		key: "uosisv"
+	}],
+	["path", {
+		d: "M11 20h10",
+		key: "jvxblo"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var BadgeCheck = createLucideIcon("badge-check", [["path", {
+	d: "M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z",
+	key: "3c2336"
+}], ["path", {
+	d: "m9 12 2 2 4-4",
+	key: "dzmm74"
+}]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Ban = createLucideIcon("ban", [["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}], ["path", {
+	d: "m4.9 4.9 14.2 14.2",
+	key: "1m5liu"
+}]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Banknote = createLucideIcon("banknote", [
+	["rect", {
+		width: "20",
+		height: "12",
+		x: "2",
+		y: "6",
+		rx: "2",
+		key: "9lu3g6"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "2",
+		key: "1c9p78"
+	}],
+	["path", {
+		d: "M6 12h.01M18 12h.01",
+		key: "113zkx"
+	}]
+]);
 /**
 * @license lucide-react v0.511.0 - ISC
 *
@@ -38711,6 +39788,97 @@ var Building2 = createLucideIcon("building-2", [
 	["path", {
 		d: "M10 18h4",
 		key: "1ulq68"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Building = createLucideIcon("building", [
+	["rect", {
+		width: "16",
+		height: "20",
+		x: "4",
+		y: "2",
+		rx: "2",
+		ry: "2",
+		key: "76otgf"
+	}],
+	["path", {
+		d: "M9 22v-4h6v4",
+		key: "r93iot"
+	}],
+	["path", {
+		d: "M8 6h.01",
+		key: "1dz90k"
+	}],
+	["path", {
+		d: "M16 6h.01",
+		key: "1x0f13"
+	}],
+	["path", {
+		d: "M12 6h.01",
+		key: "1vi96p"
+	}],
+	["path", {
+		d: "M12 10h.01",
+		key: "1nrarc"
+	}],
+	["path", {
+		d: "M12 14h.01",
+		key: "1etili"
+	}],
+	["path", {
+		d: "M16 10h.01",
+		key: "1m94wz"
+	}],
+	["path", {
+		d: "M16 14h.01",
+		key: "1gbofw"
+	}],
+	["path", {
+		d: "M8 10h.01",
+		key: "19clt8"
+	}],
+	["path", {
+		d: "M8 14h.01",
+		key: "6423bh"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var CalendarClock = createLucideIcon("calendar-clock", [
+	["path", {
+		d: "M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5",
+		key: "1osxxc"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M3 10h5",
+		key: "r794hk"
+	}],
+	["path", {
+		d: "M17.5 17.5 16 16.3V14",
+		key: "akvzfd"
+	}],
+	["circle", {
+		cx: "16",
+		cy: "16",
+		r: "6",
+		key: "qoo3c4"
 	}]
 ]);
 /**
@@ -38808,6 +39976,28 @@ var CircleDot = createLucideIcon("circle-dot", [["circle", {
 	r: "1",
 	key: "41hilf"
 }]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var CircleHelp = createLucideIcon("circle-help", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
+		key: "1u773s"
+	}],
+	["path", {
+		d: "M12 17h.01",
+		key: "p32p05"
+	}]
+]);
 /**
 * @license lucide-react v0.511.0 - ISC
 *
@@ -38983,6 +40173,26 @@ var Download = createLucideIcon("download", [
 	["path", {
 		d: "m7 10 5 5 5-5",
 		key: "brsn70"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var ExternalLink = createLucideIcon("external-link", [
+	["path", {
+		d: "M15 3h6v6",
+		key: "1q9fwt"
+	}],
+	["path", {
+		d: "M10 14 21 3",
+		key: "gplh6r"
+	}],
+	["path", {
+		d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
+		key: "a6xqqp"
 	}]
 ]);
 /**
@@ -39172,6 +40382,38 @@ var Info = createLucideIcon("info", [
 	["path", {
 		d: "M12 8h.01",
 		key: "e9boi3"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Landmark = createLucideIcon("landmark", [
+	["path", {
+		d: "M10 18v-7",
+		key: "wt116b"
+	}],
+	["path", {
+		d: "M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z",
+		key: "1m329m"
+	}],
+	["path", {
+		d: "M14 18v-7",
+		key: "vav6t3"
+	}],
+	["path", {
+		d: "M18 18v-7",
+		key: "aexdmj"
+	}],
+	["path", {
+		d: "M3 22h18",
+		key: "8prr45"
+	}],
+	["path", {
+		d: "M6 18v-7",
+		key: "1ivflk"
 	}]
 ]);
 /**
@@ -39372,6 +40614,19 @@ var Plus = createLucideIcon("plus", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Quote = createLucideIcon("quote", [["path", {
+	d: "M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z",
+	key: "rib7q0"
+}], ["path", {
+	d: "M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z",
+	key: "1ymkrd"
+}]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Radar = createLucideIcon("radar", [
 	["path", {
 		d: "M19.07 4.93A10 10 0 0 0 6.99 3.34",
@@ -39432,6 +40687,19 @@ var RefreshCw = createLucideIcon("refresh-cw", [
 		key: "1cv678"
 	}]
 ]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var RotateCcw = createLucideIcon("rotate-ccw", [["path", {
+	d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8",
+	key: "1357e3"
+}], ["path", {
+	d: "M3 3v5h5",
+	key: "1xhq8a"
+}]]);
 /**
 * @license lucide-react v0.511.0 - ISC
 *
@@ -39555,6 +40823,32 @@ var ShieldX = createLucideIcon("shield-x", [
 	["path", {
 		d: "m9.5 9.5 5 5",
 		key: "18nt4w"
+	}]
+]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Target = createLucideIcon("target", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "6",
+		key: "1vlfrh"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "2",
+		key: "1c9p78"
 	}]
 ]);
 /**
@@ -39767,6 +41061,19 @@ var Users = createLucideIcon("users", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Wallet = createLucideIcon("wallet", [["path", {
+	d: "M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1",
+	key: "18etb6"
+}], ["path", {
+	d: "M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4",
+	key: "xoc0q4"
+}]]);
+/**
+* @license lucide-react v0.511.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var X = createLucideIcon("x", [["path", {
 	d: "M18 6 6 18",
 	key: "1bl5f8"
@@ -39963,7 +41270,13 @@ var AUDIT_ACTION_LABELS = {
 	[AuditAction.viewDashboard]: "查看缺口看板",
 	[AuditAction.viewList]: "查看列表",
 	[AuditAction.viewAuditLog]: "查看审计日志",
-	[AuditAction.seedSampleData]: "生成示例数据"
+	[AuditAction.seedSampleData]: "生成示例数据",
+	[AuditAction.createOpportunity]: "新建公告草稿",
+	[AuditAction.submitOpportunity]: "提交公告",
+	[AuditAction.changeOpportunityStatus]: "变更公告状态",
+	[AuditAction.createCheckItem]: "新建核对结论",
+	[AuditAction.editCheckItem]: "修改核对结论",
+	[AuditAction.confirmCheckItem]: "确认核对结论"
 };
 var AUDIT_RESULT_LABELS = {
 	[AuditResult.success]: "成功",
@@ -39985,8 +41298,64 @@ var NOTIFICATION_KIND_LABELS = {
 	[NotificationKind.permissionChanged]: "权限变更",
 	[NotificationKind.accountApproved]: "账号已批准",
 	[NotificationKind.accountRejected]: "账号被拒绝",
-	[NotificationKind.pendingUser]: "待批准用户"
+	[NotificationKind.pendingUser]: "待批准用户",
+	[NotificationKind.checkItemConfirmed]: "核对结论已确认"
 };
+var OPPORTUNITY_STATUS_LABELS = {
+	[OpportunityStatus.pendingReview]: "待核对",
+	[OpportunityStatus.selected]: "已选公司参投",
+	[OpportunityStatus.declined]: "不参与",
+	[OpportunityStatus.closed]: "已截止"
+};
+var OPPORTUNITY_STATUS_ORDER = [
+	OpportunityStatus.pendingReview,
+	OpportunityStatus.selected,
+	OpportunityStatus.declined,
+	OpportunityStatus.closed
+];
+var CHECK_CONCLUSION_LABELS = {
+	[CheckConclusion.conform]: "符合",
+	[CheckConclusion.nonConform]: "不符合",
+	[CheckConclusion.pending]: "待核"
+};
+var CHECK_CONCLUSION_ORDER = [
+	CheckConclusion.conform,
+	CheckConclusion.nonConform,
+	CheckConclusion.pending
+];
+var CHECK_ITEM_KIND_LABELS = {
+	[CheckItemKind.qualification]: "资质类别与等级",
+	[CheckItemKind.performance]: "类似业绩",
+	[CheckItemKind.personnel]: "人员与证书",
+	[CheckItemKind.capital]: "注册资本与信用",
+	[CheckItemKind.deposit]: "保证金能力",
+	[CheckItemKind.other]: "其他公告条款"
+};
+var CHECK_ITEM_KIND_ORDER = [
+	CheckItemKind.qualification,
+	CheckItemKind.performance,
+	CheckItemKind.personnel,
+	CheckItemKind.capital,
+	CheckItemKind.deposit,
+	CheckItemKind.other
+];
+var CLAUSE_KIND_LABELS = {
+	[ClauseKind.qualification]: "资格要求",
+	[ClauseKind.performance]: "业绩要求",
+	[ClauseKind.personnel]: "人员要求",
+	[ClauseKind.deposit]: "保证金要求"
+};
+var CLAUSE_KIND_ORDER = [
+	ClauseKind.qualification,
+	ClauseKind.performance,
+	ClauseKind.personnel,
+	ClauseKind.deposit
+];
+var SORT_FIELD_LABELS = {
+	[SortField.deadline]: "报名截止时间",
+	[SortField.createdAt]: "录入时间"
+};
+var SORT_FIELD_ORDER = [SortField.deadline, SortField.createdAt];
 var APP_NAME = "投标雷达";
 var APP_TAGLINE = "资质、人员、业绩档案审计系统";
 //#endregion
@@ -40172,7 +41541,7 @@ function useControllableState({ prop, defaultProp, onChange = () => {}, caller }
 	}
 	return [value, import_react.useCallback((nextValue) => {
 		if (isControlled) {
-			const value2 = isFunction$1(nextValue) ? nextValue(prop) : nextValue;
+			const value2 = isFunction$2(nextValue) ? nextValue(prop) : nextValue;
 			if (value2 !== prop) onChangeRef.current?.(value2);
 		} else setUncontrolledProp(nextValue);
 	}, [
@@ -40201,7 +41570,7 @@ function useUncontrolledState({ defaultProp, onChange }) {
 		onChangeRef
 	];
 }
-function isFunction$1(value) {
+function isFunction$2(value) {
 	return typeof value === "function";
 }
 //#endregion
@@ -44315,11 +45684,11 @@ var MenuCheckboxItem = import_react.forwardRef((props, forwardedRef) => {
 		checked,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuItem, {
 			role: "menuitemcheckbox",
-			"aria-checked": isIndeterminate(checked) ? "mixed" : checked,
+			"aria-checked": isIndeterminate$1(checked) ? "mixed" : checked,
 			...checkboxItemProps,
 			ref: forwardedRef,
 			"data-state": getCheckedState(checked),
-			onSelect: composeEventHandlers(checkboxItemProps.onSelect, () => onCheckedChange?.(isIndeterminate(checked) ? true : !checked), { checkForDefaultPrevented: false })
+			onSelect: composeEventHandlers(checkboxItemProps.onSelect, () => onCheckedChange?.(isIndeterminate$1(checked) ? true : !checked), { checkForDefaultPrevented: false })
 		})
 	});
 });
@@ -44368,7 +45737,7 @@ var MenuItemIndicator = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeMenu, forceMount, ...itemIndicatorProps } = props;
 	const indicatorContext = useItemIndicatorContext(ITEM_INDICATOR_NAME$1, __scopeMenu);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
-		present: forceMount || isIndeterminate(indicatorContext.checked) || indicatorContext.checked === true,
+		present: forceMount || isIndeterminate$1(indicatorContext.checked) || indicatorContext.checked === true,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
 			...itemIndicatorProps,
 			ref: forwardedRef,
@@ -44591,11 +45960,11 @@ MenuSubContent.displayName = SUB_CONTENT_NAME$1;
 function getOpenState(open) {
 	return open ? "open" : "closed";
 }
-function isIndeterminate(checked) {
+function isIndeterminate$1(checked) {
 	return checked === "indeterminate";
 }
 function getCheckedState(checked) {
-	return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
+	return isIndeterminate$1(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
 }
 function focusFirst(candidates) {
 	const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
@@ -44691,10 +46060,10 @@ var DropdownMenu$1 = (props) => {
 	});
 };
 DropdownMenu$1.displayName = DROPDOWN_MENU_NAME;
-var TRIGGER_NAME$4 = "DropdownMenuTrigger";
+var TRIGGER_NAME$5 = "DropdownMenuTrigger";
 var DropdownMenuTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDropdownMenu, disabled = false, ...triggerProps } = props;
-	const context = useDropdownMenuContext(TRIGGER_NAME$4, __scopeDropdownMenu);
+	const context = useDropdownMenuContext(TRIGGER_NAME$5, __scopeDropdownMenu);
 	const menuScope = useMenuScope(__scopeDropdownMenu);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Anchor2, {
 		asChild: true,
@@ -44729,7 +46098,7 @@ var DropdownMenuTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-DropdownMenuTrigger$1.displayName = TRIGGER_NAME$4;
+DropdownMenuTrigger$1.displayName = TRIGGER_NAME$5;
 var PORTAL_NAME$3 = "DropdownMenuPortal";
 var DropdownMenuPortal = (props) => {
 	const { __scopeDropdownMenu, ...portalProps } = props;
@@ -44840,7 +46209,7 @@ var DropdownMenuRadioItem = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 DropdownMenuRadioItem.displayName = RADIO_ITEM_NAME;
-var INDICATOR_NAME$1 = "DropdownMenuItemIndicator";
+var INDICATOR_NAME$2 = "DropdownMenuItemIndicator";
 var DropdownMenuItemIndicator = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDropdownMenu, ...itemIndicatorProps } = props;
 	const menuScope = useMenuScope(__scopeDropdownMenu);
@@ -44850,7 +46219,7 @@ var DropdownMenuItemIndicator = import_react.forwardRef((props, forwardedRef) =>
 		ref: forwardedRef
 	});
 });
-DropdownMenuItemIndicator.displayName = INDICATOR_NAME$1;
+DropdownMenuItemIndicator.displayName = INDICATOR_NAME$2;
 var SEPARATOR_NAME$1 = "DropdownMenuSeparator";
 var DropdownMenuSeparator$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDropdownMenu, ...separatorProps } = props;
@@ -45591,11 +46960,11 @@ function createRandomKey() {
 function last(arr) {
 	return arr[arr.length - 1];
 }
-function isFunction(d) {
+function isFunction$1(d) {
 	return typeof d === "function";
 }
 function functionalUpdate(updater, previous) {
-	if (isFunction(updater)) return updater(previous);
+	if (isFunction$1(updater)) return updater(previous);
 	return updater;
 }
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -49746,6 +51115,12 @@ var NAV_ITEMS = [
 		mobile: true
 	},
 	{
+		to: "/opportunities",
+		label: "机会池",
+		icon: Target,
+		mobile: true
+	},
+	{
 		to: "/companies",
 		label: "公司档案",
 		icon: Building2,
@@ -49921,13 +51296,26 @@ function AppShell({ account }) {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("footer", {
 						className: "hidden border-t border-border px-6 py-3 text-center text-xs text-muted-foreground lg:block",
-						children: [
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
 							"© ",
 							(/* @__PURE__ */ new Date()).getFullYear(),
 							" ",
 							APP_NAME,
 							" · 内部使用"
-						]
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-1",
+							children: [
+								"Built with love using",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "https://caffeine.ai",
+									target: "_blank",
+									rel: "noreferrer",
+									className: "underline underline-offset-2 transition-smooth hover:text-foreground",
+									children: "caffeine.ai"
+								})
+							]
+						})]
 					})
 				]
 			}),
@@ -49954,6 +51342,122 @@ function AppGate() {
 	if (account.approval === ApprovalState.pending) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PendingScreen, { displayName: account.displayName });
 	if (account.approval === ApprovalState.rejected) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RejectedScreen, { displayName: account.displayName });
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppShell, { account });
+}
+//#endregion
+//#region src/lib/format.ts
+/** Shared formatting helpers for backend values. */
+/** Motoko Time.now() is a nanosecond bigint. */
+function timestampToDate(timestamp) {
+	const date = new Date(Number(timestamp / 1000000n));
+	return Number.isNaN(date.getTime()) ? null : date;
+}
+function formatDate(timestamp) {
+	if (timestamp === void 0) return "—";
+	const date = timestampToDate(timestamp);
+	if (!date) return "—";
+	return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`;
+}
+function formatDateTime(timestamp) {
+	if (timestamp === void 0) return "—";
+	const date = timestampToDate(timestamp);
+	if (!date) return "—";
+	const hh = `${date.getHours()}`.padStart(2, "0");
+	const mm = `${date.getMinutes()}`.padStart(2, "0");
+	return `${formatDate(timestamp)} ${hh}:${mm}`;
+}
+/** Convert a yyyy-mm-dd input value to a UTC-midnight nanosecond timestamp. */
+function dateInputToTimestamp(value) {
+	if (!value) return void 0;
+	const parsed = /* @__PURE__ */ new Date(`${value}T00:00:00Z`);
+	if (Number.isNaN(parsed.getTime())) return void 0;
+	return BigInt(parsed.getTime()) * 1000000n;
+}
+function timestampToDateInput(timestamp) {
+	if (timestamp === void 0) return "";
+	const date = timestampToDate(timestamp);
+	if (!date) return "";
+	return `${date.getUTCFullYear()}-${`${date.getUTCMonth() + 1}`.padStart(2, "0")}-${`${date.getUTCDate()}`.padStart(2, "0")}`;
+}
+/**
+* Registration is closed once the deadline timestamp has passed. The backend's
+* daysRemaining is a Nat (0 after the deadline), so it cannot signal closure.
+*/
+function isRegistrationClosed(registrationDeadline, now = Date.now()) {
+	return Number(registrationDeadline / 1000000n) < now;
+}
+/** Contract amounts are stored in fen (分). */
+function formatFen(fen) {
+	if (fen === void 0) return "—";
+	return `¥${(Number(fen) / 100).toLocaleString("zh-CN", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	})}`;
+}
+function fenFromYuanInput(value) {
+	const trimmed = value.trim();
+	if (!trimmed) return void 0;
+	const yuan = Number(trimmed);
+	if (Number.isNaN(yuan) || yuan < 0) return void 0;
+	return BigInt(Math.round(yuan * 100));
+}
+/** Mask a Chinese ID number: keep first 3 and last 4 digits. */
+function maskIdNumber(idNumber) {
+	if (!idNumber) return "—";
+	if (idNumber.length <= 7) return `${idNumber.slice(0, 1)}****`;
+	return `${idNumber.slice(0, 3)}********${idNumber.slice(-4)}`;
+}
+//#endregion
+//#region src/lib/opportunitySearch.ts
+var PROJECT_TYPES = new Set(Object.values(ProjectType));
+var STATUSES = new Set(Object.values(OpportunityStatus));
+var SORT_FIELDS = new Set(Object.values(SortField));
+function pick(value, allowed) {
+	return typeof value === "string" && allowed.has(value) ? value : void 0;
+}
+function pickDate(value) {
+	return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : void 0;
+}
+/** Normalises raw URL search into the typed opportunity filter shape. */
+function parseOpportunitySearch(search) {
+	return {
+		projectType: pick(search.projectType, PROJECT_TYPES),
+		status: pick(search.status, STATUSES),
+		deadlineFrom: pickDate(search.deadlineFrom),
+		deadlineTo: pickDate(search.deadlineTo),
+		keyword: typeof search.keyword === "string" && search.keyword.trim() ? search.keyword : void 0,
+		sortBy: pick(search.sortBy, SORT_FIELDS),
+		descending: search.descending === "true" || search.descending === "false" ? search.descending : void 0
+	};
+}
+/**
+* Builds a complete /opportunities search object from a partial filter.
+* Returned as a reducer so TanStack Router accepts every required key.
+*/
+function opportunitySearch(partial = {}) {
+	return () => ({
+		projectType: partial.projectType,
+		status: partial.status,
+		deadlineFrom: partial.deadlineFrom,
+		deadlineTo: partial.deadlineTo,
+		keyword: partial.keyword,
+		sortBy: partial.sortBy,
+		descending: partial.descending
+	});
+}
+/** Maps URL search params onto the backend OpportunityFilter contract. */
+function toOpportunityFilter(search) {
+	const deadlineFrom = dateInputToTimestamp(search.deadlineFrom ?? "");
+	const deadlineTo = dateInputToTimestamp(search.deadlineTo ?? "");
+	const keyword = search.keyword?.trim();
+	return {
+		projectType: search.projectType,
+		status: search.status,
+		deadlineFrom,
+		deadlineTo,
+		search: keyword ? keyword : void 0,
+		sortBy: search.sortBy ?? SortField.deadline,
+		descending: search.descending === "true"
+	};
 }
 //#endregion
 //#region ../../../../../../opt/pnpm-templates/build_template/node_modules/.pnpm/@radix-ui+number@1.1.1/node_modules/@radix-ui/number/dist/index.mjs
@@ -50091,11 +51595,11 @@ var Select$1 = (props) => {
 	});
 };
 Select$1.displayName = SELECT_NAME;
-var TRIGGER_NAME$3 = "SelectTrigger";
+var TRIGGER_NAME$4 = "SelectTrigger";
 var SelectTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, disabled = false, ...triggerProps } = props;
 	const popperScope = usePopperScope$1(__scopeSelect);
-	const context = useSelectContext(TRIGGER_NAME$3, __scopeSelect);
+	const context = useSelectContext(TRIGGER_NAME$4, __scopeSelect);
 	const isDisabled = context.disabled || disabled;
 	const composedRefs = useComposedRefs(forwardedRef, context.onTriggerChange);
 	const getItems = useCollection(__scopeSelect);
@@ -50157,7 +51661,7 @@ var SelectTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-SelectTrigger$1.displayName = TRIGGER_NAME$3;
+SelectTrigger$1.displayName = TRIGGER_NAME$4;
 var VALUE_NAME = "SelectValue";
 var SelectValue$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, className, style, children, placeholder = "", ...valueProps } = props;
@@ -50875,7 +52379,7 @@ var SelectArrow = import_react.forwardRef((props, forwardedRef) => {
 	}) : null;
 });
 SelectArrow.displayName = ARROW_NAME$1;
-var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$2 = "SelectBubbleInput";
 var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...props }, forwardedRef) => {
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
@@ -50901,7 +52405,7 @@ var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...prop
 		defaultValue: value
 	});
 });
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$2;
 function shouldShowPlaceholder(value) {
 	return value === "" || value === void 0;
 }
@@ -51239,62 +52743,6 @@ function TableCell({ className, ...props }) {
 		className: cn("p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]", className),
 		...props
 	});
-}
-//#endregion
-//#region src/lib/format.ts
-/** Shared formatting helpers for backend values. */
-/** Motoko Time.now() is a nanosecond bigint. */
-function timestampToDate(timestamp) {
-	const date = new Date(Number(timestamp / 1000000n));
-	return Number.isNaN(date.getTime()) ? null : date;
-}
-function formatDate(timestamp) {
-	if (timestamp === void 0) return "—";
-	const date = timestampToDate(timestamp);
-	if (!date) return "—";
-	return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`;
-}
-function formatDateTime(timestamp) {
-	if (timestamp === void 0) return "—";
-	const date = timestampToDate(timestamp);
-	if (!date) return "—";
-	const hh = `${date.getHours()}`.padStart(2, "0");
-	const mm = `${date.getMinutes()}`.padStart(2, "0");
-	return `${formatDate(timestamp)} ${hh}:${mm}`;
-}
-/** Convert a yyyy-mm-dd input value to a UTC-midnight nanosecond timestamp. */
-function dateInputToTimestamp(value) {
-	if (!value) return void 0;
-	const parsed = /* @__PURE__ */ new Date(`${value}T00:00:00Z`);
-	if (Number.isNaN(parsed.getTime())) return void 0;
-	return BigInt(parsed.getTime()) * 1000000n;
-}
-function timestampToDateInput(timestamp) {
-	if (timestamp === void 0) return "";
-	const date = timestampToDate(timestamp);
-	if (!date) return "";
-	return `${date.getUTCFullYear()}-${`${date.getUTCMonth() + 1}`.padStart(2, "0")}-${`${date.getUTCDate()}`.padStart(2, "0")}`;
-}
-/** Contract amounts are stored in fen (分). */
-function formatFen(fen) {
-	if (fen === void 0) return "—";
-	return `¥${(Number(fen) / 100).toLocaleString("zh-CN", {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	})}`;
-}
-function fenFromYuanInput(value) {
-	const trimmed = value.trim();
-	if (!trimmed) return void 0;
-	const yuan = Number(trimmed);
-	if (Number.isNaN(yuan) || yuan < 0) return void 0;
-	return BigInt(Math.round(yuan * 100));
-}
-/** Mask a Chinese ID number: keep first 3 and last 4 digits. */
-function maskIdNumber(idNumber) {
-	if (!idNumber) return "—";
-	if (idNumber.length <= 7) return `${idNumber.slice(0, 1)}****`;
-	return `${idNumber.slice(0, 3)}********${idNumber.slice(-4)}`;
 }
 //#endregion
 //#region src/components/audit/AuditTable.tsx
@@ -51883,23 +53331,23 @@ var Dialog$1 = (props) => {
 	});
 };
 Dialog$1.displayName = DIALOG_NAME;
-var TRIGGER_NAME$2 = "DialogTrigger";
+var TRIGGER_NAME$3 = "DialogTrigger";
 var DialogTrigger = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...triggerProps } = props;
-	const context = useDialogContext(TRIGGER_NAME$2, __scopeDialog);
+	const context = useDialogContext(TRIGGER_NAME$3, __scopeDialog);
 	const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.button, {
 		type: "button",
 		"aria-haspopup": "dialog",
 		"aria-expanded": context.open,
 		"aria-controls": context.contentId,
-		"data-state": getState$1(context.open),
+		"data-state": getState$2(context.open),
 		...triggerProps,
 		ref: composedTriggerRef,
 		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
 	});
 });
-DialogTrigger.displayName = TRIGGER_NAME$2;
+DialogTrigger.displayName = TRIGGER_NAME$3;
 var PORTAL_NAME$1 = "DialogPortal";
 var [PortalProvider$1, usePortalContext$1] = createDialogContext(PORTAL_NAME$1, { forceMount: void 0 });
 var DialogPortal$1 = (props) => {
@@ -51942,7 +53390,7 @@ var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 		allowPinchZoom: true,
 		shards: [context.contentRef],
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-			"data-state": getState$1(context.open),
+			"data-state": getState$2(context.open),
 			...overlayProps,
 			ref: forwardedRef,
 			style: {
@@ -52041,7 +53489,7 @@ var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 			id: context.contentId,
 			"aria-describedby": context.descriptionId,
 			"aria-labelledby": context.titleId,
-			"data-state": getState$1(context.open),
+			"data-state": getState$2(context.open),
 			...contentProps,
 			ref: composedRefs,
 			onDismiss: () => context.onOpenChange(false)
@@ -52085,7 +53533,7 @@ var DialogClose = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 DialogClose.displayName = CLOSE_NAME;
-function getState$1(open) {
+function getState$2(open) {
 	return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
@@ -52173,6 +53621,13 @@ function DialogHeader({ className, ...props }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		"data-slot": "dialog-header",
 		className: cn("flex flex-col gap-2 text-center sm:text-left", className),
+		...props
+	});
+}
+function DialogFooter({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-slot": "dialog-footer",
+		className: cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className),
 		...props
 	});
 }
@@ -53160,12 +54615,12 @@ function CompaniesPage() {
 }
 //#endregion
 //#region src/components/records/StatusBadge.tsx
-var STATUS_STYLES = {
+var STATUS_STYLES$1 = {
 	[RecordStatus.missing]: "bg-status-missing-soft text-status-missing-foreground border-status-missing-border",
 	[RecordStatus.pendingReview]: "bg-status-pending-soft text-status-pending-foreground border-status-pending-border",
 	[RecordStatus.verified]: "bg-status-verified-soft text-status-verified-foreground border-status-verified-border"
 };
-var STATUS_ICONS = {
+var STATUS_ICONS$1 = {
 	[RecordStatus.missing]: Circle,
 	[RecordStatus.pendingReview]: CircleDot,
 	[RecordStatus.verified]: CircleCheck
@@ -53179,11 +54634,11 @@ var EXPIRY_ICONS = {
 	[ExpiryFlag.expired]: TriangleAlert
 };
 function StatusBadge({ status, className }) {
-	const Icon = STATUS_ICONS[status];
+	const Icon = STATUS_ICONS$1[status];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
 		variant: "outline",
 		"data-ocid": "status.badge",
-		className: cn("rounded-sm gap-1 px-1.5 py-0.5 font-medium", STATUS_STYLES[status], className),
+		className: cn("rounded-sm gap-1 px-1.5 py-0.5 font-medium", STATUS_STYLES$1[status], className),
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
 			className: "size-3",
 			"aria-hidden": "true"
@@ -53282,7 +54737,7 @@ function ConflictBanner({ latest, onResubmit, pending }) {
 }
 //#endregion
 //#region src/components/records/kindConfig.ts
-var PROJECT_TYPE_OPTIONS = [
+var PROJECT_TYPE_OPTIONS$2 = [
 	{
 		value: "construction",
 		label: "施工"
@@ -53361,7 +54816,7 @@ var KIND_CONFIGS = {
 				key: "projectType",
 				label: "项目类型",
 				type: "select",
-				options: PROJECT_TYPE_OPTIONS
+				options: PROJECT_TYPE_OPTIONS$2
 			},
 			{
 				key: "contractAmountFen",
@@ -53907,7 +55362,7 @@ function RecordEditorDialog({ open, onOpenChange, kind, companyId, maintainer, r
 //#endregion
 //#region src/components/companies/RecordList.tsx
 /** One-line summary of the record's key fields, per kind. */
-function recordSummary(record) {
+function recordSummary$1(record) {
 	const data = record.data;
 	switch (data.__kind__) {
 		case "license": return [
@@ -53975,7 +55430,7 @@ function RecordList({ records, canEdit, onOpen, onCreate }) {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "truncate text-xs text-muted-foreground",
-						children: recordSummary(record)
+						children: recordSummary$1(record)
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex flex-wrap items-center gap-2 pt-0.5",
@@ -54092,10 +55547,10 @@ var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Progress$1.displayName = PROGRESS_NAME;
-var INDICATOR_NAME = "ProgressIndicator";
+var INDICATOR_NAME$1 = "ProgressIndicator";
 var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeProgress, ...indicatorProps } = props;
-	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
+	const context = useProgressContext(INDICATOR_NAME$1, __scopeProgress);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
 		"data-state": getProgressState(context.value, context.max),
 		"data-value": context.value ?? void 0,
@@ -54104,7 +55559,7 @@ var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	});
 });
-ProgressIndicator.displayName = INDICATOR_NAME;
+ProgressIndicator.displayName = INDICATOR_NAME$1;
 function defaultGetValueLabel(value, max) {
 	return `${Math.round(value / max * 100)}%`;
 }
@@ -54827,10 +56282,10 @@ var TabsList$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 TabsList$1.displayName = TAB_LIST_NAME;
-var TRIGGER_NAME$1 = "TabsTrigger";
+var TRIGGER_NAME$2 = "TabsTrigger";
 var TabsTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value, disabled = false, ...triggerProps } = props;
-	const context = useTabsContext(TRIGGER_NAME$1, __scopeTabs);
+	const context = useTabsContext(TRIGGER_NAME$2, __scopeTabs);
 	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
 	const triggerId = makeTriggerId(context.baseId, value);
 	const contentId = makeContentId(context.baseId, value);
@@ -54865,7 +56320,7 @@ var TabsTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-TabsTrigger$1.displayName = TRIGGER_NAME$1;
+TabsTrigger$1.displayName = TRIGGER_NAME$2;
 var CONTENT_NAME$1 = "TabsContent";
 var TabsContent$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value, forceMount, children, ...contentProps } = props;
@@ -55393,8 +56848,8 @@ function CompanyGapCard({ row, selected, onOpen }) {
 }
 //#endregion
 //#region src/components/dashboard/GapFilterBar.tsx
-var ALL$1 = "__all__";
-var STATUS_OPTIONS = [
+var ALL$2 = "__all__";
+var STATUS_OPTIONS$1 = [
 	RecordStatus.missing,
 	RecordStatus.pendingReview,
 	RecordStatus.verified
@@ -55407,8 +56862,8 @@ function FilterField({ label, value, onChange, placeholder, options, ocid }) {
 			className: "text-xs font-medium text-muted-foreground",
 			children: label
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-			value: value ?? ALL$1,
-			onValueChange: (next) => onChange(next === ALL$1 ? void 0 : next),
+			value: value ?? ALL$2,
+			onValueChange: (next) => onChange(next === ALL$2 ? void 0 : next),
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
 				size: "sm",
 				"aria-label": label,
@@ -55416,7 +56871,7 @@ function FilterField({ label, value, onChange, placeholder, options, ocid }) {
 				className: "w-full min-w-0 bg-card text-sm",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder })
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-				value: ALL$1,
+				value: ALL$2,
 				children: placeholder
 			}), options.map((option) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
 				value: option.value,
@@ -55448,7 +56903,7 @@ function GapFilterBar({ value, onChange, owners, className }) {
 					}),
 					placeholder: "全部状态",
 					ocid: "dashboard.filter.status_select",
-					options: STATUS_OPTIONS.map((s) => ({
+					options: STATUS_OPTIONS$1.map((s) => ({
 						value: s,
 						label: STATUS_LABELS[s]
 					}))
@@ -56111,6 +57566,167 @@ function MyAttention({ records, onOpen }) {
 	});
 }
 //#endregion
+//#region src/components/opportunities/DeadlineBadge.tsx
+/**
+* Marks an announcement's registration deadline: 已截止 once the deadline
+* timestamp has passed, otherwise the remaining days (≤7 highlighted).
+*/
+function DeadlineBadge({ daysRemaining, registrationDeadline, className }) {
+	const closed = isRegistrationClosed(registrationDeadline);
+	const urgent = !closed && daysRemaining <= 7n;
+	if (closed) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+		variant: "outline",
+		"data-ocid": "opportunity.deadline.badge",
+		className: cn("gap-1 rounded-sm border-status-expired-border bg-status-expired-soft px-1.5 py-0.5 font-medium text-status-expired-foreground", className),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
+			className: "size-3",
+			"aria-hidden": "true"
+		}), "已截止"]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+		variant: "outline",
+		"data-ocid": "opportunity.deadline.badge",
+		className: cn("gap-1 rounded-sm px-1.5 py-0.5 font-medium", urgent ? "border-status-expiring-border bg-status-expiring-soft text-status-expiring-foreground" : "border-border bg-muted text-muted-foreground", className),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
+			className: "size-3",
+			"aria-hidden": "true"
+		}), daysRemaining === 0n ? "今日截止" : `剩余 ${daysRemaining} 天`]
+	});
+}
+//#endregion
+//#region src/components/home/OpportunityTodo.tsx
+var CONCLUSION_STYLES$2 = {
+	[CheckConclusion.conform]: "bg-status-verified-soft text-status-verified-foreground border-status-verified-border",
+	[CheckConclusion.pending]: "bg-status-pending-soft text-status-pending-foreground border-status-pending-border",
+	[CheckConclusion.nonConform]: "bg-status-expired-soft text-status-expired-foreground border-status-expired-border"
+};
+function TodoRow({ to, params, ocid, children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+		to,
+		params,
+		"data-ocid": ocid,
+		className: "group flex items-start gap-3 rounded-md px-2 py-2.5 transition-smooth hover:bg-accent focus-visible:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "min-w-0 flex-1",
+			children
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
+			className: "mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5",
+			"aria-hidden": "true"
+		})]
+	}) });
+}
+function ClosingSoonRow({ item, index }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TodoRow, {
+		to: "/opportunities/$opportunityId",
+		params: { opportunityId: item.id.toString() },
+		ocid: `home.opportunity_todo.closing.${index}`,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-wrap items-center gap-1.5",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "min-w-0 truncate text-sm font-medium text-foreground",
+				children: item.projectName
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeadlineBadge, {
+				daysRemaining: item.daysRemaining,
+				registrationDeadline: item.registrationDeadline
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "mt-0.5 truncate text-xs text-muted-foreground",
+			children: [
+				item.tenderer,
+				" · ",
+				item.projectTypeLabel,
+				" · 报名截止",
+				" ",
+				formatDate(item.registrationDeadline)
+			]
+		})]
+	});
+}
+function PendingConfirmationRow({ item, index }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TodoRow, {
+		to: "/opportunities/$opportunityId",
+		params: { opportunityId: item.opportunityId.toString() },
+		ocid: `home.opportunity_todo.pending.${index}`,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-wrap items-center gap-1.5",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "min-w-0 truncate text-sm font-medium text-foreground",
+				children: item.companyName
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				variant: "outline",
+				className: cn("rounded-sm px-1.5 py-0.5 font-medium", CONCLUSION_STYLES$2[item.conclusion]),
+				children: CHECK_CONCLUSION_LABELS[item.conclusion]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "mt-0.5 truncate text-xs text-muted-foreground",
+			children: [
+				item.kindLabel,
+				" · 由 ",
+				item.createdByName,
+				" 提交，待确认"
+			]
+		})]
+	});
+}
+/**
+* 机会池待办: announcements closing within 7 days and check conclusions still
+* awaiting confirmation. Each row links straight to the announcement detail.
+*/
+function OpportunityTodo({ closingSoon, pendingConfirmations, isLoading }) {
+	if (isLoading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InlineLoading, { label: "正在加载机会池待办…" });
+	if (closingSoon.length === 0 && pendingConfirmations.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, {
+		icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, {
+			className: "size-5",
+			"aria-hidden": "true"
+		}),
+		title: "暂无机会池待办",
+		description: "7 天内截止的公告与待确认的核对结论会出现在这里。",
+		className: "border-0 bg-transparent py-8"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-4",
+		children: [closingSoon.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+			className: "mb-1 flex items-center gap-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, {
+					className: "size-3.5",
+					"aria-hidden": "true"
+				}),
+				"临近报名截止",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "num-tabular rounded-sm bg-status-expiring-soft px-1.5 py-0.5 text-[11px] font-semibold text-status-expiring-foreground",
+					children: closingSoon.length
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+			className: "divide-y divide-border",
+			children: closingSoon.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClosingSoonRow, {
+				item,
+				index: index + 1
+			}, item.id.toString()))
+		})] }), pendingConfirmations.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+			className: "mb-1 flex items-center gap-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleHelp, {
+					className: "size-3.5",
+					"aria-hidden": "true"
+				}),
+				"待确认核对结论",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "num-tabular rounded-sm bg-status-pending-soft px-1.5 py-0.5 text-[11px] font-semibold text-status-pending-foreground",
+					children: pendingConfirmations.length
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+			className: "divide-y divide-border",
+			children: pendingConfirmations.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PendingConfirmationRow, {
+				item,
+				index: index + 1
+			}, item.id.toString()))
+		})] })]
+	});
+}
+//#endregion
 //#region src/components/home/PendingAccountList.tsx
 /** Users waiting for approval, each linking to the user management page. */
 function PendingAccountList({ accounts }) {
@@ -56252,11 +57868,74 @@ function VerifyQueue({ records, onOpen }) {
 	});
 }
 //#endregion
+//#region src/hooks/useOpportunities.ts
+/** Stable query key for an opportunity filter (bigints serialise via toJSON). */
+function opportunitiesKey(filter) {
+	return ["opportunities", filter];
+}
+function useOpportunities(filter) {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: opportunitiesKey(filter),
+		queryFn: async () => {
+			if (!actor) return [];
+			return unwrap(await actor.listOpportunities(filter));
+		},
+		enabled: !!actor && !isFetching
+	});
+}
+function useOpportunity(id) {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: ["opportunity", id?.toString()],
+		queryFn: async () => {
+			if (!actor || id === void 0) throw new Error("Backend is not ready");
+			return unwrap(await actor.getOpportunity(id));
+		},
+		enabled: !!actor && !isFetching && id !== void 0
+	});
+}
+function useOpportunityStatusHistory(id) {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: ["opportunityStatusHistory", id?.toString()],
+		queryFn: async () => {
+			if (!actor || id === void 0) return [];
+			return unwrap(await actor.getOpportunityStatusHistory(id));
+		},
+		enabled: !!actor && !isFetching && id !== void 0
+	});
+}
+function useCheckItems(opportunityId) {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: ["checkItems", opportunityId?.toString()],
+		queryFn: async () => {
+			if (!actor || opportunityId === void 0) return [];
+			return unwrap(await actor.listCheckItems(opportunityId));
+		},
+		enabled: !!actor && !isFetching && opportunityId !== void 0
+	});
+}
+/** 机会池待办: closing-soon announcements and unconfirmed check items. */
+function useOpportunityTodo() {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: ["opportunityTodo"],
+		queryFn: async () => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.getOpportunityTodo());
+		},
+		enabled: !!actor && !isFetching
+	});
+}
+//#endregion
 //#region src/pages/HomePage.tsx
 function HomePage() {
 	const summary = useHomeSummary();
 	const account = useMyAccount();
 	const permissions = useMyPermissions();
+	const opportunityTodo = useOpportunityTodo();
 	const [selected, setSelected] = (0, import_react.useState)(null);
 	const [sheetOpen, setSheetOpen] = (0, import_react.useState)(false);
 	const openRecord = (record) => {
@@ -56270,7 +57949,10 @@ function HomePage() {
 	const overview = summary.data?.overview ?? [];
 	const myAttention = summary.data?.myAttention ?? [];
 	const toVerify = summary.data?.toVerify ?? [];
-	const isEmptySystem = !!summary.data && overview.length === 0 && myAttention.length === 0 && toVerify.length === 0 && pendingAccounts.length === 0;
+	const closingSoon = opportunityTodo.data?.closingSoon ?? [];
+	const pendingConfirmations = opportunityTodo.data?.pendingConfirmations ?? [];
+	const opportunityTodoCount = closingSoon.length + pendingConfirmations.length;
+	const isEmptySystem = !!summary.data && overview.length === 0 && myAttention.length === 0 && toVerify.length === 0 && pendingAccounts.length === 0 && opportunityTodoCount === 0;
 	const roleLabel = role ? ROLE_LABELS[role] : void 0;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-ocid": "home.page",
@@ -56309,6 +57991,29 @@ function HomePage() {
 			summary.data && !isEmptySystem && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "grid grid-cols-1 gap-4 lg:grid-cols-2",
 				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HomeSection, {
+						title: "机会池待办",
+						description: "7 天内报名截止的公告与待确认的核对结论。",
+						icon: Target,
+						count: opportunityTodoCount,
+						ocid: "home.opportunity_todo.section",
+						action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							asChild: true,
+							type: "button",
+							variant: "ghost",
+							size: "sm",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/opportunities",
+								search: opportunitySearch(),
+								children: "机会池"
+							})
+						}),
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityTodo, {
+							closingSoon,
+							pendingConfirmations,
+							isLoading: opportunityTodo.isLoading
+						})
+					}),
 					isAdmin && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HomeSection, {
 						title: "待批准用户",
 						description: "新注册的成员需管理员批准后才能使用系统。",
@@ -56449,7 +58154,8 @@ var KIND_STYLES = {
 	[NotificationKind.permissionChanged]: "bg-accent text-accent-foreground border-border",
 	[NotificationKind.accountApproved]: "bg-status-verified-soft text-status-verified-foreground border-status-verified-border",
 	[NotificationKind.accountRejected]: "bg-status-expired-soft text-status-expired-foreground border-status-expired-border",
-	[NotificationKind.pendingUser]: "bg-status-pending-soft text-status-pending-foreground border-status-pending-border"
+	[NotificationKind.pendingUser]: "bg-status-pending-soft text-status-pending-foreground border-status-pending-border",
+	[NotificationKind.checkItemConfirmed]: "bg-status-verified-soft text-status-verified-foreground border-status-verified-border"
 };
 var KIND_ICONS = {
 	[NotificationKind.nearExpiry]: Clock,
@@ -56459,7 +58165,8 @@ var KIND_ICONS = {
 	[NotificationKind.permissionChanged]: ShieldCheck,
 	[NotificationKind.accountApproved]: UserCheck,
 	[NotificationKind.accountRejected]: UserX,
-	[NotificationKind.pendingUser]: Users
+	[NotificationKind.pendingUser]: Users,
+	[NotificationKind.checkItemConfirmed]: CircleCheck
 };
 function NotificationItem({ notification, index, onMarkRead, marking }) {
 	const Icon = KIND_ICONS[notification.kind];
@@ -56649,6 +58356,2497 @@ function NotificationsPage() {
 				}, notification.id.toString()))
 			})
 		]
+	});
+}
+//#endregion
+//#region src/components/opportunities/announcementForm.ts
+function emptyAnnouncementValues() {
+	return {
+		projectName: "",
+		tenderer: "",
+		projectType: ProjectType.construction,
+		sourceName: "",
+		sourceUrl: "",
+		publishDate: "",
+		registrationDeadline: "",
+		bidOpenTime: "",
+		budgetYuan: "",
+		body: ""
+	};
+}
+var URL_PATTERN = /^https?:\/\/\S+$/i;
+/**
+* Validates the draft and names every missing or malformed field, so the
+* dialog can point at the exact gap instead of a generic failure.
+*/
+function validateAnnouncement(values) {
+	const issues = [];
+	const require = (key, label) => {
+		if (!values[key].trim()) issues.push({
+			key,
+			label,
+			message: `请填写${label}`
+		});
+	};
+	require("projectName", "项目名称");
+	require("tenderer", "招标人");
+	require("sourceName", "公告来源");
+	require("publishDate", "公告发布日期");
+	require("registrationDeadline", "报名截止时间");
+	require("bidOpenTime", "开标时间");
+	require("body", "公告正文");
+	const url = values.sourceUrl.trim();
+	if (!url) issues.push({
+		key: "sourceUrl",
+		label: "公告链接",
+		message: "请填写公告链接"
+	});
+	else if (!URL_PATTERN.test(url)) issues.push({
+		key: "sourceUrl",
+		label: "公告链接",
+		message: "公告链接需以 http:// 或 https:// 开头"
+	});
+	const budget = values.budgetYuan.trim();
+	if (budget && fenFromYuanInput(budget) === void 0) issues.push({
+		key: "budgetYuan",
+		label: "预算金额",
+		message: "预算金额需为不小于 0 的数字"
+	});
+	return issues;
+}
+/** Converts a validated draft into the backend OpportunityInput contract. */
+function toOpportunityInput(values) {
+	const publishDate = dateInputToTimestamp(values.publishDate);
+	const registrationDeadline = dateInputToTimestamp(values.registrationDeadline);
+	const bidOpenTime = dateInputToTimestamp(values.bidOpenTime);
+	if (publishDate === void 0 || registrationDeadline === void 0 || bidOpenTime === void 0) throw new Error("日期格式不正确，请重新选择。");
+	return {
+		projectName: values.projectName.trim(),
+		tenderer: values.tenderer.trim(),
+		projectType: values.projectType,
+		sourceName: values.sourceName.trim(),
+		sourceUrl: values.sourceUrl.trim(),
+		publishDate,
+		registrationDeadline,
+		bidOpenTime,
+		budgetYuan: fenFromYuanInput(values.budgetYuan),
+		body: values.body.trim(),
+		clauses: []
+	};
+}
+//#endregion
+//#region src/hooks/useOpportunityMutations.ts
+function useInvalidateOpportunities() {
+	const queryClient = useQueryClient();
+	return () => {
+		queryClient.invalidateQueries({ queryKey: ["opportunities"] });
+		queryClient.invalidateQueries({ queryKey: ["opportunity"] });
+		queryClient.invalidateQueries({ queryKey: ["opportunityTodo"] });
+		queryClient.invalidateQueries({ queryKey: ["opportunityStatusHistory"] });
+		queryClient.invalidateQueries({ queryKey: ["checkItems"] });
+		queryClient.invalidateQueries({ queryKey: ["notifications"] });
+		queryClient.invalidateQueries({ queryKey: ["unreadCount"] });
+	};
+}
+function useCreateOpportunityDraft() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async (input) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.createOpportunityDraft(input));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+function useSubmitOpportunity() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async (id) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.submitOpportunity(id));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+function useChangeOpportunityStatus() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async ({ id, toStatus, reason }) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.changeOpportunityStatus(id, toStatus, reason));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+function useCreateCheckItem() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async (input) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.createCheckItem(input));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+function useUpdateCheckItem() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async ({ id, change }) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.updateCheckItem(id, change));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+function useConfirmCheckItem() {
+	const { actor } = useActor(createActor);
+	const invalidate = useInvalidateOpportunities();
+	return useMutation({
+		mutationFn: async (id) => {
+			if (!actor) throw new Error("Backend is not ready");
+			return unwrap(await actor.confirmCheckItem(id));
+		},
+		onSuccess: () => {
+			invalidate();
+		}
+	});
+}
+//#endregion
+//#region src/components/opportunities/AnnouncementFormDialog.tsx
+var PROJECT_TYPE_OPTIONS$1 = Object.values(ProjectType);
+var TEXT_FIELDS = [
+	{
+		key: "projectName",
+		label: "项目名称",
+		placeholder: "如：滨江新区综合管廊工程施工",
+		required: true,
+		span: true
+	},
+	{
+		key: "tenderer",
+		label: "招标人",
+		placeholder: "如：滨江市城市建设投资有限公司",
+		required: true
+	},
+	{
+		key: "sourceName",
+		label: "公告来源",
+		placeholder: "如：中国招标投标公共服务平台",
+		required: true
+	},
+	{
+		key: "sourceUrl",
+		label: "公告链接",
+		placeholder: "https://…",
+		type: "url",
+		required: true,
+		span: true
+	},
+	{
+		key: "publishDate",
+		label: "公告发布日期",
+		placeholder: "",
+		type: "date",
+		required: true
+	},
+	{
+		key: "registrationDeadline",
+		label: "报名截止时间",
+		placeholder: "",
+		type: "date",
+		required: true
+	},
+	{
+		key: "bidOpenTime",
+		label: "开标时间",
+		placeholder: "",
+		type: "date",
+		required: true
+	},
+	{
+		key: "budgetYuan",
+		label: "预算金额（元）",
+		placeholder: "如：12800000",
+		type: "number",
+		help: "可留空；填写时按元计，保留两位小数"
+	}
+];
+/**
+* Records one tender announcement. The draft lives in local state so a failed
+* save keeps every typed value; the dialog only closes after success.
+*/
+function AnnouncementFormDialog({ open, onOpenChange }) {
+	const createDraft = useCreateOpportunityDraft();
+	const submitOpportunity = useSubmitOpportunity();
+	const [values, setValues] = (0, import_react.useState)(emptyAnnouncementValues);
+	const [issues, setIssues] = (0, import_react.useState)([]);
+	const [error, setError] = (0, import_react.useState)(void 0);
+	const pending = createDraft.isPending || submitOpportunity.isPending;
+	const setField = (key, value) => {
+		setValues((prev) => ({
+			...prev,
+			[key]: value
+		}));
+		setIssues((prev) => prev.filter((issue) => issue.key !== key));
+	};
+	const issueFor = (key) => issues.find((issue) => issue.key === key)?.message;
+	const reset = () => {
+		setValues(emptyAnnouncementValues());
+		setIssues([]);
+		setError(void 0);
+	};
+	const handleOpenChange = (next) => {
+		if (!next) {
+			setError(void 0);
+			setIssues([]);
+		}
+		onOpenChange(next);
+	};
+	const save = (mode) => {
+		setError(void 0);
+		const found = validateAnnouncement(values);
+		if (found.length > 0) {
+			setIssues(found);
+			return;
+		}
+		let input;
+		try {
+			input = toOpportunityInput(values);
+		} catch (err) {
+			setError(describeError(err));
+			return;
+		}
+		createDraft.mutate(input, {
+			onSuccess: (created) => {
+				if (mode === "draft") {
+					ue.success("公告已保存为草稿");
+					reset();
+					onOpenChange(false);
+					return;
+				}
+				submitOpportunity.mutate(created.id, {
+					onSuccess: () => {
+						ue.success("公告已提交，进入机会池");
+						reset();
+						onOpenChange(false);
+					},
+					onError: (err) => {
+						setError(`草稿已保存，但提交失败：${describeError(err)}。可在草稿中重试提交。`);
+					}
+				});
+			},
+			onError: (err) => setError(describeError(err))
+		});
+	};
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		save("submit");
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+		open,
+		onOpenChange: handleOpenChange,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+			"data-ocid": "announcement.form.dialog",
+			className: "max-h-[90dvh] overflow-y-auto sm:max-w-2xl",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "录入招标公告" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "公告正文与来源链接为必填。可先保存为草稿（仅本人可见可改），确认后提交进入机会池。" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				onSubmit: handleSubmit,
+				className: "space-y-4",
+				"data-ocid": "announcement.form",
+				noValidate: true,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid gap-4 sm:grid-cols-2",
+						children: [TEXT_FIELDS.map((field) => {
+							const value = values[field.key];
+							const message = issueFor(field.key);
+							const fieldId = `announcement-field-${field.key}`;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: cn("space-y-1.5", field.span && "sm:col-span-2"),
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+										htmlFor: fieldId,
+										className: "text-xs text-muted-foreground",
+										children: [field.label, field.required && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-destructive",
+											"aria-hidden": "true",
+											children: "*"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										id: fieldId,
+										type: field.type ?? "text",
+										inputMode: field.type === "number" ? "decimal" : void 0,
+										min: field.type === "number" ? 0 : void 0,
+										step: field.type === "number" ? "0.01" : void 0,
+										value,
+										placeholder: field.placeholder,
+										"aria-invalid": !!message,
+										"aria-required": field.required,
+										autoComplete: "off",
+										"data-ocid": `announcement.form.${field.key}.input`,
+										onChange: (e) => setField(field.key, e.target.value)
+									}),
+									message ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-destructive",
+										"data-ocid": `announcement.form.${field.key}.error`,
+										children: message
+									}) : field.help && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-muted-foreground",
+										children: field.help
+									})
+								]
+							}, field.key);
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+								className: "text-xs text-muted-foreground",
+								children: ["项目类型", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-destructive",
+									"aria-hidden": "true",
+									children: "*"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+								value: values.projectType,
+								onValueChange: (value) => setValues((prev) => ({
+									...prev,
+									projectType: value
+								})),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+									"data-ocid": "announcement.form.projectType.select",
+									"aria-label": "项目类型",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: PROJECT_TYPE_OPTIONS$1.map((type) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+									value: type,
+									children: PROJECT_TYPE_LABELS[type]
+								}, type)) })]
+							})]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-1.5",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+								htmlFor: "announcement-field-body",
+								className: "text-xs text-muted-foreground",
+								children: ["公告正文", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-destructive",
+									"aria-hidden": "true",
+									children: "*"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								id: "announcement-field-body",
+								value: values.body,
+								rows: 8,
+								placeholder: "粘贴公告原文，保留段落与列表结构。",
+								"aria-invalid": !!issueFor("body"),
+								"aria-required": true,
+								"data-ocid": "announcement.form.body.textarea",
+								className: "min-h-40 resize-y font-body text-sm leading-relaxed",
+								onChange: (e) => setField("body", e.target.value)
+							}),
+							issueFor("body") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-destructive",
+								"data-ocid": "announcement.form.body.error",
+								children: issueFor("body")
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-muted-foreground",
+								children: "正文用于后续资格核对追溯，请完整保留原文段落。"
+							})
+						]
+					}),
+					issues.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						role: "alert",
+						"data-ocid": "announcement.form.validation_state",
+						className: "flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-foreground",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
+							className: "mt-0.5 size-4 shrink-0 text-destructive",
+							"aria-hidden": "true"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+							"还有 ",
+							issues.length,
+							" 项需要补充：",
+							issues.map((issue) => issue.label).join("、")
+						] })]
+					}),
+					error && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						role: "alert",
+						"data-ocid": "announcement.form.error_state",
+						className: "flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-foreground",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
+							className: "mt-0.5 size-4 shrink-0 text-destructive",
+							"aria-hidden": "true"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: error })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								type: "button",
+								variant: "outline",
+								"data-ocid": "announcement.form.cancel_button",
+								onClick: () => handleOpenChange(false),
+								disabled: pending,
+								children: "取消"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+								type: "button",
+								variant: "secondary",
+								"data-ocid": "announcement.form.save_draft_button",
+								onClick: () => save("draft"),
+								disabled: pending,
+								children: [createDraft.isPending && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+									className: "size-4 animate-spin",
+									"aria-hidden": "true"
+								}), "保存草稿"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+								type: "submit",
+								"data-ocid": "announcement.form.submit_button",
+								disabled: pending,
+								children: [submitOpportunity.isPending && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+									className: "size-4 animate-spin",
+									"aria-hidden": "true"
+								}), "提交到机会池"]
+							})
+						]
+					})
+				]
+			})]
+		})
+	});
+}
+//#endregion
+//#region src/components/opportunities/OpportunityFilters.tsx
+var ALL$1 = "__all__";
+var PROJECT_TYPE_OPTIONS = Object.values(ProjectType);
+var STATUS_OPTIONS = OPPORTUNITY_STATUS_ORDER;
+/**
+* Filter bar for the opportunity pool. Every change is written to the URL
+* search so a refresh or shared link restores the same view.
+*/
+function OpportunityFilters({ search, onChange, onReset, activeCount }) {
+	const [keyword, setKeyword] = (0, import_react.useState)(search.keyword ?? "");
+	(0, import_react.useEffect)(() => {
+		setKeyword(search.keyword ?? "");
+	}, [search.keyword]);
+	const submitKeyword = (event) => {
+		event.preventDefault();
+		const trimmed = keyword.trim();
+		onChange({ keyword: trimmed ? trimmed : void 0 });
+	};
+	const sortBy = search.sortBy ?? SortField.deadline;
+	const descending = search.descending === "true";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		"data-ocid": "opportunities.filters.section",
+		"aria-label": "筛选公告",
+		className: "rounded-lg border border-border bg-card p-3 shadow-subtle md:p-4",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "grid gap-3 md:grid-cols-2 lg:grid-cols-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: submitKeyword,
+					className: "space-y-1.5 lg:col-span-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						htmlFor: "opportunity-keyword",
+						className: "text-xs text-muted-foreground",
+						children: "关键词"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							id: "opportunity-keyword",
+							type: "search",
+							value: keyword,
+							onChange: (e) => setKeyword(e.target.value),
+							placeholder: "项目名称或招标人",
+							"data-ocid": "opportunities.filters.search_input",
+							className: "h-9"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							type: "submit",
+							variant: "outline",
+							size: "sm",
+							"data-ocid": "opportunities.filters.search_button",
+							className: "h-9 shrink-0",
+							children: "搜索"
+						})]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						className: "text-xs text-muted-foreground",
+						children: "项目类型"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+						value: search.projectType ?? ALL$1,
+						onValueChange: (value) => onChange({ projectType: value === ALL$1 ? void 0 : value }),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+							"data-ocid": "opportunities.filters.project_type.select",
+							className: "h-9",
+							"aria-label": "按项目类型筛选",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "全部类型" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: ALL$1,
+							children: "全部类型"
+						}), PROJECT_TYPE_OPTIONS.map((type) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: type,
+							children: PROJECT_TYPE_LABELS[type]
+						}, type))] })]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						className: "text-xs text-muted-foreground",
+						children: "状态"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+						value: search.status ?? ALL$1,
+						onValueChange: (value) => onChange({ status: value === ALL$1 ? void 0 : value }),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+							"data-ocid": "opportunities.filters.status.select",
+							className: "h-9",
+							"aria-label": "按状态筛选",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "全部状态" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: ALL$1,
+							children: "全部状态"
+						}), STATUS_OPTIONS.map((status) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: status,
+							children: OPPORTUNITY_STATUS_LABELS[status]
+						}, status))] })]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						htmlFor: "opportunity-deadline-from",
+						className: "text-xs text-muted-foreground",
+						children: "报名截止（起）"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+						id: "opportunity-deadline-from",
+						type: "date",
+						value: search.deadlineFrom ?? "",
+						"data-ocid": "opportunities.filters.deadline_from.input",
+						className: "h-9",
+						onChange: (e) => onChange({ deadlineFrom: e.target.value || void 0 })
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						htmlFor: "opportunity-deadline-to",
+						className: "text-xs text-muted-foreground",
+						children: "报名截止（止）"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+						id: "opportunity-deadline-to",
+						type: "date",
+						value: search.deadlineTo ?? "",
+						"data-ocid": "opportunities.filters.deadline_to.input",
+						className: "h-9",
+						onChange: (e) => onChange({ deadlineTo: e.target.value || void 0 })
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+						className: "text-xs text-muted-foreground",
+						children: "排序"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+							value: sortBy,
+							onValueChange: (value) => onChange({ sortBy: value }),
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+								"data-ocid": "opportunities.filters.sort.select",
+								className: "h-9 flex-1",
+								"aria-label": "排序字段",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: SORT_FIELD_ORDER.map((field) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: field,
+								children: SORT_FIELD_LABELS[field]
+							}, field)) })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							type: "button",
+							variant: "outline",
+							size: "icon",
+							"data-ocid": "opportunities.filters.sort_direction.toggle",
+							"aria-label": descending ? "当前降序，切换为升序" : "当前升序，切换为降序",
+							"aria-pressed": descending,
+							className: "size-9 shrink-0",
+							onClick: () => onChange({ descending: descending ? "false" : "true" }),
+							children: descending ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowDownWideNarrow, {
+								className: "size-4",
+								"aria-hidden": "true"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowUpNarrowWide, {
+								className: "size-4",
+								"aria-hidden": "true"
+							})
+						})]
+					})]
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-3 flex items-center justify-between gap-2 border-t border-border pt-3",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs text-muted-foreground",
+				children: activeCount > 0 ? `已应用 ${activeCount} 项筛选` : "未应用筛选"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				type: "button",
+				variant: "ghost",
+				size: "sm",
+				"data-ocid": "opportunities.filters.reset_button",
+				disabled: activeCount === 0,
+				onClick: onReset,
+				className: cn("h-8", activeCount === 0 && "opacity-50"),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, {
+					className: "size-3.5",
+					"aria-hidden": "true"
+				}), "重置筛选"]
+			})]
+		})]
+	});
+}
+//#endregion
+//#region src/components/opportunities/OpportunityStatusBadge.tsx
+var STATUS_STYLES = {
+	[OpportunityStatus.pendingReview]: "bg-status-pending-soft text-status-pending-foreground border-status-pending-border",
+	[OpportunityStatus.selected]: "bg-status-verified-soft text-status-verified-foreground border-status-verified-border",
+	[OpportunityStatus.declined]: "bg-muted text-muted-foreground border-border",
+	[OpportunityStatus.closed]: "bg-status-expired-soft text-status-expired-foreground border-status-expired-border"
+};
+var STATUS_ICONS = {
+	[OpportunityStatus.pendingReview]: CircleDot,
+	[OpportunityStatus.selected]: CircleCheck,
+	[OpportunityStatus.declined]: Ban,
+	[OpportunityStatus.closed]: Clock
+};
+function OpportunityStatusBadge({ status, className }) {
+	const Icon = STATUS_ICONS[status];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+		variant: "outline",
+		"data-ocid": "opportunity.status.badge",
+		className: cn("gap-1 rounded-sm px-1.5 py-0.5 font-medium", STATUS_STYLES[status], className),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+			className: "size-3",
+			"aria-hidden": "true"
+		}), OPPORTUNITY_STATUS_LABELS[status]]
+	});
+}
+//#endregion
+//#region src/components/opportunities/OpportunityRow.tsx
+/**
+* One announcement in the opportunity pool. Expired registrations keep a
+* visible 已截止 marker but stay fully openable for checking.
+*/
+function OpportunityRow({ item, index }) {
+	const closed = isRegistrationClosed(item.registrationDeadline);
+	const position = index + 1;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+		"data-ocid": `opportunities.list.item.${position}`,
+		className: cn("group relative border-b border-border last:border-b-0 transition-smooth hover:bg-accent/40", closed && "bg-status-expired-soft/40"),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+			to: "/opportunities/$opportunityId",
+			params: { opportunityId: item.id.toString() },
+			"data-ocid": `opportunities.list.link.${position}`,
+			className: "flex flex-col gap-2 px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex-row md:items-center md:gap-3",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "flex min-w-0 flex-1 items-start gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: cn("mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md md:size-8", closed ? "bg-status-expired-soft text-status-expired-foreground" : "bg-primary/10 text-primary"),
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Building2, {
+							className: "size-4",
+							"aria-hidden": "true"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "min-w-0 flex-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex flex-wrap items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "min-w-0 truncate text-sm font-medium text-foreground",
+									children: item.projectName
+								}), closed && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "shrink-0 rounded-sm border border-status-expired-border bg-status-expired-soft px-1.5 py-0.5 text-[11px] font-medium text-status-expired-foreground",
+									children: "已截止"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "truncate",
+									children: item.tenderer
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "rounded-sm bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground",
+									children: item.projectTypeLabel
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground md:hidden",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "num-tabular",
+										children: ["报名截止 ", formatDate(item.registrationDeadline)]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeadlineBadge, {
+										daysRemaining: item.daysRemaining,
+										registrationDeadline: item.registrationDeadline
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "num-tabular",
+										children: ["预算 ", formatFen(item.budgetYuan)]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "inline-flex items-center gap-1",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
+												className: "size-3",
+												"aria-hidden": "true"
+											}),
+											"已核对 ",
+											item.checkedCompanyCount.toString(),
+											" 家"
+										]
+									})
+								]
+							})
+						]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "hidden w-32 shrink-0 text-xs text-muted-foreground md:block",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "block num-tabular text-foreground",
+						children: formatDate(item.registrationDeadline)
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "mt-1 block",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeadlineBadge, {
+							daysRemaining: item.daysRemaining,
+							registrationDeadline: item.registrationDeadline
+						})
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "hidden w-28 shrink-0 text-right text-sm num-tabular text-foreground md:block",
+					children: formatFen(item.budgetYuan)
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "hidden w-24 shrink-0 md:block",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityStatusBadge, { status: item.status })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "hidden w-20 shrink-0 items-center justify-end gap-1 text-xs text-muted-foreground md:flex",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
+							className: "size-3",
+							"aria-hidden": "true"
+						}),
+						item.checkedCompanyCount.toString(),
+						" 家"
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "flex items-center justify-between gap-2 md:hidden",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityStatusBadge, { status: item.status }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
+						className: "size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5",
+						"aria-hidden": "true"
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
+					className: "hidden size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 md:block",
+					"aria-hidden": "true"
+				})
+			]
+		})
+	});
+}
+//#endregion
+//#region src/pages/OpportunitiesPage.tsx
+var FILTER_KEYS = [
+	"projectType",
+	"status",
+	"deadlineFrom",
+	"deadlineTo",
+	"keyword"
+];
+function OpportunitiesPage() {
+	const search = useSearch({ from: "/opportunities" });
+	const navigate = useNavigate({ from: "/opportunities" });
+	const [dialogOpen, setDialogOpen] = (0, import_react.useState)(false);
+	const opportunities = useOpportunities((0, import_react.useMemo)(() => toOpportunityFilter(search), [search]));
+	const activeCount = FILTER_KEYS.filter((key) => search[key]).length;
+	const updateSearch = (next) => {
+		navigate({ search: (prev) => ({
+			...prev,
+			...next
+		}) });
+	};
+	const resetFilters = () => {
+		navigate({ search: opportunitySearch({
+			sortBy: search.sortBy,
+			descending: search.descending
+		}) });
+	};
+	const items = opportunities.data ?? [];
+	const closedCount = items.filter((item) => isRegistrationClosed(item.registrationDeadline)).length;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunities.page",
+		className: "space-y-4",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+				title: "机会池",
+				description: "已提交的招标公告，按截止时间与状态跟踪参投机会",
+				actions: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					type: "button",
+					"data-ocid": "opportunities.create_button",
+					onClick: () => setDialogOpen(true),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}), "录入公告"]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityFilters, {
+				search,
+				onChange: updateSearch,
+				onReset: resetFilters,
+				activeCount
+			}),
+			opportunities.isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingState, {
+				rows: 4,
+				label: "正在加载机会池…"
+			}) : opportunities.isError ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorState, {
+				message: describeError(opportunities.error),
+				onRetry: () => void opportunities.refetch()
+			}) : items.length === 0 ? activeCount > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, {
+				title: "没有符合条件的公告",
+				description: "当前筛选下没有公告，调整条件或重置筛选查看全部。",
+				icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, {
+					className: "size-5",
+					"aria-hidden": "true"
+				}),
+				action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					type: "button",
+					variant: "outline",
+					size: "sm",
+					"data-ocid": "opportunities.empty_state.reset_button",
+					onClick: resetFilters,
+					children: "重置筛选"
+				})
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, {
+				title: "机会池还没有公告",
+				description: "录入一条招标公告并提交后，会出现在这里供资格核对。",
+				icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, {
+					className: "size-5",
+					"aria-hidden": "true"
+				}),
+				action: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					type: "button",
+					"data-ocid": "opportunities.empty_state.create_button",
+					onClick: () => setDialogOpen(true),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}), "录入公告"]
+				})
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+						"共 ",
+						items.length,
+						" 条公告",
+						closedCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "ml-2 text-status-expired-foreground",
+							children: [
+								"· ",
+								closedCount,
+								" 条已截止"
+							]
+						})
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "hidden md:block",
+						children: "点击任意公告查看原文与资格核对"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "overflow-hidden rounded-lg border border-border bg-card shadow-subtle",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "hidden items-center gap-3 border-b border-border bg-muted/50 px-4 py-2 text-xs font-medium text-muted-foreground md:flex",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex-1",
+								children: "项目名称 / 招标人"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "w-32",
+								children: "报名截止"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "w-28 text-right",
+								children: "预算金额"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "w-24",
+								children: "状态"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "w-20 text-right",
+								children: "已核对"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-4" })
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						"data-ocid": "opportunities.list",
+						children: items.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityRow, {
+							item,
+							index
+						}, item.id.toString()))
+					})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnnouncementFormDialog, {
+				open: dialogOpen,
+				onOpenChange: setDialogOpen
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/opportunities/opportunityConfig.ts
+/** Display config for 核对项类别 (check item kinds). */
+var CHECK_ITEM_KIND_OPTIONS = CHECK_ITEM_KIND_ORDER.map((kind) => ({
+	value: kind,
+	label: CHECK_ITEM_KIND_LABELS[kind],
+	icon: CHECK_ITEM_KIND_ICONS[kind]
+}));
+var CHECK_ITEM_KIND_ICONS = {
+	[CheckItemKind.qualification]: BadgeCheck,
+	[CheckItemKind.performance]: FileText,
+	[CheckItemKind.personnel]: Users,
+	[CheckItemKind.capital]: Landmark,
+	[CheckItemKind.deposit]: Banknote,
+	[CheckItemKind.other]: Building
+};
+/** Display config for 条款类别 (clause kinds). */
+var CLAUSE_KIND_OPTIONS = CLAUSE_KIND_ORDER.map((kind) => ({
+	value: kind,
+	label: CLAUSE_KIND_LABELS[kind],
+	icon: CLAUSE_KIND_ICONS[kind]
+}));
+var CLAUSE_KIND_ICONS = {
+	[ClauseKind.qualification]: BadgeCheck,
+	[ClauseKind.performance]: FileText,
+	[ClauseKind.personnel]: Users,
+	[ClauseKind.deposit]: Banknote
+};
+//#endregion
+//#region src/components/opportunities/AnnouncementBody.tsx
+/** Splits the announcement body into paragraphs on blank lines. */
+function paragraphs(body) {
+	return body.split(/\n{2,}/).map((block) => block.trim()).filter((block) => block.length > 0);
+}
+/**
+* Renders the full announcement text plus the extracted clauses. Each clause
+* excerpt is the traceable source a check item's basis must quote.
+*/
+function AnnouncementBody({ body, clauses, className }) {
+	const blocks = paragraphs(body);
+	const blockIds = blocks.map((block, index) => `para-${index}-${block.slice(0, 12)}`);
+	const clauseIds = clauses.map((clause, index) => `clause-${index}-${clause.kind}`);
+	const clauseLabel = (kind) => CLAUSE_KIND_OPTIONS.find((option) => option.value === kind)?.label ?? "条款";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: cn("space-y-5", className),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-ocid": "opportunity_detail.body",
+			className: "space-y-3 text-sm leading-relaxed text-foreground",
+			children: blocks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-muted-foreground",
+				children: "公告正文尚未录入。"
+			}) : blocks.map((block, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "whitespace-pre-line break-words",
+				children: block
+			}, blockIds[index]))
+		}), clauses.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			"data-ocid": "opportunity_detail.clauses",
+			"aria-labelledby": "clause-heading",
+			className: "rounded-lg border border-border bg-muted/40 p-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+				id: "clause-heading",
+				className: "mb-3 flex items-center gap-1.5 font-display text-sm font-semibold text-foreground",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Quote, {
+					className: "size-3.5 text-primary",
+					"aria-hidden": "true"
+				}), "关键条款摘录"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+				className: "space-y-2.5",
+				children: clauses.map((clause, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+					"data-ocid": `opportunity_detail.clause.${index + 1}`,
+					className: "border-l-2 border-primary/40 pl-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs font-medium text-primary",
+						children: clauseLabel(clause.kind)
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-0.5 break-words text-sm text-foreground",
+						children: clause.excerpt
+					})]
+				}, clauseIds[index]))
+			})]
+		})]
+	});
+}
+//#endregion
+//#region ../../../../../../opt/pnpm-templates/build_template/node_modules/.pnpm/@radix-ui+react-checkbox@1.3.3_@types+react-dom@19.1.11_@types+react@19.1.17__@types+re_d01eb15d553d41ee42b3d7c22f57c00c/node_modules/@radix-ui/react-checkbox/dist/index.mjs
+var CHECKBOX_NAME = "Checkbox";
+var [createCheckboxContext, createCheckboxScope] = createContextScope$1(CHECKBOX_NAME);
+var [CheckboxProviderImpl, useCheckboxContext] = createCheckboxContext(CHECKBOX_NAME);
+function CheckboxProvider(props) {
+	const { __scopeCheckbox, checked: checkedProp, children, defaultChecked, disabled, form, name, onCheckedChange, required, value = "on", internal_do_not_use_render } = props;
+	const [checked, setChecked] = useControllableState({
+		prop: checkedProp,
+		defaultProp: defaultChecked ?? false,
+		onChange: onCheckedChange,
+		caller: CHECKBOX_NAME
+	});
+	const [control, setControl] = import_react.useState(null);
+	const [bubbleInput, setBubbleInput] = import_react.useState(null);
+	const hasConsumerStoppedPropagationRef = import_react.useRef(false);
+	const isFormControl = control ? !!form || !!control.closest("form") : true;
+	const context = {
+		checked,
+		disabled,
+		setChecked,
+		control,
+		setControl,
+		name,
+		form,
+		value,
+		hasConsumerStoppedPropagationRef,
+		required,
+		defaultChecked: isIndeterminate(defaultChecked) ? false : defaultChecked,
+		isFormControl,
+		bubbleInput,
+		setBubbleInput
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxProviderImpl, {
+		scope: __scopeCheckbox,
+		...context,
+		children: isFunction(internal_do_not_use_render) ? internal_do_not_use_render(context) : children
+	});
+}
+var TRIGGER_NAME$1 = "CheckboxTrigger";
+var CheckboxTrigger = import_react.forwardRef(({ __scopeCheckbox, onKeyDown, onClick, ...checkboxProps }, forwardedRef) => {
+	const { control, value, disabled, checked, required, setControl, setChecked, hasConsumerStoppedPropagationRef, isFormControl, bubbleInput } = useCheckboxContext(TRIGGER_NAME$1, __scopeCheckbox);
+	const composedRefs = useComposedRefs(forwardedRef, setControl);
+	const initialCheckedStateRef = import_react.useRef(checked);
+	import_react.useEffect(() => {
+		const form = control?.form;
+		if (form) {
+			const reset = () => setChecked(initialCheckedStateRef.current);
+			form.addEventListener("reset", reset);
+			return () => form.removeEventListener("reset", reset);
+		}
+	}, [control, setChecked]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.button, {
+		type: "button",
+		role: "checkbox",
+		"aria-checked": isIndeterminate(checked) ? "mixed" : checked,
+		"aria-required": required,
+		"data-state": getState$1(checked),
+		"data-disabled": disabled ? "" : void 0,
+		disabled,
+		value,
+		...checkboxProps,
+		ref: composedRefs,
+		onKeyDown: composeEventHandlers(onKeyDown, (event) => {
+			if (event.key === "Enter") event.preventDefault();
+		}),
+		onClick: composeEventHandlers(onClick, (event) => {
+			setChecked((prevChecked) => isIndeterminate(prevChecked) ? true : !prevChecked);
+			if (bubbleInput && isFormControl) {
+				hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+				if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+			}
+		})
+	});
+});
+CheckboxTrigger.displayName = TRIGGER_NAME$1;
+var Checkbox$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeCheckbox, name, checked, defaultChecked, required, disabled, value, onCheckedChange, form, ...checkboxProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxProvider, {
+		__scopeCheckbox,
+		checked,
+		defaultChecked,
+		disabled,
+		required,
+		onCheckedChange,
+		name,
+		form,
+		value,
+		internal_do_not_use_render: ({ isFormControl }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxTrigger, {
+			...checkboxProps,
+			ref: forwardedRef,
+			__scopeCheckbox
+		}), isFormControl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxBubbleInput, { __scopeCheckbox })] })
+	});
+});
+Checkbox$1.displayName = CHECKBOX_NAME;
+var INDICATOR_NAME = "CheckboxIndicator";
+var CheckboxIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeCheckbox, forceMount, ...indicatorProps } = props;
+	const context = useCheckboxContext(INDICATOR_NAME, __scopeCheckbox);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || isIndeterminate(context.checked) || context.checked === true,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
+			"data-state": getState$1(context.checked),
+			"data-disabled": context.disabled ? "" : void 0,
+			...indicatorProps,
+			ref: forwardedRef,
+			style: {
+				pointerEvents: "none",
+				...props.style
+			}
+		})
+	});
+});
+CheckboxIndicator.displayName = INDICATOR_NAME;
+var BUBBLE_INPUT_NAME$1 = "CheckboxBubbleInput";
+var CheckboxBubbleInput = import_react.forwardRef(({ __scopeCheckbox, ...props }, forwardedRef) => {
+	const { control, hasConsumerStoppedPropagationRef, checked, defaultChecked, required, disabled, name, value, form, bubbleInput, setBubbleInput } = useCheckboxContext(BUBBLE_INPUT_NAME$1, __scopeCheckbox);
+	const composedRefs = useComposedRefs(forwardedRef, setBubbleInput);
+	const prevChecked = usePrevious(checked);
+	const controlSize = useSize(control);
+	import_react.useEffect(() => {
+		const input = bubbleInput;
+		if (!input) return;
+		const inputProto = window.HTMLInputElement.prototype;
+		const setChecked = Object.getOwnPropertyDescriptor(inputProto, "checked").set;
+		const bubbles = !hasConsumerStoppedPropagationRef.current;
+		if (prevChecked !== checked && setChecked) {
+			const event = new Event("click", { bubbles });
+			input.indeterminate = isIndeterminate(checked);
+			setChecked.call(input, isIndeterminate(checked) ? false : checked);
+			input.dispatchEvent(event);
+		}
+	}, [
+		bubbleInput,
+		prevChecked,
+		checked,
+		hasConsumerStoppedPropagationRef
+	]);
+	const defaultCheckedRef = import_react.useRef(isIndeterminate(checked) ? false : checked);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.input, {
+		type: "checkbox",
+		"aria-hidden": true,
+		defaultChecked: defaultChecked ?? defaultCheckedRef.current,
+		required,
+		disabled,
+		name,
+		value,
+		form,
+		...props,
+		tabIndex: -1,
+		ref: composedRefs,
+		style: {
+			...props.style,
+			...controlSize,
+			position: "absolute",
+			pointerEvents: "none",
+			opacity: 0,
+			margin: 0,
+			transform: "translateX(-100%)"
+		}
+	});
+});
+CheckboxBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
+function isFunction(value) {
+	return typeof value === "function";
+}
+function isIndeterminate(checked) {
+	return checked === "indeterminate";
+}
+function getState$1(checked) {
+	return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
+}
+//#endregion
+//#region src/components/ui/checkbox.tsx
+function Checkbox({ className, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox$1, {
+		"data-slot": "checkbox",
+		className: cn("peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50", className),
+		...props,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxIndicator, {
+			"data-slot": "checkbox-indicator",
+			className: "flex items-center justify-center text-current transition-none",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-3.5" })
+		})
+	});
+}
+//#endregion
+//#region src/components/opportunities/EvidencePicker.tsx
+function recordSummary(record) {
+	const data = record.data;
+	switch (data.__kind__) {
+		case "license": return `${data.license.category} · ${data.license.number}`;
+		case "companyTrack": return `${data.companyTrack.owner} · ${data.companyTrack.projectName}`;
+		case "person": return `${data.person.position || "人员"} · ${data.person.name}`;
+		case "personCert": return `${data.personCert.category} · ${data.personCert.number}`;
+		case "personTrack": return `${data.personTrack.role} · ${data.personTrack.projectName}`;
+	}
+}
+/**
+* Lets the user cite company archive records as evidence for a check item.
+* Records are only listed when the caller can view the company; otherwise a
+* permission notice replaces the list.
+*/
+function EvidencePicker({ records, canView, selected, onChange, disabled }) {
+	const [query, setQuery] = (0, import_react.useState)("");
+	const selectedIds = (0, import_react.useMemo)(() => new Set(selected.map((item) => item.recordId.toString())), [selected]);
+	const filtered = (0, import_react.useMemo)(() => {
+		const keyword = query.trim().toLowerCase();
+		if (!keyword) return records;
+		return records.filter((record) => record.title.toLowerCase().includes(keyword) || record.kindLabel.toLowerCase().includes(keyword) || recordSummary(record).toLowerCase().includes(keyword));
+	}, [records, query]);
+	const toggle = (record, checked) => {
+		if (checked) onChange([...selected, {
+			recordId: record.id,
+			statusAtCitation: record.status
+		}]);
+		else onChange(selected.filter((item) => item.recordId.toString() !== record.id.toString()));
+	};
+	if (!canView) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "check_form.evidence.no_permission",
+		className: "flex items-start gap-2 rounded-md border border-border bg-muted/50 px-3 py-2.5 text-xs text-muted-foreground",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, {
+			className: "mt-0.5 size-3.5 shrink-0",
+			"aria-hidden": "true"
+		}), "无权限查看该公司资料，无法引用档案作为佐证。"]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "check_form.evidence",
+		className: "space-y-2",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "relative",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
+					className: "pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground",
+					"aria-hidden": "true"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+					"data-ocid": "check_form.evidence.search_input",
+					value: query,
+					onChange: (event) => setQuery(event.target.value),
+					placeholder: "搜索档案名称或类别",
+					className: "h-8 pl-8 text-sm",
+					disabled,
+					"aria-label": "搜索档案"
+				})]
+			}),
+			records.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				"data-ocid": "check_form.evidence.empty_state",
+				className: "rounded-md border border-dashed border-border px-3 py-3 text-xs text-muted-foreground",
+				children: "该公司暂无档案可引用，请先在档案中补充证照、业绩或人员资料。"
+			}) : filtered.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "px-1 py-2 text-xs text-muted-foreground",
+				children: "没有匹配的档案。"
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+				className: "max-h-56 space-y-1 overflow-y-auto rounded-md border border-border p-1",
+				children: filtered.map((record) => {
+					const checked = selectedIds.has(record.id.toString());
+					const inputId = `evidence-${record.id.toString()}`;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+						htmlFor: inputId,
+						className: cn("flex cursor-pointer items-start gap-2.5 rounded-sm px-2 py-1.5 transition-smooth hover:bg-accent/60", disabled && "cursor-not-allowed opacity-60"),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Checkbox, {
+							id: inputId,
+							"data-ocid": `check_form.evidence.checkbox.${record.id.toString()}`,
+							checked,
+							disabled,
+							onCheckedChange: (value) => toggle(record, value === true),
+							className: "mt-0.5"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "min-w-0 flex-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex flex-wrap items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "truncate text-sm text-foreground",
+									children: record.title
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatusBadge, { status: record.status })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "mt-0.5 block truncate text-xs text-muted-foreground",
+								children: [
+									record.kindLabel,
+									" · ",
+									recordSummary(record)
+								]
+							})]
+						})]
+					}) }, record.id.toString());
+				})
+			}),
+			selected.some((item) => item.statusAtCitation !== RecordStatus.verified) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs text-status-pending-foreground",
+				children: "引用了待补或待核档案时，核对结论只能为「待核」。"
+			})
+		]
+	});
+}
+/** Read-only list of cited evidence with the status captured at citation. */
+function EvidenceList({ evidence, records, canView }) {
+	if (evidence.length === 0) return null;
+	if (!canView) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+		className: "text-xs text-muted-foreground",
+		children: [
+			"无权限查看该公司资料（引用 ",
+			evidence.length,
+			" 项）。"
+		]
+	});
+	const byId = new Map(records.map((record) => [record.id.toString(), record]));
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+		className: "flex flex-wrap gap-1.5",
+		children: evidence.map((item) => {
+			const record = byId.get(item.recordId.toString());
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+				className: "inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted/50 px-2 py-1 text-xs",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "max-w-[16rem] truncate text-foreground",
+					children: record ? record.title : `档案 #${item.recordId.toString()}`
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatusBadge, { status: item.statusAtCitation })]
+			}, item.recordId.toString());
+		})
+	});
+}
+//#endregion
+//#region src/components/opportunities/CheckItemRow.tsx
+var CONCLUSION_STYLES$1 = {
+	[CheckConclusion.conform]: "border-status-verified-border bg-status-verified-soft text-status-verified-foreground",
+	[CheckConclusion.nonConform]: "border-status-expired-border bg-status-expired-soft text-status-expired-foreground",
+	[CheckConclusion.pending]: "border-status-pending-border bg-status-pending-soft text-status-pending-foreground"
+};
+var CONCLUSION_ICONS = {
+	[CheckConclusion.conform]: CircleCheck,
+	[CheckConclusion.nonConform]: CircleX,
+	[CheckConclusion.pending]: CircleDot
+};
+function CheckItemRow({ item, index, records, canViewRecords, canEdit, canVerify, isCreator, onEdit }) {
+	const confirm = useConfirmCheckItem();
+	const Icon = CONCLUSION_ICONS[item.conclusion];
+	const kindLabel = CHECK_ITEM_KIND_OPTIONS.find((option) => option.value === item.kind)?.label ?? item.kindLabel;
+	const confirmed = item.confirmation !== void 0;
+	const confirmBlockedReason = !canVerify ? "需要该公司「核实」权限才能确认。" : isCreator ? "不能确认本人提交的核对结论，请由其他具备核实权限的成员确认。" : confirmed ? "该结论已确认。" : null;
+	const handleConfirm = () => {
+		confirm.mutate(item.id, {
+			onSuccess: () => ue.success("核对结论已确认"),
+			onError: (err) => ue.error(describeError(err))
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+		"data-ocid": `check_item.row.${index + 1}`,
+		className: "rounded-lg border border-border bg-card p-4 shadow-subtle",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-start justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex min-w-0 items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BadgeCheck, {
+							className: "size-3.5",
+							"aria-hidden": "true"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "min-w-0",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "truncate text-sm font-medium text-foreground",
+							children: kindLabel
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-xs text-muted-foreground",
+							children: [
+								item.createdByName,
+								" · ",
+								formatDateTime(item.createdAt)
+							]
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					"data-ocid": `check_item.conclusion.${index + 1}`,
+					className: cn("inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 text-xs font-medium", CONCLUSION_STYLES$1[item.conclusion]),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+						className: "size-3",
+						"aria-hidden": "true"
+					}), CHECK_CONCLUSION_LABELS[item.conclusion]]
+				})]
+			}),
+			item.clauseExcerpt && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-3 flex gap-2 rounded-md border-l-2 border-primary/40 bg-muted/40 px-3 py-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Quote, {
+					className: "mt-0.5 size-3 shrink-0 text-primary",
+					"aria-hidden": "true"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "break-words text-xs text-muted-foreground",
+					children: item.clauseExcerpt
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-3 break-words text-sm text-foreground",
+				children: item.basis
+			}),
+			item.evidence.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mb-1.5 text-xs text-muted-foreground",
+					children: "引用档案"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EvidenceList, {
+					evidence: item.evidence,
+					records,
+					canView: canViewRecords
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "min-w-0 text-xs",
+					children: confirmed && item.confirmation ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "inline-flex items-center gap-1 text-status-verified-foreground",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, {
+								className: "size-3.5",
+								"aria-hidden": "true"
+							}),
+							"已由 ",
+							item.confirmation.confirmerName,
+							" 于",
+							" ",
+							formatDateTime(item.confirmation.confirmedAt),
+							" 确认"
+						]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-muted-foreground",
+						children: "待确认"
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [canEdit && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						size: "sm",
+						variant: "ghost",
+						"data-ocid": `check_item.edit_button.${index + 1}`,
+						onClick: () => onEdit(item),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pencil, {
+							className: "size-3.5",
+							"aria-hidden": "true"
+						}), "修改"]
+					}), !confirmed && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						size: "sm",
+						variant: "outline",
+						"data-ocid": `check_item.confirm_button.${index + 1}`,
+						disabled: confirmBlockedReason !== null || confirm.isPending,
+						title: confirmBlockedReason ?? void 0,
+						onClick: handleConfirm,
+						children: [confirm.isPending ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+							className: "size-3.5 animate-spin",
+							"aria-hidden": "true"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, {
+							className: "size-3.5",
+							"aria-hidden": "true"
+						}), "确认"]
+					})]
+				})]
+			}),
+			!confirmed && confirmBlockedReason && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				"data-ocid": `check_item.confirm_hint.${index + 1}`,
+				className: "mt-2 text-xs text-muted-foreground",
+				children: confirmBlockedReason
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/opportunities/CompanyCheckSummary.tsx
+var CONCLUSION_ORDER = [
+	CheckConclusion.conform,
+	CheckConclusion.nonConform,
+	CheckConclusion.pending
+];
+var COUNT_STYLES = {
+	[CheckConclusion.conform]: "bg-status-verified-soft text-status-verified-foreground",
+	[CheckConclusion.nonConform]: "bg-status-expired-soft text-status-expired-foreground",
+	[CheckConclusion.pending]: "bg-status-pending-soft text-status-pending-foreground"
+};
+/**
+* Per-company progress summary: 符合/不符合/待核 counts and a one-click action
+* to mark the company as a 参投候选 (only when it has a 符合 conclusion).
+*/
+function CompanyCheckSummary({ groups, onStartCheck, onMarkCandidate, markingCompanyId }) {
+	if (groups.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		"data-ocid": "check_summary.empty_state",
+		className: "rounded-lg border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground",
+		children: "尚未对任何公司发起资格核对。"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+		"data-ocid": "check_summary.list",
+		className: "space-y-2",
+		children: groups.map((group, index) => {
+			const counts = {
+				[CheckConclusion.conform]: 0,
+				[CheckConclusion.nonConform]: 0,
+				[CheckConclusion.pending]: 0
+			};
+			for (const item of group.items) counts[item.conclusion] += 1;
+			const hasConform = counts[CheckConclusion.conform] > 0;
+			const isMarking = markingCompanyId === group.companyId;
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+				"data-ocid": `check_summary.item.${index + 1}`,
+				className: "rounded-lg border border-border bg-card p-3.5 shadow-subtle",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-wrap items-center justify-between gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex min-w-0 items-center gap-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Building2, {
+									className: "size-3.5",
+									"aria-hidden": "true"
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "truncate text-sm font-medium text-foreground",
+								children: group.companyName
+							}),
+							!group.canView && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-1 text-xs text-muted-foreground",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, {
+									className: "size-3",
+									"aria-hidden": "true"
+								}), "无权限查看该公司资料"]
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex flex-wrap items-center gap-1.5",
+						children: CONCLUSION_ORDER.map((conclusion) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: cn("rounded-sm px-1.5 py-0.5 text-xs font-medium num-tabular", COUNT_STYLES[conclusion]),
+							children: [
+								CHECK_CONCLUSION_LABELS[conclusion],
+								" ",
+								counts[conclusion]
+							]
+						}, conclusion))
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-2.5 flex flex-wrap items-center gap-2",
+					children: [group.canEdit && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						size: "sm",
+						variant: "outline",
+						"data-ocid": `check_summary.start_button.${index + 1}`,
+						onClick: () => onStartCheck(group.companyId),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+							className: "size-3.5",
+							"aria-hidden": "true"
+						}), "发起核对"]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						type: "button",
+						size: "sm",
+						variant: hasConform ? "default" : "outline",
+						"data-ocid": `check_summary.candidate_button.${index + 1}`,
+						disabled: !hasConform || isMarking,
+						title: hasConform ? void 0 : "该公司尚无「符合」的核对结论，不能标记为参投候选。",
+						onClick: () => onMarkCandidate(group.companyId),
+						children: isMarking ? "处理中…" : "标记为参投候选"
+					})]
+				})]
+			}, group.companyId.toString());
+		})
+	});
+}
+//#endregion
+//#region src/components/opportunities/QualificationCheckForm.tsx
+var CONCLUSION_STYLES = {
+	[CheckConclusion.conform]: "border-status-verified-border bg-status-verified-soft text-status-verified-foreground",
+	[CheckConclusion.nonConform]: "border-status-expired-border bg-status-expired-soft text-status-expired-foreground",
+	[CheckConclusion.pending]: "border-status-pending-border bg-status-pending-soft text-status-pending-foreground"
+};
+/**
+* Create/edit dialog for a single qualification check item. The conclusion is
+* forced to 待核 whenever a cited record is not 已核实, and 依据说明 is required.
+*/
+function QualificationCheckForm({ open, onOpenChange, opportunityId, companyId, companyName, records, canViewRecords, editing, defaultKind, defaultClause }) {
+	const createItem = useCreateCheckItem();
+	const updateItem = useUpdateCheckItem();
+	const [kind, setKind] = (0, import_react.useState)(editing?.kind ?? defaultKind ?? CHECK_ITEM_KIND_OPTIONS[0].value);
+	const [conclusion, setConclusion] = (0, import_react.useState)(editing?.conclusion ?? CheckConclusion.pending);
+	const [basis, setBasis] = (0, import_react.useState)(editing?.basis ?? "");
+	const [clauseExcerpt, setClauseExcerpt] = (0, import_react.useState)(editing?.clauseExcerpt ?? defaultClause ?? "");
+	const [evidence, setEvidence] = (0, import_react.useState)(editing?.evidence.map((item) => ({
+		recordId: item.recordId,
+		statusAtCitation: item.statusAtCitation
+	})) ?? []);
+	const [error, setError] = (0, import_react.useState)(null);
+	const hasUnverifiedEvidence = evidence.some((item) => item.statusAtCitation !== "verified");
+	const effectiveConclusion = hasUnverifiedEvidence ? CheckConclusion.pending : conclusion;
+	const basisMissing = basis.trim().length === 0;
+	const pending = createItem.isPending || updateItem.isPending;
+	const reset = () => {
+		setKind(editing?.kind ?? defaultKind ?? CHECK_ITEM_KIND_OPTIONS[0].value);
+		setConclusion(editing?.conclusion ?? CheckConclusion.pending);
+		setBasis(editing?.basis ?? "");
+		setClauseExcerpt(editing?.clauseExcerpt ?? defaultClause ?? "");
+		setEvidence(editing?.evidence.map((item) => ({
+			recordId: item.recordId,
+			statusAtCitation: item.statusAtCitation
+		})) ?? []);
+		setError(null);
+	};
+	const close = () => {
+		reset();
+		onOpenChange(false);
+	};
+	const submit = () => {
+		if (basisMissing) {
+			setError("请填写依据说明，并引用公告原文条款。");
+			return;
+		}
+		const payload = {
+			kind,
+			conclusion: effectiveConclusion,
+			basis: basis.trim(),
+			clauseExcerpt: clauseExcerpt.trim(),
+			evidence
+		};
+		if (editing) {
+			const change = payload;
+			updateItem.mutate({
+				id: editing.id,
+				change
+			}, {
+				onSuccess: () => {
+					ue.success("核对结论已更新");
+					close();
+				},
+				onError: (err) => setError(describeError(err))
+			});
+			return;
+		}
+		createItem.mutate({
+			...payload,
+			opportunityId,
+			companyId
+		}, {
+			onSuccess: () => {
+				ue.success("核对结论已保存");
+				close();
+			},
+			onError: (err) => setError(describeError(err))
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+		open,
+		onOpenChange: (next) => next ? void 0 : close(),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+			"data-ocid": "check_form.dialog",
+			className: "max-h-[90vh] overflow-y-auto sm:max-w-xl",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: editing ? "修改核对结论" : "发起资格核对" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogDescription, { children: [companyName, " · 结论需可追溯到公告原文，依据说明必填。"] })] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								htmlFor: "check-kind",
+								children: "核对项"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+								value: kind,
+								onValueChange: (value) => setKind(value),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+									id: "check-kind",
+									"data-ocid": "check_form.kind.select",
+									className: "w-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: CHECK_ITEM_KIND_OPTIONS.map((option) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+									value: option.value,
+									children: option.label
+								}, option.value)) })]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "结论" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-ocid": "check_form.conclusion.group",
+									className: "flex flex-wrap gap-2",
+									children: CHECK_CONCLUSION_ORDER.map((value) => {
+										const active = effectiveConclusion === value;
+										const blocked = hasUnverifiedEvidence && value !== CheckConclusion.pending;
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											"data-ocid": `check_form.conclusion.${value}`,
+											"aria-pressed": active,
+											disabled: blocked,
+											title: blocked ? "引用了待补或待核档案，只能为「待核」" : void 0,
+											onClick: () => setConclusion(value),
+											className: cn("rounded-md border px-3 py-1.5 text-sm font-medium transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active ? CONCLUSION_STYLES[value] : "border-border bg-background text-muted-foreground hover:bg-accent/60", blocked && "cursor-not-allowed opacity-50"),
+											children: CHECK_CONCLUSION_LABELS[value]
+										}, value);
+									})
+								}),
+								hasUnverifiedEvidence && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs text-status-pending-foreground",
+									children: "引用了待补或待核档案，结论已锁定为「待核」。"
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								htmlFor: "check-clause",
+								children: "引用公告条款"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								id: "check-clause",
+								"data-ocid": "check_form.clause.textarea",
+								value: clauseExcerpt,
+								onChange: (event) => setClauseExcerpt(event.target.value),
+								placeholder: "粘贴公告正文中对应的条款片段",
+								rows: 2
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+								htmlFor: "check-basis",
+								children: ["依据说明 ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-destructive",
+									children: "*"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								id: "check-basis",
+								"data-ocid": "check_form.basis.textarea",
+								value: basis,
+								onChange: (event) => setBasis(event.target.value),
+								placeholder: "说明判断依据，并对应到公告条款与公司档案。",
+								rows: 3,
+								"aria-invalid": error !== null
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "引用公司档案佐证" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EvidencePicker, {
+								records,
+								canView: canViewRecords,
+								selected: evidence,
+								onChange: setEvidence,
+								disabled: pending
+							})]
+						}),
+						error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							"data-ocid": "check_form.error_state",
+							role: "alert",
+							className: "text-xs text-destructive",
+							children: error
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					type: "button",
+					variant: "outline",
+					"data-ocid": "check_form.cancel_button",
+					onClick: close,
+					children: "取消"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					type: "button",
+					"data-ocid": "check_form.submit_button",
+					disabled: basisMissing || pending,
+					onClick: submit,
+					children: [pending && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+						className: "size-4 animate-spin motion-reduce:animate-none",
+						"aria-hidden": "true"
+					}), editing ? "保存修改" : "保存结论"]
+				})] })
+			]
+		})
+	});
+}
+//#endregion
+//#region src/components/personnel/usePersonnel.ts
+var NO_ACCESS = {
+	canView: false,
+	canEdit: false,
+	canVerify: false,
+	canSensitiveDownload: false
+};
+function fromSet(set) {
+	return {
+		canView: set.view,
+		canEdit: set.edit,
+		canVerify: set.verify,
+		canSensitiveDownload: set.sensitiveDownload
+	};
+}
+/** The caller's own grants, indexed by company id. */
+function useMyAccess() {
+	const query = useMyPermissions();
+	const byCompany = /* @__PURE__ */ new Map();
+	for (const grant of query.data ?? []) byCompany.set(grant.companyId.toString(), fromSet(grant.permissions));
+	const accessFor = (companyId) => byCompany.get(companyId.toString()) ?? NO_ACCESS;
+	return {
+		...query,
+		accessFor
+	};
+}
+//#endregion
+//#region src/hooks/useRecords.ts
+/** Stable query key for a record filter (bigints serialise via toJSON). */
+function recordsKey(filter) {
+	return ["records", filter];
+}
+function useRecords(filter) {
+	const { actor, isFetching } = useActor(createActor);
+	return useQuery({
+		queryKey: recordsKey(filter),
+		queryFn: async () => {
+			if (!actor) return [];
+			return unwrap(await actor.listRecords(filter));
+		},
+		enabled: !!actor && !isFetching
+	});
+}
+//#endregion
+//#region src/components/opportunities/QualificationCheckPanel.tsx
+/**
+* Qualification checks for one announcement: per-company progress, the check
+* item list, and the create/edit dialog. Company evidence is only shown when
+* the caller holds that company's 查看 permission.
+*/
+function QualificationCheckPanel({ opportunityId, items, currentPrincipal, onMarkCandidate, markingCompanyId }) {
+	const companies = useCompanies();
+	const access = useMyAccess();
+	const changeStatus = useChangeOpportunityStatus();
+	const [selectedCompanyId, setSelectedCompanyId] = (0, import_react.useState)("");
+	const [formOpen, setFormOpen] = (0, import_react.useState)(false);
+	const [editing, setEditing] = (0, import_react.useState)(void 0);
+	const [formCompanyId, setFormCompanyId] = (0, import_react.useState)(null);
+	const companyList = companies.data ?? [];
+	const groups = (0, import_react.useMemo)(() => {
+		const byCompany = /* @__PURE__ */ new Map();
+		for (const item of items) {
+			const key = item.companyId.toString();
+			const list = byCompany.get(key) ?? [];
+			list.push(item);
+			byCompany.set(key, list);
+		}
+		return companyList.map((company) => {
+			const companyAccess = access.accessFor(company.id);
+			return {
+				companyId: company.id,
+				companyName: company.name,
+				canView: companyAccess.canView,
+				canEdit: companyAccess.canEdit,
+				canVerify: companyAccess.canVerify,
+				items: byCompany.get(company.id.toString()) ?? []
+			};
+		});
+	}, [
+		companyList,
+		items,
+		access
+	]);
+	const activeCompanyId = (0, import_react.useMemo)(() => {
+		if (selectedCompanyId) return BigInt(selectedCompanyId);
+		return groups[0]?.companyId ?? null;
+	}, [selectedCompanyId, groups]);
+	const activeGroup = groups.find((group) => group.companyId === activeCompanyId);
+	const recordsQuery = useRecords(activeCompanyId !== null ? { companyId: activeCompanyId } : {});
+	const activeRecords = activeGroup?.canView ? recordsQuery.data ?? [] : [];
+	const formCompany = groups.find((group) => group.companyId === formCompanyId);
+	const formRecordsQuery = useRecords(formCompanyId !== null ? { companyId: formCompanyId } : {});
+	const formRecords = formCompany?.canView ? formRecordsQuery.data ?? [] : [];
+	const openCreate = (companyId) => {
+		setEditing(void 0);
+		setFormCompanyId(companyId);
+		setFormOpen(true);
+	};
+	const openEdit = (item) => {
+		setEditing(item);
+		setFormCompanyId(item.companyId);
+		setFormOpen(true);
+	};
+	const handleMarkCandidate = (companyId) => {
+		const company = groups.find((group) => group.companyId === companyId);
+		changeStatus.mutate({
+			id: opportunityId,
+			toStatus: OpportunityStatus.selected,
+			reason: `资格核对通过，将「${company?.companyName ?? "该公司"}」标记为参投候选。`
+		}, {
+			onSuccess: () => {
+				ue.success("已标记为参投候选");
+				onMarkCandidate(companyId);
+			},
+			onError: (err) => ue.error(describeError(err))
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		"data-ocid": "opportunity_detail.check_panel",
+		className: "rounded-lg border border-border bg-card p-5 shadow-subtle",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-4 flex flex-wrap items-center justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+					className: "flex items-center gap-1.5 font-display text-base font-semibold text-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClipboardCheck, {
+						className: "size-4 text-primary",
+						"aria-hidden": "true"
+					}), "资格核对"]
+				}), activeGroup?.canEdit && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					type: "button",
+					size: "sm",
+					"data-ocid": "opportunity_detail.start_check_button",
+					onClick: () => openCreate(activeGroup.companyId),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}), "发起核对"]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CompanyCheckSummary, {
+				groups,
+				onStartCheck: openCreate,
+				onMarkCandidate: handleMarkCandidate,
+				markingCompanyId
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-5 border-t border-border pt-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-3 flex flex-wrap items-center justify-between gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-sm font-medium text-foreground",
+						children: "核对项明细"
+					}), groups.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+						value: activeCompanyId?.toString() ?? "",
+						onValueChange: setSelectedCompanyId,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+							"data-ocid": "opportunity_detail.company.select",
+							size: "sm",
+							className: "w-48",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "选择公司" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: groups.map((group) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: group.companyId.toString(),
+							children: group.companyName
+						}, group.companyId.toString())) })]
+					})]
+				}), !activeGroup ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-sm text-muted-foreground",
+					children: "请先选择公司，再发起资格核对。"
+				}) : !activeGroup.canView ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					"data-ocid": "opportunity_detail.check.no_permission",
+					className: "rounded-md border border-border bg-muted/50 px-3 py-3 text-sm text-muted-foreground",
+					children: "无权限查看该公司资料，核对项内容已隐藏。"
+				}) : activeGroup.items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					"data-ocid": "opportunity_detail.check.empty_state",
+					className: "rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground",
+					children: "该公司尚无核对结论。公告未写明或资料缺失的核对项应记为「待核」。"
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+					className: "space-y-2.5",
+					children: activeGroup.items.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckItemRow, {
+						item,
+						index,
+						records: activeRecords,
+						canViewRecords: activeGroup.canView,
+						canEdit: activeGroup.canEdit,
+						canVerify: activeGroup.canVerify,
+						isCreator: currentPrincipal !== null && item.createdBy.toText() === currentPrincipal,
+						onEdit: openEdit
+					}, item.id.toString()))
+				})]
+			}),
+			formOpen && formCompany && formCompanyId !== null && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QualificationCheckForm, {
+				open: formOpen,
+				onOpenChange: setFormOpen,
+				opportunityId,
+				companyId: formCompanyId,
+				companyName: formCompany.companyName,
+				records: formRecords,
+				canViewRecords: formCompany.canView,
+				editing
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/opportunities/StatusChangePanel.tsx
+/** Statuses a user may move an announcement to, excluding the current one. */
+var TARGET_STATUSES = [
+	OpportunityStatus.pendingReview,
+	OpportunityStatus.selected,
+	OpportunityStatus.declined,
+	OpportunityStatus.closed
+];
+function StatusChangePanel({ opportunityId, currentStatus, history, canSelect, selectBlockedReason }) {
+	const changeStatus = useChangeOpportunityStatus();
+	const [target, setTarget] = (0, import_react.useState)(null);
+	const [reason, setReason] = (0, import_react.useState)("");
+	const [error, setError] = (0, import_react.useState)(null);
+	const open = target !== null;
+	const reasonMissing = reason.trim().length === 0;
+	const startChange = (status) => {
+		setTarget(status);
+		setReason("");
+		setError(null);
+	};
+	const close = () => {
+		setTarget(null);
+		setReason("");
+		setError(null);
+	};
+	const submit = () => {
+		if (target === null || reasonMissing) return;
+		const captured = reason.trim();
+		changeStatus.mutate({
+			id: opportunityId,
+			toStatus: target,
+			reason: captured
+		}, {
+			onSuccess: () => {
+				ue.success(`公告状态已更新为「${OPPORTUNITY_STATUS_LABELS[target]}」`);
+				close();
+			},
+			onError: (err) => setError(describeError(err))
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		"data-ocid": "opportunity_detail.status_panel",
+		className: "rounded-lg border border-border bg-card p-5 shadow-subtle",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-4 flex items-center justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "font-display text-base font-semibold text-foreground",
+					children: "状态变更"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityStatusBadge, { status: currentStatus })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex flex-wrap gap-2",
+				children: TARGET_STATUSES.filter((status) => status !== currentStatus).map((status) => {
+					const blocked = status === OpportunityStatus.selected && !canSelect;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						type: "button",
+						size: "sm",
+						variant: status === OpportunityStatus.selected ? "default" : "outline",
+						"data-ocid": `opportunity_detail.status_button.${status}`,
+						disabled: blocked,
+						title: blocked ? selectBlockedReason : void 0,
+						onClick: () => startChange(status),
+						children: ["置为", OPPORTUNITY_STATUS_LABELS[status]]
+					}, status);
+				})
+			}),
+			!canSelect && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				"data-ocid": "opportunity_detail.select_blocked_hint",
+				className: "mt-3 rounded-md border border-status-pending-border bg-status-pending-soft px-3 py-2 text-xs text-status-pending-foreground",
+				children: selectBlockedReason
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-5 border-t border-border pt-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+					className: "mb-3 flex items-center gap-1.5 text-sm font-medium text-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(History, {
+						className: "size-3.5 text-muted-foreground",
+						"aria-hidden": "true"
+					}), "变更记录"]
+				}), history.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					"data-ocid": "opportunity_detail.status_history.empty_state",
+					className: "text-sm text-muted-foreground",
+					children: "暂无状态变更记录。"
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+					"data-ocid": "opportunity_detail.status_history.list",
+					className: "space-y-3",
+					children: history.map((entry, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+						"data-ocid": `opportunity_detail.status_history.item.${index + 1}`,
+						className: "relative border-l border-border pl-4",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "absolute -left-[5px] top-1.5 size-2 rounded-full bg-primary",
+								"aria-hidden": "true"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-medium text-foreground",
+										children: entry.operatorName
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "·" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formatDateTime(entry.at) })
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-1 flex flex-wrap items-center gap-1.5 text-sm",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-muted-foreground",
+										children: entry.fromStatusLabel
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, {
+										className: "size-3 text-muted-foreground",
+										"aria-hidden": "true"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-medium text-foreground",
+										children: entry.toStatusLabel
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-1 break-words text-sm text-muted-foreground",
+								children: ["原因：", entry.reason]
+							})
+						]
+					}, entry.id.toString()))
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+				open,
+				onOpenChange: (next) => next ? void 0 : close(),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+					"data-ocid": "opportunity_detail.status_dialog",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogTitle, { children: [
+							"变更状态为「",
+							target ? OPPORTUNITY_STATUS_LABELS[target] : "",
+							"」"
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "状态变更需填写原因，记录将保留在公告的变更历史中。" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+									htmlFor: "status-reason",
+									children: "变更原因"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+									id: "status-reason",
+									"data-ocid": "opportunity_detail.status_reason.textarea",
+									value: reason,
+									onChange: (event) => setReason(event.target.value),
+									placeholder: "例如：已完成资格核对，选定参投公司。",
+									rows: 3,
+									"aria-invalid": error !== null
+								}),
+								error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									"data-ocid": "opportunity_detail.status_dialog.error_state",
+									role: "alert",
+									className: "text-xs text-destructive",
+									children: error
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							type: "button",
+							variant: "outline",
+							"data-ocid": "opportunity_detail.status_dialog.cancel_button",
+							onClick: close,
+							children: "取消"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							type: "button",
+							"data-ocid": "opportunity_detail.status_dialog.confirm_button",
+							disabled: reasonMissing || changeStatus.isPending,
+							onClick: submit,
+							children: [changeStatus.isPending && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+								className: "size-4 animate-spin",
+								"aria-hidden": "true"
+							}), "确认变更"]
+						})] })
+					]
+				})
+			})
+		]
+	});
+}
+//#endregion
+//#region src/pages/OpportunityDetailPage.tsx
+function MetaField({ icon, label, value }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex items-start gap-2.5",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "mt-0.5 text-muted-foreground",
+			children: icon
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "min-w-0",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs text-muted-foreground",
+				children: label
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "break-words text-sm text-foreground",
+				children: value || "—"
+			})]
+		})]
+	});
+}
+function AnnouncementMeta({ data }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		"data-ocid": "opportunity_detail.meta",
+		className: "rounded-lg border border-border bg-card p-5 shadow-subtle",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "grid gap-4 sm:grid-cols-2 lg:grid-cols-3",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Building2, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "招标人",
+					value: data.tenderer
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "项目类型",
+					value: data.projectTypeLabel
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wallet, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "预算金额",
+					value: data.budgetYuan !== void 0 ? `¥${data.budgetYuan.toLocaleString("zh-CN")}` : "未公布"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "发布日期",
+					value: formatDate(data.publishDate)
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "报名截止",
+					value: formatDate(data.registrationDeadline)
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MetaField, {
+					icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, {
+						className: "size-4",
+						"aria-hidden": "true"
+					}),
+					label: "开标时间",
+					value: formatDateTime(data.bidOpenTime)
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-3 text-xs text-muted-foreground",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "inline-flex items-center gap-1",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserRound, {
+							className: "size-3.5",
+							"aria-hidden": "true"
+						}),
+						"录入人 ",
+						data.createdByName
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["录入时间 ", formatDateTime(data.createdAt)] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+					"最近修改 ",
+					data.lastModifiedByName,
+					" ·",
+					" ",
+					formatDateTime(data.lastModifiedAt)
+				] }),
+				data.sourceUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+					href: data.sourceUrl,
+					target: "_blank",
+					rel: "noopener noreferrer",
+					"data-ocid": "opportunity_detail.source_link",
+					className: "inline-flex items-center gap-1 rounded-sm font-medium text-primary underline-offset-4 transition-smooth hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+					children: [
+						"查看原公告（",
+						data.sourceName || "来源",
+						"）",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, {
+							className: "size-3",
+							"aria-hidden": "true"
+						})
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["来源：", data.sourceName || "未记录"] })
+			]
+		})]
+	});
+}
+function OpportunityDetailPage() {
+	const params = useParams({ from: "/opportunities/$opportunityId" });
+	const navigate = useNavigate();
+	const account = useMyAccount();
+	const opportunityId = (0, import_react.useMemo)(() => {
+		try {
+			return BigInt(params.opportunityId);
+		} catch {
+			return null;
+		}
+	}, [params.opportunityId]);
+	const opportunity = useOpportunity(opportunityId ?? void 0);
+	const history = useOpportunityStatusHistory(opportunityId ?? void 0);
+	const checkItems = useCheckItems(opportunityId ?? void 0);
+	const [markingCompanyId, setMarkingCompanyId] = (0, import_react.useState)(null);
+	const backLink = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+		type: "button",
+		"data-ocid": "opportunity_detail.back_button",
+		onClick: () => void navigate({
+			to: "/opportunities",
+			search: opportunitySearch()
+		}),
+		className: "inline-flex items-center gap-1 rounded-sm text-xs text-muted-foreground transition-smooth hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, {
+			className: "size-3.5",
+			"aria-hidden": "true"
+		}), "机会池"]
+	});
+	if (opportunityId === null) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunity_detail.page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+			title: "公告详情",
+			breadcrumb: backLink
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorState, { message: "公告编号无效，请返回机会池重新选择。" })]
+	});
+	if (opportunity.isLoading) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunity_detail.page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+			title: "公告详情",
+			breadcrumb: backLink
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "space-y-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-lg border border-border bg-card p-5 shadow-subtle",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "mb-3 h-5 w-1/2" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "mb-2 h-3 w-2/3" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-3 w-1/3" })
+				]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingState, {
+				rows: 2,
+				label: "正在加载公告…"
+			})]
+		})]
+	});
+	if (opportunity.isError) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunity_detail.page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+			title: "公告详情",
+			breadcrumb: backLink
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorState, {
+			message: describeError(opportunity.error),
+			onRetry: () => void opportunity.refetch()
+		})]
+	});
+	const data = opportunity.data;
+	if (!data) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunity_detail.page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+			title: "公告详情",
+			breadcrumb: backLink
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorState, { message: "未找到该公告。" })]
+	});
+	const items = checkItems.data ?? [];
+	const hasConform = items.some((item) => item.conclusion === "conform");
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-ocid": "opportunity_detail.page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeader, {
+			title: data.projectName,
+			breadcrumb: backLink,
+			description: `${data.tenderer} · ${data.projectTypeLabel}`,
+			actions: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-center gap-2",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(OpportunityStatusBadge, { status: data.status }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeadlineBadge, {
+						daysRemaining: data.daysRemaining,
+						registrationDeadline: data.registrationDeadline
+					}),
+					data.draft && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "rounded-sm border border-border bg-muted px-1.5 py-0.5 text-xs text-muted-foreground",
+						children: "草稿"
+					})
+				]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "min-w-0 space-y-5",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnnouncementMeta, { data }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						"data-ocid": "opportunity_detail.body_panel",
+						className: "rounded-lg border border-border bg-card p-5 shadow-subtle",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mb-3 font-display text-base font-semibold text-foreground",
+							children: "公告正文"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnnouncementBody, {
+							body: data.body,
+							clauses: data.clauses
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(QualificationCheckPanel, {
+						opportunityId: data.id,
+						items,
+						currentPrincipal: account.data?.principal.toText() ?? null,
+						onMarkCandidate: setMarkingCompanyId,
+						markingCompanyId
+					})
+				]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
+				className: "min-w-0 space-y-5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatusChangePanel, {
+					opportunityId: data.id,
+					currentStatus: data.status,
+					history: history.data ?? [],
+					canSelect: hasConform,
+					selectBlockedReason: "已选公司参投前，至少需要一条「符合」的资格核对结论。请先完成核对并确认。"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rounded-lg border border-border bg-muted/40 p-4 text-xs text-muted-foreground",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mb-1 font-medium text-foreground",
+							children: "核对说明"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "公告未写明或资料缺失的核对项默认「待核」，不提供自动「不符合」结论。 核对结论须由具备该公司「核实」权限的成员确认，创建人不能确认本人提交的结论。" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							type: "button",
+							variant: "link",
+							size: "sm",
+							"data-ocid": "opportunity_detail.back_to_list_button",
+							className: "mt-2 h-auto px-0 text-xs",
+							onClick: () => void navigate({
+								to: "/opportunities",
+								search: opportunitySearch()
+							}),
+							children: "返回机会池"
+						})
+					]
+				})]
+			})]
+		})]
 	});
 }
 //#endregion
@@ -56964,50 +61162,6 @@ function PersonRecordList({ records, canEdit, addLabel, emptyTitle, emptyDescrip
 				onOpen
 			}, record.id.toString()))
 		})]
-	});
-}
-//#endregion
-//#region src/components/personnel/usePersonnel.ts
-var NO_ACCESS = {
-	canView: false,
-	canEdit: false,
-	canVerify: false,
-	canSensitiveDownload: false
-};
-function fromSet(set) {
-	return {
-		canView: set.view,
-		canEdit: set.edit,
-		canVerify: set.verify,
-		canSensitiveDownload: set.sensitiveDownload
-	};
-}
-/** The caller's own grants, indexed by company id. */
-function useMyAccess() {
-	const query = useMyPermissions();
-	const byCompany = /* @__PURE__ */ new Map();
-	for (const grant of query.data ?? []) byCompany.set(grant.companyId.toString(), fromSet(grant.permissions));
-	const accessFor = (companyId) => byCompany.get(companyId.toString()) ?? NO_ACCESS;
-	return {
-		...query,
-		accessFor
-	};
-}
-//#endregion
-//#region src/hooks/useRecords.ts
-/** Stable query key for a record filter (bigints serialise via toJSON). */
-function recordsKey(filter) {
-	return ["records", filter];
-}
-function useRecords(filter) {
-	const { actor, isFetching } = useActor(createActor);
-	return useQuery({
-		queryKey: recordsKey(filter),
-		queryFn: async () => {
-			if (!actor) return [];
-			return unwrap(await actor.listRecords(filter));
-		},
-		enabled: !!actor && !isFetching
 	});
 }
 //#endregion
@@ -58711,6 +62865,17 @@ var companyDetailRoute = createRoute({
 	path: "/companies/$companyId",
 	component: CompanyDetailPage
 });
+var opportunitiesRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/opportunities",
+	validateSearch: (search) => parseOpportunitySearch(search),
+	component: OpportunitiesPage
+});
+var opportunityDetailRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/opportunities/$opportunityId",
+	component: OpportunityDetailPage
+});
 var personnelRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/personnel",
@@ -58741,6 +62906,8 @@ var router = createRouter({ routeTree: rootRoute.addChildren([
 	dashboardRoute,
 	companiesRoute,
 	companyDetailRoute,
+	opportunitiesRoute,
+	opportunityDetailRoute,
 	personnelRoute,
 	personDetailRoute,
 	usersRoute,

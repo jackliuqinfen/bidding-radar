@@ -44,43 +44,55 @@ export type ApiResult = { 'ok' : string } |
   { 'err' : ApiError };
 export type ApiResult_1 = { 'ok' : RecordView } |
   { 'err' : ApiError };
-export type ApiResult_10 = { 'ok' : AuditPage } |
+export type ApiResult_10 = { 'ok' : Array<OpportunityListItem> } |
   { 'err' : ApiError };
-export type ApiResult_11 = { 'ok' : Array<AccountView> } |
+export type ApiResult_11 = { 'ok' : Array<NotificationView> } |
   { 'err' : ApiError };
-export type ApiResult_12 = { 'ok' : UserPermissions } |
+export type ApiResult_12 = { 'ok' : Array<CompanyView> } |
   { 'err' : ApiError };
-export type ApiResult_13 = { 'ok' : bigint } |
+export type ApiResult_13 = { 'ok' : Array<CheckItemView> } |
   { 'err' : ApiError };
-export type ApiResult_14 = { 'ok' : Array<ChangeEntryView> } |
+export type ApiResult_14 = { 'ok' : AuditPage } |
   { 'err' : ApiError };
-export type ApiResult_15 = { 'ok' : Array<CompanyPermissionGrant> } |
+export type ApiResult_15 = { 'ok' : Array<AccountView> } |
   { 'err' : ApiError };
-export type ApiResult_16 = { 'ok' : HomeSummary } |
+export type ApiResult_16 = { 'ok' : UserPermissions } |
   { 'err' : ApiError };
-export type ApiResult_17 = { 'ok' : Array<CompanyGapRow> } |
+export type ApiResult_17 = { 'ok' : bigint } |
   { 'err' : ApiError };
-export type ApiResult_18 = { 'ok' : CompanyDetail } |
+export type ApiResult_18 = { 'ok' : Array<ChangeEntryView> } |
   { 'err' : ApiError };
-export type ApiResult_19 = { 'ok' : DownloadInfo } |
+export type ApiResult_19 = { 'ok' : OpportunityTodo } |
   { 'err' : ApiError };
-export type ApiResult_2 = { 'ok' : CompanyView } |
+export type ApiResult_2 = { 'ok' : OpportunityView } |
   { 'err' : ApiError };
-export type ApiResult_20 = { 'ok' : AttachmentView } |
+export type ApiResult_20 = { 'ok' : Array<StatusChangeView> } |
   { 'err' : ApiError };
-export type ApiResult_3 = { 'ok' : CompanyPermissionGrant } |
+export type ApiResult_21 = { 'ok' : Array<CompanyPermissionGrant> } |
   { 'err' : ApiError };
-export type ApiResult_4 = { 'ok' : AccountView } |
+export type ApiResult_22 = { 'ok' : HomeSummary } |
   { 'err' : ApiError };
-export type ApiResult_5 = { 'ok' : SampleReport } |
+export type ApiResult_23 = { 'ok' : Array<CompanyGapRow> } |
   { 'err' : ApiError };
-export type ApiResult_6 = { 'ok' : null } |
+export type ApiResult_24 = { 'ok' : CompanyDetail } |
   { 'err' : ApiError };
-export type ApiResult_7 = { 'ok' : Array<RecordView> } |
+export type ApiResult_25 = { 'ok' : DownloadInfo } |
   { 'err' : ApiError };
-export type ApiResult_8 = { 'ok' : Array<NotificationView> } |
+export type ApiResult_26 = { 'ok' : AttachmentView } |
   { 'err' : ApiError };
-export type ApiResult_9 = { 'ok' : Array<CompanyView> } |
+export type ApiResult_3 = { 'ok' : CompanyView } |
+  { 'err' : ApiError };
+export type ApiResult_4 = { 'ok' : CheckItemView } |
+  { 'err' : ApiError };
+export type ApiResult_5 = { 'ok' : CompanyPermissionGrant } |
+  { 'err' : ApiError };
+export type ApiResult_6 = { 'ok' : AccountView } |
+  { 'err' : ApiError };
+export type ApiResult_7 = { 'ok' : SampleReport } |
+  { 'err' : ApiError };
+export type ApiResult_8 = { 'ok' : null } |
+  { 'err' : ApiError };
+export type ApiResult_9 = { 'ok' : Array<RecordView> } |
   { 'err' : ApiError };
 export type ApprovalState = { 'pending' : null } |
   { 'approved' : null } |
@@ -111,24 +123,30 @@ export type AuditAction = { 'downloadAttachment' : null } |
   { 'changeAccountRole' : null } |
   { 'createRecord' : null } |
   { 'rejectAccount' : null } |
+  { 'createCheckItem' : null } |
   { 'viewRecord' : null } |
+  { 'changeOpportunityStatus' : null } |
   { 'viewHistory' : null } |
   { 'viewAuditLog' : null } |
   { 'viewCompany' : null } |
   { 'createCompany' : null } |
+  { 'editCheckItem' : null } |
   { 'viewList' : null } |
+  { 'confirmCheckItem' : null } |
   { 'seedSampleData' : null } |
   { 'changePermissions' : null } |
   { 'uploadAttachment' : null } |
   { 'signIn' : null } |
   { 'editCompany' : null } |
   { 'resetToPending' : null } |
+  { 'submitOpportunity' : null } |
   { 'replaceAttachment' : null } |
   { 'editRecord' : null } |
   { 'register' : null } |
   { 'approveAsAdmin' : null } |
   { 'viewSensitive' : null } |
-  { 'verifyRecord' : null };
+  { 'verifyRecord' : null } |
+  { 'createOpportunity' : null };
 export interface AuditEntryView {
   'at' : Timestamp,
   'id' : AuditId,
@@ -176,6 +194,57 @@ export interface ChangeEntryView {
   'editorName' : string,
   'changes' : Array<FieldChange>,
 }
+export type CheckConclusion = { 'conform' : null } |
+  { 'pending' : null } |
+  { 'nonConform' : null };
+export type CheckItemId = bigint;
+export interface CheckItemInput {
+  'clauseExcerpt' : string,
+  'kind' : CheckItemKind,
+  'conclusion' : CheckConclusion,
+  'opportunityId' : OpportunityId,
+  'evidence' : Array<EvidenceRef>,
+  'basis' : string,
+  'companyId' : CompanyId,
+}
+export type CheckItemKind = { 'other' : null } |
+  { 'deposit' : null } |
+  { 'personnel' : null } |
+  { 'performance' : null } |
+  { 'capital' : null } |
+  { 'qualification' : null };
+export interface CheckItemUpdate {
+  'clauseExcerpt' : string,
+  'kind' : CheckItemKind,
+  'conclusion' : CheckConclusion,
+  'evidence' : Array<EvidenceRef>,
+  'basis' : string,
+}
+export interface CheckItemView {
+  'id' : bigint,
+  'clauseExcerpt' : string,
+  'kind' : CheckItemKind,
+  'createdAt' : Timestamp,
+  'createdBy' : Principal,
+  'conclusion' : CheckConclusion,
+  'opportunityId' : OpportunityId,
+  'kindLabel' : string,
+  'evidence' : Array<EvidenceRef>,
+  'createdByName' : string,
+  'companyName' : string,
+  'basis' : string,
+  'confirmation' : [] | [ConfirmationView],
+  'lastModifiedAt' : Timestamp,
+  'lastModifiedBy' : Principal,
+  'lastModifiedByName' : string,
+  'conclusionLabel' : string,
+  'companyId' : CompanyId,
+}
+export interface Clause { 'kind' : ClauseKind, 'excerpt' : string }
+export type ClauseKind = { 'deposit' : null } |
+  { 'personnel' : null } |
+  { 'performance' : null } |
+  { 'qualification' : null };
 export interface CompanyDetail {
   'records' : Array<RecordView>,
   'canView' : boolean,
@@ -222,6 +291,11 @@ export interface CompanyView {
   'registeredPlace' : string,
   'maintainer' : Principal,
 }
+export interface ConfirmationView {
+  'confirmedAt' : Timestamp,
+  'confirmerName' : string,
+  'confirmer' : Principal,
+}
 export interface DownloadInfo {
   'blob' : ExternalBlob,
   'fileName' : string,
@@ -245,6 +319,10 @@ export type Error = { 'FrontendOriginsNotConfigured' : null } |
   { 'UntrustedSsoSource' : { 'domain' : string } } |
   { 'MissingField' : string } |
   { 'FrontendOriginMismatch' : { 'got' : string, 'expected' : Array<string> } };
+export interface EvidenceRef {
+  'statusAtCitation' : RecordStatus,
+  'recordId' : RecordId,
+}
 export type ExpiryFlag = { 'nearExpiry' : null } |
   { 'expired' : null };
 export type ExternalBlob = Uint8Array;
@@ -289,6 +367,7 @@ export type NotificationKind = { 'nearExpiry' : null } |
   { 'verified' : null } |
   { 'expired' : null } |
   { 'permissionChanged' : null } |
+  { 'checkItemConfirmed' : null } |
   { 'resetToPending' : null } |
   { 'accountApproved' : null } |
   { 'pendingUser' : null } |
@@ -298,10 +377,94 @@ export interface NotificationView {
   'kind' : NotificationKind,
   'createdAt' : Timestamp,
   'read' : boolean,
+  'opportunityId' : [] | [OpportunityId],
   'kindLabel' : string,
   'message' : string,
   'recordId' : [] | [RecordId],
   'companyId' : [] | [CompanyId],
+}
+export interface OpportunityFilter {
+  'status' : [] | [OpportunityStatus],
+  'descending' : boolean,
+  'projectType' : [] | [ProjectType],
+  'deadlineTo' : [] | [Timestamp],
+  'sortBy' : [] | [SortField],
+  'deadlineFrom' : [] | [Timestamp],
+  'search' : [] | [string],
+}
+export type OpportunityId = bigint;
+export interface OpportunityInput {
+  'projectName' : string,
+  'tenderer' : string,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : string,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : string,
+  'clauses' : Array<Clause>,
+  'sourceName' : string,
+  'budgetYuan' : [] | [bigint],
+  'registrationDeadline' : Timestamp,
+}
+export interface OpportunityListItem {
+  'id' : OpportunityId,
+  'status' : OpportunityStatus,
+  'projectName' : string,
+  'tenderer' : string,
+  'projectType' : ProjectType,
+  'checkedCompanyCount' : bigint,
+  'budgetYuan' : [] | [bigint],
+  'projectTypeLabel' : string,
+  'registrationDeadline' : Timestamp,
+  'daysRemaining' : bigint,
+  'statusLabel' : string,
+}
+export type OpportunityStatus = { 'pendingReview' : null } |
+  { 'closed' : null } |
+  { 'selected' : null } |
+  { 'declined' : null };
+export interface OpportunityTodo {
+  'pendingConfirmations' : Array<CheckItemView>,
+  'closingSoon' : Array<OpportunityListItem>,
+}
+export interface OpportunityUpdate {
+  'projectName' : string,
+  'tenderer' : string,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : string,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : string,
+  'clauses' : Array<Clause>,
+  'sourceName' : string,
+  'budgetYuan' : [] | [bigint],
+  'registrationDeadline' : Timestamp,
+}
+export interface OpportunityView {
+  'id' : OpportunityId,
+  'status' : OpportunityStatus,
+  'projectName' : string,
+  'tenderer' : string,
+  'projectType' : ProjectType,
+  'publishDate' : Timestamp,
+  'body' : string,
+  'createdAt' : Timestamp,
+  'createdBy' : Principal,
+  'bidOpenTime' : Timestamp,
+  'sourceUrl' : string,
+  'clauses' : Array<Clause>,
+  'sourceName' : string,
+  'checkedCompanyCount' : bigint,
+  'budgetYuan' : [] | [bigint],
+  'projectTypeLabel' : string,
+  'createdByName' : string,
+  'lastModifiedAt' : Timestamp,
+  'lastModifiedBy' : Principal,
+  'registrationDeadline' : Timestamp,
+  'daysRemaining' : bigint,
+  'statusLabel' : string,
+  'draft' : boolean,
+  'lastModifiedByName' : string,
 }
 export type Permission = { 'edit' : null } |
   { 'view' : null } |
@@ -408,9 +571,24 @@ export type Result__1 = { 'ok' : null } |
   { 'err' : Error };
 export interface SampleReport {
   'records' : bigint,
+  'opportunities' : bigint,
+  'checkItems' : bigint,
   'attachments' : bigint,
   'alreadySeeded' : boolean,
   'companies' : bigint,
+}
+export type SortField = { 'createdAt' : null } |
+  { 'deadline' : null };
+export interface StatusChangeView {
+  'at' : Timestamp,
+  'id' : bigint,
+  'fromStatusLabel' : string,
+  'toStatus' : OpportunityStatus,
+  'operator' : Principal,
+  'fromStatus' : OpportunityStatus,
+  'operatorName' : string,
+  'toStatusLabel' : string,
+  'reason' : string,
 }
 export type Timestamp = bigint;
 export interface UserPermissions {
@@ -468,16 +646,35 @@ export interface _SERVICE {
   /**
    * / Requires 编辑. The blob comes from the object-storage upload.
    */
-  'addAttachment' : ActorMethod<[NewAttachmentInput], ApiResult_20>,
+  'addAttachment' : ActorMethod<[NewAttachmentInput], ApiResult_26>,
   /**
    * / 管理员 only. role #admin = direct approval as 管理员 (audited as such).
    */
-  'approveAccount' : ActorMethod<[Principal, AccountRole], ApiResult_4>,
+  'approveAccount' : ActorMethod<[Principal, AccountRole], ApiResult_6>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  /**
+   * / Requires a reason; 已选公司参投 requires at least one 符合 check item.
+   */
+  'changeOpportunityStatus' : ActorMethod<
+    [OpportunityId, OpportunityStatus, string],
+    ApiResult_2
+  >,
+  /**
+   * / Requires 核实 on the company; creator cannot confirm their own item.
+   */
+  'confirmCheckItem' : ActorMethod<[CheckItemId], ApiResult_4>,
+  /**
+   * / Requires 编辑 on the company; 符合 cannot cite a 待核/待补 record.
+   */
+  'createCheckItem' : ActorMethod<[CheckItemInput], ApiResult_4>,
   /**
    * / 管理员 only.
    */
-  'createCompany' : ActorMethod<[CompanyInput], ApiResult_2>,
+  'createCompany' : ActorMethod<[CompanyInput], ApiResult_3>,
+  /**
+   * / Requires 编辑 on the company; body and source URL required. Saves as draft (creator-only).
+   */
+  'createOpportunityDraft' : ActorMethod<[OpportunityInput], ApiResult_2>,
   /**
    * / Requires 编辑 on input.companyId.
    */
@@ -487,7 +684,7 @@ export interface _SERVICE {
    */
   'downloadAttachment' : ActorMethod<
     [AttachmentId, [] | [bigint]],
-    ApiResult_19
+    ApiResult_25
   >,
   'execute' : ActorMethod<[string], Result>,
   'getApiDoc' : ActorMethod<[], string>,
@@ -495,19 +692,19 @@ export interface _SERVICE {
   /**
    * / Requires 查看; denial is audited.
    */
-  'getCompany' : ActorMethod<[CompanyId], ApiResult_2>,
+  'getCompany' : ActorMethod<[CompanyId], ApiResult_3>,
   /**
    * / Records need 查看; without it only counts are returned.
    */
-  'getCompanyDetail' : ActorMethod<[CompanyId, RecordFilter], ApiResult_18>,
+  'getCompanyDetail' : ActorMethod<[CompanyId, RecordFilter], ApiResult_24>,
   /**
    * / Every company by name with counts only (zeros when empty). Also triggers expiry notifications.
    */
-  'getGapDashboard' : ActorMethod<[], ApiResult_17>,
+  'getGapDashboard' : ActorMethod<[], ApiResult_23>,
   /**
    * / Role home data. Also triggers expiry notifications.
    */
-  'getHomeSummary' : ActorMethod<[], ApiResult_16>,
+  'getHomeSummary' : ActorMethod<[], ApiResult_22>,
   /**
    * / Own profile and approval state; allowed for pending users.
    */
@@ -515,7 +712,19 @@ export interface _SERVICE {
   /**
    * / The caller's own grants.
    */
-  'getMyPermissions' : ActorMethod<[], ApiResult_15>,
+  'getMyPermissions' : ActorMethod<[], ApiResult_21>,
+  /**
+   * / Approved members; drafts visible only to their creator.
+   */
+  'getOpportunity' : ActorMethod<[OpportunityId], ApiResult_2>,
+  /**
+   * / Status change history for an announcement.
+   */
+  'getOpportunityStatusHistory' : ActorMethod<[OpportunityId], ApiResult_20>,
+  /**
+   * / 机会池待办: announcements closing within 7 days and unconfirmed check items.
+   */
+  'getOpportunityTodo' : ActorMethod<[], ApiResult_19>,
   /**
    * / Requires 查看; denial audited. ID number masked.
    */
@@ -523,43 +732,51 @@ export interface _SERVICE {
   /**
    * / Requires 查看; ID numbers masked.
    */
-  'getRecordHistory' : ActorMethod<[RecordId], ApiResult_14>,
-  'getUnreadCount' : ActorMethod<[], ApiResult_13>,
+  'getRecordHistory' : ActorMethod<[RecordId], ApiResult_18>,
+  'getUnreadCount' : ActorMethod<[], ApiResult_17>,
   /**
    * / 管理员 only.
    */
-  'getUserPermissions' : ActorMethod<[Principal], ApiResult_12>,
+  'getUserPermissions' : ActorMethod<[Principal], ApiResult_16>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   /**
    * / 管理员 only.
    */
-  'listAccounts' : ActorMethod<[], ApiResult_11>,
+  'listAccounts' : ActorMethod<[], ApiResult_15>,
   /**
    * / 管理员 only; filter by operator, action, result and company.
    */
-  'listAuditLog' : ActorMethod<[AuditFilter], ApiResult_10>,
+  'listAuditLog' : ActorMethod<[AuditFilter], ApiResult_14>,
+  /**
+   * / Check items for an announcement; evidence only with 查看 on that company.
+   */
+  'listCheckItems' : ActorMethod<[OpportunityId], ApiResult_13>,
   /**
    * / Only companies where the caller has 查看.
    */
-  'listCompanies' : ActorMethod<[], ApiResult_9>,
+  'listCompanies' : ActorMethod<[], ApiResult_12>,
   /**
    * / Approved users only; the caller's notifications, newest first.
    */
-  'listNotifications' : ActorMethod<[], ApiResult_8>,
+  'listNotifications' : ActorMethod<[], ApiResult_11>,
+  /**
+   * / Approved members; drafts excluded except the caller's own. Filtered and sorted.
+   */
+  'listOpportunities' : ActorMethod<[OpportunityFilter], ApiResult_10>,
   /**
    * / Only records in companies where the caller has 查看.
    */
-  'listRecords' : ActorMethod<[RecordFilter], ApiResult_7>,
-  'markAllNotificationsRead' : ActorMethod<[], ApiResult_6>,
-  'markNotificationRead' : ActorMethod<[NotificationId], ApiResult_6>,
+  'listRecords' : ActorMethod<[RecordFilter], ApiResult_9>,
+  'markAllNotificationsRead' : ActorMethod<[], ApiResult_8>,
+  'markNotificationRead' : ActorMethod<[NotificationId], ApiResult_8>,
   /**
    * / First sign-in registration with a display name. The first user becomes 管理员 and is approved; others wait as 待批准.
    */
-  'registerAccount' : ActorMethod<[string], ApiResult_4>,
+  'registerAccount' : ActorMethod<[string], ApiResult_6>,
   /**
    * / 管理员 only.
    */
-  'rejectAccount' : ActorMethod<[Principal], ApiResult_4>,
+  'rejectAccount' : ActorMethod<[Principal], ApiResult_6>,
   /**
    * / Requires 编辑; keeps older versions; record returns to 待核.
    */
@@ -568,26 +785,41 @@ export interface _SERVICE {
   /**
    * / 管理员 only, idempotent: 【虚构】 sample companies, records and attachments.
    */
-  'seedSampleData' : ActorMethod<[], ApiResult_5>,
+  'seedSampleData' : ActorMethod<[], ApiResult_7>,
   /**
    * / 管理员 only: set an approved user's account role to 管理员 or 成员.
    */
-  'setAccountRole' : ActorMethod<[Principal, AccountRole], ApiResult_4>,
+  'setAccountRole' : ActorMethod<[Principal, AccountRole], ApiResult_6>,
   /**
    * / 管理员 only: set 查看/编辑/核实/敏感下载 for a user on a company.
    */
   'setUserCompanyPermissions' : ActorMethod<
     [Principal, CompanyId, PermissionSet],
-    ApiResult_3
+    ApiResult_5
   >,
   /**
    * / Audits a sign-in; returns the caller's account or null when not registered yet.
    */
   'signIn' : ActorMethod<[], [] | [AccountView]>,
   /**
+   * / Creator only; moves a draft into the opportunity pool (待核对).
+   */
+  'submitOpportunity' : ActorMethod<[OpportunityId], ApiResult_2>,
+  /**
+   * / Requires 编辑 on the company; confirmed items are immutable.
+   */
+  'updateCheckItem' : ActorMethod<[CheckItemId, CheckItemUpdate], ApiResult_4>,
+  /**
    * / Requires 编辑 on the company.
    */
-  'updateCompany' : ActorMethod<[CompanyId, CompanyInput], ApiResult_2>,
+  'updateCompany' : ActorMethod<[CompanyId, CompanyInput], ApiResult_3>,
+  /**
+   * / Creator only, draft only. Requires 编辑 on the company.
+   */
+  'updateOpportunityDraft' : ActorMethod<
+    [OpportunityId, OpportunityUpdate],
+    ApiResult_2
+  >,
   /**
    * / Requires 编辑; expectedVersion must equal the stored version, else #conflict with the latest record.
    */

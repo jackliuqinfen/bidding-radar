@@ -43,6 +43,17 @@ export function timestampToDateInput(timestamp: bigint | undefined): string {
   return `${y}-${m}-${d}`;
 }
 
+/**
+ * Registration is closed once the deadline timestamp has passed. The backend's
+ * daysRemaining is a Nat (0 after the deadline), so it cannot signal closure.
+ */
+export function isRegistrationClosed(
+  registrationDeadline: bigint,
+  now: number = Date.now(),
+): boolean {
+  return Number(registrationDeadline / 1_000_000n) < now;
+}
+
 /** Contract amounts are stored in fen (分). */
 export function formatFen(fen: bigint | undefined): string {
   if (fen === undefined) return "—";

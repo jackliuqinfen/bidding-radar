@@ -76,82 +76,124 @@ export type ApiResult_1 = {
 };
 export type ApiResult_10 = {
     __kind__: "ok";
-    ok: AuditPage;
+    ok: Array<OpportunityListItem>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_11 = {
     __kind__: "ok";
-    ok: Array<AccountView>;
+    ok: Array<NotificationView>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_12 = {
     __kind__: "ok";
-    ok: UserPermissions;
+    ok: Array<CompanyView>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_13 = {
     __kind__: "ok";
-    ok: bigint;
+    ok: Array<CheckItemView>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_14 = {
     __kind__: "ok";
-    ok: Array<ChangeEntryView>;
+    ok: AuditPage;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_15 = {
     __kind__: "ok";
-    ok: Array<CompanyPermissionGrant>;
+    ok: Array<AccountView>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_16 = {
     __kind__: "ok";
-    ok: HomeSummary;
+    ok: UserPermissions;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_17 = {
     __kind__: "ok";
-    ok: Array<CompanyGapRow>;
+    ok: bigint;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_18 = {
     __kind__: "ok";
-    ok: CompanyDetail;
+    ok: Array<ChangeEntryView>;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_19 = {
     __kind__: "ok";
-    ok: DownloadInfo;
+    ok: OpportunityTodo;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_2 = {
     __kind__: "ok";
-    ok: CompanyView;
+    ok: OpportunityView;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_20 = {
+    __kind__: "ok";
+    ok: Array<StatusChangeView>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_21 = {
+    __kind__: "ok";
+    ok: Array<CompanyPermissionGrant>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_22 = {
+    __kind__: "ok";
+    ok: HomeSummary;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_23 = {
+    __kind__: "ok";
+    ok: Array<CompanyGapRow>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_24 = {
+    __kind__: "ok";
+    ok: CompanyDetail;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_25 = {
+    __kind__: "ok";
+    ok: DownloadInfo;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiResult_26 = {
     __kind__: "ok";
     ok: AttachmentView;
 } | {
@@ -160,49 +202,49 @@ export type ApiResult_20 = {
 };
 export type ApiResult_3 = {
     __kind__: "ok";
-    ok: CompanyPermissionGrant;
+    ok: CompanyView;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_4 = {
     __kind__: "ok";
-    ok: AccountView;
+    ok: CheckItemView;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_5 = {
     __kind__: "ok";
-    ok: SampleReport;
+    ok: CompanyPermissionGrant;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_6 = {
     __kind__: "ok";
-    ok: null;
+    ok: AccountView;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_7 = {
     __kind__: "ok";
-    ok: Array<RecordView>;
+    ok: SampleReport;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_8 = {
     __kind__: "ok";
-    ok: Array<NotificationView>;
+    ok: null;
 } | {
     __kind__: "err";
     err: ApiError;
 };
 export type ApiResult_9 = {
     __kind__: "ok";
-    ok: Array<CompanyView>;
+    ok: Array<RecordView>;
 } | {
     __kind__: "err";
     err: ApiError;
@@ -269,6 +311,47 @@ export interface ChangeEntryView {
     editorName: string;
     changes: Array<FieldChange>;
 }
+export type CheckItemId = bigint;
+export interface CheckItemInput {
+    clauseExcerpt: string;
+    kind: CheckItemKind;
+    conclusion: CheckConclusion;
+    opportunityId: OpportunityId;
+    evidence: Array<EvidenceRef>;
+    basis: string;
+    companyId: CompanyId;
+}
+export interface CheckItemUpdate {
+    clauseExcerpt: string;
+    kind: CheckItemKind;
+    conclusion: CheckConclusion;
+    evidence: Array<EvidenceRef>;
+    basis: string;
+}
+export interface CheckItemView {
+    id: bigint;
+    clauseExcerpt: string;
+    kind: CheckItemKind;
+    createdAt: Timestamp;
+    createdBy: Principal;
+    conclusion: CheckConclusion;
+    opportunityId: OpportunityId;
+    kindLabel: string;
+    evidence: Array<EvidenceRef>;
+    createdByName: string;
+    companyName: string;
+    basis: string;
+    confirmation?: ConfirmationView;
+    lastModifiedAt: Timestamp;
+    lastModifiedBy: Principal;
+    lastModifiedByName: string;
+    conclusionLabel: string;
+    companyId: CompanyId;
+}
+export interface Clause {
+    kind: ClauseKind;
+    excerpt: string;
+}
 export interface CompanyDetail {
     records: Array<RecordView>;
     canView: boolean;
@@ -314,6 +397,11 @@ export interface CompanyView {
     updatedAt: Timestamp;
     registeredPlace: string;
     maintainer: Principal;
+}
+export interface ConfirmationView {
+    confirmedAt: Timestamp;
+    confirmerName: string;
+    confirmer: Principal;
 }
 export interface DownloadInfo {
     blob: ExternalBlob;
@@ -367,6 +455,10 @@ export type Error_ = {
         expected: Array<string>;
     };
 };
+export interface EvidenceRef {
+    statusAtCitation: RecordStatus;
+    recordId: RecordId;
+}
 export interface FieldChange {
     field: string;
     after: string;
@@ -409,10 +501,90 @@ export interface NotificationView {
     kind: NotificationKind;
     createdAt: Timestamp;
     read: boolean;
+    opportunityId?: OpportunityId;
     kindLabel: string;
     message: string;
     recordId?: RecordId;
     companyId?: CompanyId;
+}
+export interface OpportunityFilter {
+    status?: OpportunityStatus;
+    descending: boolean;
+    projectType?: ProjectType;
+    deadlineTo?: Timestamp;
+    sortBy?: SortField;
+    deadlineFrom?: Timestamp;
+    search?: string;
+}
+export type OpportunityId = bigint;
+export interface OpportunityInput {
+    projectName: string;
+    tenderer: string;
+    projectType: ProjectType;
+    publishDate: Timestamp;
+    body: string;
+    bidOpenTime: Timestamp;
+    sourceUrl: string;
+    clauses: Array<Clause>;
+    sourceName: string;
+    budgetYuan?: bigint;
+    registrationDeadline: Timestamp;
+}
+export interface OpportunityListItem {
+    id: OpportunityId;
+    status: OpportunityStatus;
+    projectName: string;
+    tenderer: string;
+    projectType: ProjectType;
+    checkedCompanyCount: bigint;
+    budgetYuan?: bigint;
+    projectTypeLabel: string;
+    registrationDeadline: Timestamp;
+    daysRemaining: bigint;
+    statusLabel: string;
+}
+export interface OpportunityTodo {
+    pendingConfirmations: Array<CheckItemView>;
+    closingSoon: Array<OpportunityListItem>;
+}
+export interface OpportunityUpdate {
+    projectName: string;
+    tenderer: string;
+    projectType: ProjectType;
+    publishDate: Timestamp;
+    body: string;
+    bidOpenTime: Timestamp;
+    sourceUrl: string;
+    clauses: Array<Clause>;
+    sourceName: string;
+    budgetYuan?: bigint;
+    registrationDeadline: Timestamp;
+}
+export interface OpportunityView {
+    id: OpportunityId;
+    status: OpportunityStatus;
+    projectName: string;
+    tenderer: string;
+    projectType: ProjectType;
+    publishDate: Timestamp;
+    body: string;
+    createdAt: Timestamp;
+    createdBy: Principal;
+    bidOpenTime: Timestamp;
+    sourceUrl: string;
+    clauses: Array<Clause>;
+    sourceName: string;
+    checkedCompanyCount: bigint;
+    budgetYuan?: bigint;
+    projectTypeLabel: string;
+    createdByName: string;
+    lastModifiedAt: Timestamp;
+    lastModifiedBy: Principal;
+    registrationDeadline: Timestamp;
+    daysRemaining: bigint;
+    statusLabel: string;
+    draft: boolean;
+    lastModifiedByName: string;
 }
 export interface PermissionSet {
     edit: boolean;
@@ -523,9 +695,22 @@ export type Result__1 = {
 };
 export interface SampleReport {
     records: bigint;
+    opportunities: bigint;
+    checkItems: bigint;
     attachments: bigint;
     alreadySeeded: boolean;
     companies: bigint;
+}
+export interface StatusChangeView {
+    at: Timestamp;
+    id: bigint;
+    fromStatusLabel: string;
+    toStatus: OpportunityStatus;
+    operator: Principal;
+    fromStatus: OpportunityStatus;
+    operatorName: string;
+    toStatusLabel: string;
+    reason: string;
 }
 export type Timestamp = bigint;
 export interface UserPermissions {
@@ -573,24 +758,30 @@ export enum AuditAction {
     changeAccountRole = "changeAccountRole",
     createRecord = "createRecord",
     rejectAccount = "rejectAccount",
+    createCheckItem = "createCheckItem",
     viewRecord = "viewRecord",
+    changeOpportunityStatus = "changeOpportunityStatus",
     viewHistory = "viewHistory",
     viewAuditLog = "viewAuditLog",
     viewCompany = "viewCompany",
     createCompany = "createCompany",
+    editCheckItem = "editCheckItem",
     viewList = "viewList",
+    confirmCheckItem = "confirmCheckItem",
     seedSampleData = "seedSampleData",
     changePermissions = "changePermissions",
     uploadAttachment = "uploadAttachment",
     signIn = "signIn",
     editCompany = "editCompany",
     resetToPending = "resetToPending",
+    submitOpportunity = "submitOpportunity",
     replaceAttachment = "replaceAttachment",
     editRecord = "editRecord",
     register = "register",
     approveAsAdmin = "approveAsAdmin",
     viewSensitive = "viewSensitive",
-    verifyRecord = "verifyRecord"
+    verifyRecord = "verifyRecord",
+    createOpportunity = "createOpportunity"
 }
 export enum AuditResult {
     denied = "denied",
@@ -604,6 +795,25 @@ export enum ChangeAction {
     verify = "verify",
     resetToPending = "resetToPending"
 }
+export enum CheckConclusion {
+    conform = "conform",
+    pending = "pending",
+    nonConform = "nonConform"
+}
+export enum CheckItemKind {
+    other = "other",
+    deposit = "deposit",
+    personnel = "personnel",
+    performance = "performance",
+    capital = "capital",
+    qualification = "qualification"
+}
+export enum ClauseKind {
+    deposit = "deposit",
+    personnel = "personnel",
+    performance = "performance",
+    qualification = "qualification"
+}
 export enum ExpiryFlag {
     nearExpiry = "nearExpiry",
     expired = "expired"
@@ -613,10 +823,17 @@ export enum NotificationKind {
     verified = "verified",
     expired = "expired",
     permissionChanged = "permissionChanged",
+    checkItemConfirmed = "checkItemConfirmed",
     resetToPending = "resetToPending",
     accountApproved = "accountApproved",
     pendingUser = "pendingUser",
     accountRejected = "accountRejected"
+}
+export enum OpportunityStatus {
+    pendingReview = "pendingReview",
+    closed = "closed",
+    selected = "selected",
+    declined = "declined"
 }
 export enum Permission {
     edit = "edit",
@@ -641,6 +858,10 @@ export enum RecordStatus {
     verified = "verified",
     missing = "missing"
 }
+export enum SortField {
+    createdAt = "createdAt",
+    deadline = "deadline"
+}
 export enum UserRole {
     admin = "admin",
     user = "user",
@@ -650,16 +871,32 @@ export interface backendInterface {
     /**
      * / Requires 编辑. The blob comes from the object-storage upload.
      */
-    addAttachment(input: NewAttachmentInput): Promise<ApiResult_20>;
+    addAttachment(input: NewAttachmentInput): Promise<ApiResult_26>;
     /**
      * / 管理员 only. role #admin = direct approval as 管理员 (audited as such).
      */
-    approveAccount(user: Principal, role: AccountRole): Promise<ApiResult_4>;
+    approveAccount(user: Principal, role: AccountRole): Promise<ApiResult_6>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    /**
+     * / Requires a reason; 已选公司参投 requires at least one 符合 check item.
+     */
+    changeOpportunityStatus(id: OpportunityId, toStatus: OpportunityStatus, reason: string): Promise<ApiResult_2>;
+    /**
+     * / Requires 核实 on the company; creator cannot confirm their own item.
+     */
+    confirmCheckItem(id: CheckItemId): Promise<ApiResult_4>;
+    /**
+     * / Requires 编辑 on the company; 符合 cannot cite a 待核/待补 record.
+     */
+    createCheckItem(input: CheckItemInput): Promise<ApiResult_4>;
     /**
      * / 管理员 only.
      */
-    createCompany(input: CompanyInput): Promise<ApiResult_2>;
+    createCompany(input: CompanyInput): Promise<ApiResult_3>;
+    /**
+     * / Requires 编辑 on the company; body and source URL required. Saves as draft (creator-only).
+     */
+    createOpportunityDraft(input: OpportunityInput): Promise<ApiResult_2>;
     /**
      * / Requires 编辑 on input.companyId.
      */
@@ -667,26 +904,26 @@ export interface backendInterface {
     /**
      * / Blob reference only for authorized callers; every attempt audited. version null = current.
      */
-    downloadAttachment(attachmentId: AttachmentId, version: bigint | null): Promise<ApiResult_19>;
+    downloadAttachment(attachmentId: AttachmentId, version: bigint | null): Promise<ApiResult_25>;
     execute(qJson: string): Promise<Result>;
     getApiDoc(): Promise<string>;
     getCallerUserRole(): Promise<UserRole>;
     /**
      * / Requires 查看; denial is audited.
      */
-    getCompany(id: CompanyId): Promise<ApiResult_2>;
+    getCompany(id: CompanyId): Promise<ApiResult_3>;
     /**
      * / Records need 查看; without it only counts are returned.
      */
-    getCompanyDetail(companyId: CompanyId, filter: RecordFilter): Promise<ApiResult_18>;
+    getCompanyDetail(companyId: CompanyId, filter: RecordFilter): Promise<ApiResult_24>;
     /**
      * / Every company by name with counts only (zeros when empty). Also triggers expiry notifications.
      */
-    getGapDashboard(): Promise<ApiResult_17>;
+    getGapDashboard(): Promise<ApiResult_23>;
     /**
      * / Role home data. Also triggers expiry notifications.
      */
-    getHomeSummary(): Promise<ApiResult_16>;
+    getHomeSummary(): Promise<ApiResult_22>;
     /**
      * / Own profile and approval state; allowed for pending users.
      */
@@ -694,7 +931,19 @@ export interface backendInterface {
     /**
      * / The caller's own grants.
      */
-    getMyPermissions(): Promise<ApiResult_15>;
+    getMyPermissions(): Promise<ApiResult_21>;
+    /**
+     * / Approved members; drafts visible only to their creator.
+     */
+    getOpportunity(id: OpportunityId): Promise<ApiResult_2>;
+    /**
+     * / Status change history for an announcement.
+     */
+    getOpportunityStatusHistory(id: OpportunityId): Promise<ApiResult_20>;
+    /**
+     * / 机会池待办: announcements closing within 7 days and unconfirmed check items.
+     */
+    getOpportunityTodo(): Promise<ApiResult_19>;
     /**
      * / Requires 查看; denial audited. ID number masked.
      */
@@ -702,43 +951,51 @@ export interface backendInterface {
     /**
      * / Requires 查看; ID numbers masked.
      */
-    getRecordHistory(id: RecordId): Promise<ApiResult_14>;
-    getUnreadCount(): Promise<ApiResult_13>;
+    getRecordHistory(id: RecordId): Promise<ApiResult_18>;
+    getUnreadCount(): Promise<ApiResult_17>;
     /**
      * / 管理员 only.
      */
-    getUserPermissions(user: Principal): Promise<ApiResult_12>;
+    getUserPermissions(user: Principal): Promise<ApiResult_16>;
     isCallerAdmin(): Promise<boolean>;
     /**
      * / 管理员 only.
      */
-    listAccounts(): Promise<ApiResult_11>;
+    listAccounts(): Promise<ApiResult_15>;
     /**
      * / 管理员 only; filter by operator, action, result and company.
      */
-    listAuditLog(filter: AuditFilter): Promise<ApiResult_10>;
+    listAuditLog(filter: AuditFilter): Promise<ApiResult_14>;
+    /**
+     * / Check items for an announcement; evidence only with 查看 on that company.
+     */
+    listCheckItems(opportunityId: OpportunityId): Promise<ApiResult_13>;
     /**
      * / Only companies where the caller has 查看.
      */
-    listCompanies(): Promise<ApiResult_9>;
+    listCompanies(): Promise<ApiResult_12>;
     /**
      * / Approved users only; the caller's notifications, newest first.
      */
-    listNotifications(): Promise<ApiResult_8>;
+    listNotifications(): Promise<ApiResult_11>;
+    /**
+     * / Approved members; drafts excluded except the caller's own. Filtered and sorted.
+     */
+    listOpportunities(filter: OpportunityFilter): Promise<ApiResult_10>;
     /**
      * / Only records in companies where the caller has 查看.
      */
-    listRecords(filter: RecordFilter): Promise<ApiResult_7>;
-    markAllNotificationsRead(): Promise<ApiResult_6>;
-    markNotificationRead(id: NotificationId): Promise<ApiResult_6>;
+    listRecords(filter: RecordFilter): Promise<ApiResult_9>;
+    markAllNotificationsRead(): Promise<ApiResult_8>;
+    markNotificationRead(id: NotificationId): Promise<ApiResult_8>;
     /**
      * / First sign-in registration with a display name. The first user becomes 管理员 and is approved; others wait as 待批准.
      */
-    registerAccount(displayName: string): Promise<ApiResult_4>;
+    registerAccount(displayName: string): Promise<ApiResult_6>;
     /**
      * / 管理员 only.
      */
-    rejectAccount(user: Principal): Promise<ApiResult_4>;
+    rejectAccount(user: Principal): Promise<ApiResult_6>;
     /**
      * / Requires 编辑; keeps older versions; record returns to 待核.
      */
@@ -747,23 +1004,35 @@ export interface backendInterface {
     /**
      * / 管理员 only, idempotent: 【虚构】 sample companies, records and attachments.
      */
-    seedSampleData(): Promise<ApiResult_5>;
+    seedSampleData(): Promise<ApiResult_7>;
     /**
      * / 管理员 only: set an approved user's account role to 管理员 or 成员.
      */
-    setAccountRole(user: Principal, role: AccountRole): Promise<ApiResult_4>;
+    setAccountRole(user: Principal, role: AccountRole): Promise<ApiResult_6>;
     /**
      * / 管理员 only: set 查看/编辑/核实/敏感下载 for a user on a company.
      */
-    setUserCompanyPermissions(user: Principal, companyId: CompanyId, permissions: PermissionSet): Promise<ApiResult_3>;
+    setUserCompanyPermissions(user: Principal, companyId: CompanyId, permissions: PermissionSet): Promise<ApiResult_5>;
     /**
      * / Audits a sign-in; returns the caller's account or null when not registered yet.
      */
     signIn(): Promise<AccountView | null>;
     /**
+     * / Creator only; moves a draft into the opportunity pool (待核对).
+     */
+    submitOpportunity(id: OpportunityId): Promise<ApiResult_2>;
+    /**
+     * / Requires 编辑 on the company; confirmed items are immutable.
+     */
+    updateCheckItem(id: CheckItemId, change: CheckItemUpdate): Promise<ApiResult_4>;
+    /**
      * / Requires 编辑 on the company.
      */
-    updateCompany(id: CompanyId, input: CompanyInput): Promise<ApiResult_2>;
+    updateCompany(id: CompanyId, input: CompanyInput): Promise<ApiResult_3>;
+    /**
+     * / Creator only, draft only. Requires 编辑 on the company.
+     */
+    updateOpportunityDraft(id: OpportunityId, change: OpportunityUpdate): Promise<ApiResult_2>;
     /**
      * / Requires 编辑; expectedVersion must equal the stored version, else #conflict with the latest record.
      */

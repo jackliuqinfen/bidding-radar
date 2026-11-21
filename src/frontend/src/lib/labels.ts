@@ -4,12 +4,17 @@ import {
   AuditAction,
   AuditResult,
   ChangeAction,
+  CheckConclusion,
+  CheckItemKind,
+  ClauseKind,
   ExpiryFlag,
   NotificationKind,
+  OpportunityStatus,
   Permission,
   ProjectType,
   RecordKind,
   RecordStatus,
+  SortField,
 } from "@/backend";
 
 /** The single canonical wording used across the whole app. */
@@ -97,6 +102,12 @@ export const AUDIT_ACTION_LABELS: Record<AuditAction, string> = {
   [AuditAction.viewList]: "查看列表",
   [AuditAction.viewAuditLog]: "查看审计日志",
   [AuditAction.seedSampleData]: "生成示例数据",
+  [AuditAction.createOpportunity]: "新建公告草稿",
+  [AuditAction.submitOpportunity]: "提交公告",
+  [AuditAction.changeOpportunityStatus]: "变更公告状态",
+  [AuditAction.createCheckItem]: "新建核对结论",
+  [AuditAction.editCheckItem]: "修改核对结论",
+  [AuditAction.confirmCheckItem]: "确认核对结论",
 };
 
 export const AUDIT_RESULT_LABELS: Record<AuditResult, string> = {
@@ -122,7 +133,76 @@ export const NOTIFICATION_KIND_LABELS: Record<NotificationKind, string> = {
   [NotificationKind.accountApproved]: "账号已批准",
   [NotificationKind.accountRejected]: "账号被拒绝",
   [NotificationKind.pendingUser]: "待批准用户",
+  [NotificationKind.checkItemConfirmed]: "核对结论已确认",
 };
+
+export const OPPORTUNITY_STATUS_LABELS: Record<OpportunityStatus, string> = {
+  [OpportunityStatus.pendingReview]: "待核对",
+  [OpportunityStatus.selected]: "已选公司参投",
+  [OpportunityStatus.declined]: "不参与",
+  [OpportunityStatus.closed]: "已截止",
+};
+
+export const OPPORTUNITY_STATUS_ORDER: OpportunityStatus[] = [
+  OpportunityStatus.pendingReview,
+  OpportunityStatus.selected,
+  OpportunityStatus.declined,
+  OpportunityStatus.closed,
+];
+
+export const CHECK_CONCLUSION_LABELS: Record<CheckConclusion, string> = {
+  [CheckConclusion.conform]: "符合",
+  [CheckConclusion.nonConform]: "不符合",
+  [CheckConclusion.pending]: "待核",
+};
+
+export const CHECK_CONCLUSION_ORDER: CheckConclusion[] = [
+  CheckConclusion.conform,
+  CheckConclusion.nonConform,
+  CheckConclusion.pending,
+];
+
+export const CHECK_ITEM_KIND_LABELS: Record<CheckItemKind, string> = {
+  [CheckItemKind.qualification]: "资质类别与等级",
+  [CheckItemKind.performance]: "类似业绩",
+  [CheckItemKind.personnel]: "人员与证书",
+  [CheckItemKind.capital]: "注册资本与信用",
+  [CheckItemKind.deposit]: "保证金能力",
+  [CheckItemKind.other]: "其他公告条款",
+};
+
+export const CHECK_ITEM_KIND_ORDER: CheckItemKind[] = [
+  CheckItemKind.qualification,
+  CheckItemKind.performance,
+  CheckItemKind.personnel,
+  CheckItemKind.capital,
+  CheckItemKind.deposit,
+  CheckItemKind.other,
+];
+
+export const CLAUSE_KIND_LABELS: Record<ClauseKind, string> = {
+  [ClauseKind.qualification]: "资格要求",
+  [ClauseKind.performance]: "业绩要求",
+  [ClauseKind.personnel]: "人员要求",
+  [ClauseKind.deposit]: "保证金要求",
+};
+
+export const CLAUSE_KIND_ORDER: ClauseKind[] = [
+  ClauseKind.qualification,
+  ClauseKind.performance,
+  ClauseKind.personnel,
+  ClauseKind.deposit,
+];
+
+export const SORT_FIELD_LABELS: Record<SortField, string> = {
+  [SortField.deadline]: "报名截止时间",
+  [SortField.createdAt]: "录入时间",
+};
+
+export const SORT_FIELD_ORDER: SortField[] = [
+  SortField.deadline,
+  SortField.createdAt,
+];
 
 export const APP_NAME = "投标雷达";
 export const APP_TAGLINE = "资质、人员、业绩档案审计系统";

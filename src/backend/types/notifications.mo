@@ -10,6 +10,7 @@ module {
     #nearExpiry; // to 维护责任人
     #expired; // to 维护责任人
     #verified;
+    #checkItemConfirmed; // to the announcement recorder
   };
 
   public type Notification = {
@@ -19,6 +20,7 @@ module {
     message : Text;
     companyId : ?Common.CompanyId;
     recordId : ?Common.RecordId;
+    opportunityId : ?Common.OpportunityId;
     createdAt : Common.Timestamp;
     read : Bool;
     /// de-duplication key for generated expiry notifications
@@ -32,6 +34,7 @@ module {
     message : Text;
     companyId : ?Common.CompanyId;
     recordId : ?Common.RecordId;
+    opportunityId : ?Common.OpportunityId;
     createdAt : Common.Timestamp;
     read : Bool;
   };

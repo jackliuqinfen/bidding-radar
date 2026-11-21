@@ -15,7 +15,7 @@ import CompaniesLib "companies";
 import NotificationsLib "notifications";
 
 module {
-  func emptyCounts() : Dashboard.GapCounts {
+  func _emptyCounts() : Dashboard.GapCounts {
     { missing = 0; pendingReview = 0; verified = 0; nearExpiry = 0; expired = 0 };
   };
 

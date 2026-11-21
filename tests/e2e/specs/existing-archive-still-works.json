@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "existing-archive-still-works",
+    "kind": "interactive",
+    "goal": "现有公司档案与缺口看板在新增机会池后仍可正常打开",
+    "requirementIndexes": [
+      0
+    ],
+    "acceptanceCriteriaIndexes": [
+      14
+    ],
+    "steps": [
+      "Sign in",
+      "Open 公司档案",
+      "Open 缺口看板"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "公司档案"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "缺口看板"
+      }
+    ]
+  }
+}

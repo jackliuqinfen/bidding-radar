@@ -60,6 +60,7 @@ module {
               ?companyId,
               null,
               null,
+              null,
             );
             #ok(grantOf(state, companyId, permissions));
           };

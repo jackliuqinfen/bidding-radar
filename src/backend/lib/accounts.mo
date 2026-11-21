@@ -193,6 +193,7 @@ module {
               null,
               null,
               null,
+              null,
             );
             #ok(toView(state, updated));
           };
@@ -226,6 +227,7 @@ module {
               user,
               #accountRejected,
               "您的账号申请已被拒绝。",
+              null,
               null,
               null,
               null,

@@ -4,12 +4,8 @@
     "id": "second-user-pending",
     "kind": "interactive",
     "goal": "A second user who signs in is waiting for approval and sees no business data",
-    "requirementIndexes": [
-      0
-    ],
-    "acceptanceCriteriaIndexes": [
-      0
-    ],
+    "requirementIndexes": [],
+    "acceptanceCriteriaIndexes": [],
     "persona": "new-member",
     "steps": [
       "Sign in",

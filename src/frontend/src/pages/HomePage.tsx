@@ -8,6 +8,7 @@ import {
 import { GapOverview } from "@/components/home/GapOverview";
 import { HomeSection } from "@/components/home/HomeSection";
 import { MyAttention } from "@/components/home/MyAttention";
+import { OpportunityTodo } from "@/components/home/OpportunityTodo";
 import { PendingAccountList } from "@/components/home/PendingAccountList";
 import { PermittedCompanies } from "@/components/home/PermittedCompanies";
 import { SeedSampleButton } from "@/components/home/SeedSampleButton";
@@ -16,15 +17,18 @@ import { RecordDetailSheet } from "@/components/records/RecordDetailSheet";
 import { Button } from "@/components/ui/button";
 import { useMyAccount } from "@/hooks/useAccount";
 import { useHomeSummary } from "@/hooks/useDashboard";
+import { useOpportunityTodo } from "@/hooks/useOpportunities";
 import { useMyPermissions } from "@/hooks/usePermissions";
 import { dashboardSearch } from "@/lib/dashboardSearch";
 import { describeError } from "@/lib/errors";
 import { APP_TAGLINE, ROLE_LABELS } from "@/lib/labels";
+import { opportunitySearch } from "@/lib/opportunitySearch";
 import { Link } from "@tanstack/react-router";
 import {
   Building2,
   ClipboardCheck,
   LayoutDashboard,
+  Target,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -34,6 +38,7 @@ export default function HomePage() {
   const summary = useHomeSummary();
   const account = useMyAccount();
   const permissions = useMyPermissions();
+  const opportunityTodo = useOpportunityTodo();
   const [selected, setSelected] = useState<RecordView | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -52,12 +57,17 @@ export default function HomePage() {
   const myAttention = summary.data?.myAttention ?? [];
   const toVerify = summary.data?.toVerify ?? [];
 
+  const closingSoon = opportunityTodo.data?.closingSoon ?? [];
+  const pendingConfirmations = opportunityTodo.data?.pendingConfirmations ?? [];
+  const opportunityTodoCount = closingSoon.length + pendingConfirmations.length;
+
   const isEmptySystem =
     !!summary.data &&
     overview.length === 0 &&
     myAttention.length === 0 &&
     toVerify.length === 0 &&
-    pendingAccounts.length === 0;
+    pendingAccounts.length === 0 &&
+    opportunityTodoCount === 0;
 
   const roleLabel = role ? ROLE_LABELS[role] : undefined;
 
@@ -102,6 +112,27 @@ export default function HomePage() {
 
       {summary.data && !isEmptySystem && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <HomeSection
+            title="机会池待办"
+            description="7 天内报名截止的公告与待确认的核对结论。"
+            icon={Target}
+            count={opportunityTodoCount}
+            ocid="home.opportunity_todo.section"
+            action={
+              <Button asChild type="button" variant="ghost" size="sm">
+                <Link to="/opportunities" search={opportunitySearch()}>
+                  机会池
+                </Link>
+              </Button>
+            }
+          >
+            <OpportunityTodo
+              closingSoon={closingSoon}
+              pendingConfirmations={pendingConfirmations}
+              isLoading={opportunityTodo.isLoading}
+            />
+          </HomeSection>
+
           {isAdmin && (
             <HomeSection
               title="待批准用户"

@@ -39,11 +39,30 @@ type UserPermissions =
    user: principal;
  };
 type Timestamp = int;
+type StatusChangeView = 
+ record {
+   at: Timestamp;
+   fromStatus: OpportunityStatus;
+   fromStatusLabel: text;
+   id: nat;
+   operator: principal;
+   operatorName: text;
+   reason: text;
+   toStatus: OpportunityStatus;
+   toStatusLabel: text;
+ };
+type SortField = 
+ variant {
+   createdAt;
+   deadline;
+ };
 type SampleReport = 
  record {
    alreadySeeded: bool;
    attachments: nat;
+   checkItems: nat;
    companies: nat;
+   opportunities: nat;
    records: nat;
  };
 type Result__1 = 
@@ -180,6 +199,98 @@ type Permission =
    verify;
    view;
  };
+type OpportunityView = 
+ record {
+   bidOpenTime: Timestamp;
+   body: text;
+   budgetYuan: opt nat;
+   checkedCompanyCount: nat;
+   clauses: vec Clause;
+   createdAt: Timestamp;
+   createdBy: principal;
+   createdByName: text;
+   daysRemaining: nat;
+   draft: bool;
+   id: OpportunityId;
+   lastModifiedAt: Timestamp;
+   lastModifiedBy: principal;
+   lastModifiedByName: text;
+   projectName: text;
+   projectType: ProjectType;
+   projectTypeLabel: text;
+   publishDate: Timestamp;
+   registrationDeadline: Timestamp;
+   sourceName: text;
+   sourceUrl: text;
+   status: OpportunityStatus;
+   statusLabel: text;
+   tenderer: text;
+ };
+type OpportunityUpdate = 
+ record {
+   bidOpenTime: Timestamp;
+   body: text;
+   budgetYuan: opt nat;
+   clauses: vec Clause;
+   projectName: text;
+   projectType: ProjectType;
+   publishDate: Timestamp;
+   registrationDeadline: Timestamp;
+   sourceName: text;
+   sourceUrl: text;
+   tenderer: text;
+ };
+type OpportunityTodo = 
+ record {
+   closingSoon: vec OpportunityListItem;
+   pendingConfirmations: vec CheckItemView;
+ };
+type OpportunityStatus = 
+ variant {
+   closed;
+   declined;
+   pendingReview;
+   selected;
+ };
+type OpportunityListItem = 
+ record {
+   budgetYuan: opt nat;
+   checkedCompanyCount: nat;
+   daysRemaining: nat;
+   id: OpportunityId;
+   projectName: text;
+   projectType: ProjectType;
+   projectTypeLabel: text;
+   registrationDeadline: Timestamp;
+   status: OpportunityStatus;
+   statusLabel: text;
+   tenderer: text;
+ };
+type OpportunityInput = 
+ record {
+   bidOpenTime: Timestamp;
+   body: text;
+   budgetYuan: opt nat;
+   clauses: vec Clause;
+   projectName: text;
+   projectType: ProjectType;
+   publishDate: Timestamp;
+   registrationDeadline: Timestamp;
+   sourceName: text;
+   sourceUrl: text;
+   tenderer: text;
+ };
+type OpportunityId = nat;
+type OpportunityFilter = 
+ record {
+   deadlineFrom: opt Timestamp;
+   deadlineTo: opt Timestamp;
+   descending: bool;
+   projectType: opt ProjectType;
+   search: opt text;
+   sortBy: opt SortField;
+   status: opt OpportunityStatus;
+ };
 type NotificationView = 
  record {
    companyId: opt CompanyId;
@@ -188,6 +299,7 @@ type NotificationView =
    kind: NotificationKind;
    kindLabel: text;
    message: text;
+   opportunityId: opt OpportunityId;
    read: bool;
    recordId: opt RecordId;
  };
@@ -195,6 +307,7 @@ type NotificationKind =
  variant {
    accountApproved;
    accountRejected;
+   checkItemConfirmed;
    expired;
    nearExpiry;
    pendingUser;
@@ -250,6 +363,11 @@ type ExpiryFlag =
    expired;
    nearExpiry;
  };
+type EvidenceRef = 
+ record {
+   recordId: RecordId;
+   statusAtCitation: RecordStatus;
+ };
 type Error = 
  variant {
    AmbiguousAttribute: record {
@@ -280,6 +398,12 @@ type DownloadInfo =
    isSample: bool;
    sensitive: bool;
    version: nat;
+ };
+type ConfirmationView = 
+ record {
+   confirmedAt: Timestamp;
+   confirmer: principal;
+   confirmerName: text;
  };
 type CompanyView = 
  record {
@@ -332,6 +456,73 @@ type CompanyDetail =
    companyName: text;
    counts: GapCounts;
    records: vec RecordView;
+ };
+type ClauseKind = 
+ variant {
+   deposit;
+   performance;
+   personnel;
+   qualification;
+ };
+type Clause = 
+ record {
+   excerpt: text;
+   kind: ClauseKind;
+ };
+type CheckItemView = 
+ record {
+   basis: text;
+   clauseExcerpt: text;
+   companyId: CompanyId;
+   companyName: text;
+   conclusion: CheckConclusion;
+   conclusionLabel: text;
+   confirmation: opt ConfirmationView;
+   createdAt: Timestamp;
+   createdBy: principal;
+   createdByName: text;
+   evidence: vec EvidenceRef;
+   id: nat;
+   kind: CheckItemKind;
+   kindLabel: text;
+   lastModifiedAt: Timestamp;
+   lastModifiedBy: principal;
+   lastModifiedByName: text;
+   opportunityId: OpportunityId;
+ };
+type CheckItemUpdate = 
+ record {
+   basis: text;
+   clauseExcerpt: text;
+   conclusion: CheckConclusion;
+   evidence: vec EvidenceRef;
+   kind: CheckItemKind;
+ };
+type CheckItemKind = 
+ variant {
+   capital;
+   deposit;
+   other;
+   performance;
+   personnel;
+   qualification;
+ };
+type CheckItemInput = 
+ record {
+   basis: text;
+   clauseExcerpt: text;
+   companyId: CompanyId;
+   conclusion: CheckConclusion;
+   evidence: vec EvidenceRef;
+   kind: CheckItemKind;
+   opportunityId: OpportunityId;
+ };
+type CheckItemId = nat;
+type CheckConclusion = 
+ variant {
+   conform;
+   nonConform;
+   pending;
  };
 type ChangeEntryView = 
  record {
@@ -399,10 +590,15 @@ type AuditAction =
    approveAccount;
    approveAsAdmin;
    changeAccountRole;
+   changeOpportunityStatus;
    changePermissions;
+   confirmCheckItem;
+   createCheckItem;
    createCompany;
+   createOpportunity;
    createRecord;
    downloadAttachment;
+   editCheckItem;
    editCompany;
    editRecord;
    register;
@@ -411,6 +607,7 @@ type AuditAction =
    resetToPending;
    seedSampleData;
    signIn;
+   submitOpportunity;
    uploadAttachment;
    verifyRecord;
    viewAuditLog;
@@ -452,97 +649,127 @@ type ApprovalState =
 type ApiResult_9 = 
  variant {
    err: ApiError;
-   ok: vec CompanyView;
+   ok: vec RecordView;
  };
 type ApiResult_8 = 
  variant {
    err: ApiError;
-   ok: vec NotificationView;
+   ok;
  };
 type ApiResult_7 = 
  variant {
    err: ApiError;
-   ok: vec RecordView;
+   ok: SampleReport;
  };
 type ApiResult_6 = 
  variant {
    err: ApiError;
-   ok;
+   ok: AccountView;
  };
 type ApiResult_5 = 
  variant {
    err: ApiError;
-   ok: SampleReport;
+   ok: CompanyPermissionGrant;
  };
 type ApiResult_4 = 
  variant {
    err: ApiError;
-   ok: AccountView;
+   ok: CheckItemView;
  };
 type ApiResult_3 = 
  variant {
    err: ApiError;
-   ok: CompanyPermissionGrant;
+   ok: CompanyView;
  };
-type ApiResult_20 = 
+type ApiResult_26 = 
  variant {
    err: ApiError;
    ok: AttachmentView;
  };
-type ApiResult_2 = 
- variant {
-   err: ApiError;
-   ok: CompanyView;
- };
-type ApiResult_19 = 
+type ApiResult_25 = 
  variant {
    err: ApiError;
    ok: DownloadInfo;
  };
-type ApiResult_18 = 
+type ApiResult_24 = 
  variant {
    err: ApiError;
    ok: CompanyDetail;
  };
-type ApiResult_17 = 
+type ApiResult_23 = 
  variant {
    err: ApiError;
    ok: vec CompanyGapRow;
  };
-type ApiResult_16 = 
+type ApiResult_22 = 
  variant {
    err: ApiError;
    ok: HomeSummary;
  };
-type ApiResult_15 = 
+type ApiResult_21 = 
  variant {
    err: ApiError;
    ok: vec CompanyPermissionGrant;
  };
-type ApiResult_14 = 
+type ApiResult_20 = 
+ variant {
+   err: ApiError;
+   ok: vec StatusChangeView;
+ };
+type ApiResult_2 = 
+ variant {
+   err: ApiError;
+   ok: OpportunityView;
+ };
+type ApiResult_19 = 
+ variant {
+   err: ApiError;
+   ok: OpportunityTodo;
+ };
+type ApiResult_18 = 
  variant {
    err: ApiError;
    ok: vec ChangeEntryView;
  };
-type ApiResult_13 = 
+type ApiResult_17 = 
  variant {
    err: ApiError;
    ok: nat;
  };
-type ApiResult_12 = 
+type ApiResult_16 = 
  variant {
    err: ApiError;
    ok: UserPermissions;
  };
-type ApiResult_11 = 
+type ApiResult_15 = 
  variant {
    err: ApiError;
    ok: vec AccountView;
  };
-type ApiResult_10 = 
+type ApiResult_14 = 
  variant {
    err: ApiError;
    ok: AuditPage;
+ };
+type ApiResult_13 = 
+ variant {
+   err: ApiError;
+   ok: vec CheckItemView;
+ };
+type ApiResult_12 = 
+ variant {
+   err: ApiError;
+   ok: vec CompanyView;
+ };
+type ApiResult_11 = 
+ variant {
+   err: ApiError;
+   ok: vec NotificationView;
+ };
+type ApiResult_10 = 
+ variant {
+   err: ApiError;
+   ok: vec OpportunityListItem;
  };
 type ApiResult_1 = 
  variant {
@@ -604,71 +831,98 @@ service : {
   _internet_identity_sign_in_finish: () -> (Result__1);
   _internet_identity_sign_in_start: () -> (blob);
   /// Requires 编辑. The blob comes from the object-storage upload.
-  addAttachment: (input: NewAttachmentInput) -> (ApiResult_20);
+  addAttachment: (input: NewAttachmentInput) -> (ApiResult_26);
   /// 管理员 only. role #admin = direct approval as 管理员 (audited as such).
-  approveAccount: (user: principal, role: AccountRole) -> (ApiResult_4);
+  approveAccount: (user: principal, role: AccountRole) -> (ApiResult_6);
   assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  /// Requires a reason; 已选公司参投 requires at least one 符合 check item.
+  changeOpportunityStatus: (id: OpportunityId, toStatus: OpportunityStatus,
+   reason: text) -> (ApiResult_2);
+  /// Requires 核实 on the company; creator cannot confirm their own item.
+  confirmCheckItem: (id: CheckItemId) -> (ApiResult_4);
+  /// Requires 编辑 on the company; 符合 cannot cite a 待核/待补 record.
+  createCheckItem: (input: CheckItemInput) -> (ApiResult_4);
   /// 管理员 only.
-  createCompany: (input: CompanyInput) -> (ApiResult_2);
+  createCompany: (input: CompanyInput) -> (ApiResult_3);
+  /// Requires 编辑 on the company; body and source URL required. Saves as draft (creator-only).
+  createOpportunityDraft: (input: OpportunityInput) -> (ApiResult_2);
   /// Requires 编辑 on input.companyId.
   createRecord: (input: RecordInput) -> (ApiResult_1);
   /// Blob reference only for authorized callers; every attempt audited. version null = current.
   downloadAttachment: (attachmentId: AttachmentId, version: opt nat) ->
-   (ApiResult_19);
+   (ApiResult_25);
   execute: (qJson: text) -> (Result) query;
   getApiDoc: () -> (text) query;
   getCallerUserRole: () -> (UserRole) query;
   /// Requires 查看; denial is audited.
-  getCompany: (id: CompanyId) -> (ApiResult_2);
+  getCompany: (id: CompanyId) -> (ApiResult_3);
   /// Records need 查看; without it only counts are returned.
   getCompanyDetail: (companyId: CompanyId, filter: RecordFilter) ->
-   (ApiResult_18);
+   (ApiResult_24);
   /// Every company by name with counts only (zeros when empty). Also triggers expiry notifications.
-  getGapDashboard: () -> (ApiResult_17);
+  getGapDashboard: () -> (ApiResult_23);
   /// Role home data. Also triggers expiry notifications.
-  getHomeSummary: () -> (ApiResult_16);
+  getHomeSummary: () -> (ApiResult_22);
   /// Own profile and approval state; allowed for pending users.
   getMyAccount: () -> (opt AccountView) query;
   /// The caller's own grants.
-  getMyPermissions: () -> (ApiResult_15);
+  getMyPermissions: () -> (ApiResult_21);
+  /// Approved members; drafts visible only to their creator.
+  getOpportunity: (id: OpportunityId) -> (ApiResult_2);
+  /// Status change history for an announcement.
+  getOpportunityStatusHistory: (id: OpportunityId) -> (ApiResult_20);
+  /// 机会池待办: announcements closing within 7 days and unconfirmed check items.
+  getOpportunityTodo: () -> (ApiResult_19);
   /// Requires 查看; denial audited. ID number masked.
   getRecord: (id: RecordId) -> (ApiResult_1);
   /// Requires 查看; ID numbers masked.
-  getRecordHistory: (id: RecordId) -> (ApiResult_14);
-  getUnreadCount: () -> (ApiResult_13) query;
+  getRecordHistory: (id: RecordId) -> (ApiResult_18);
+  getUnreadCount: () -> (ApiResult_17) query;
   /// 管理员 only.
-  getUserPermissions: (user: principal) -> (ApiResult_12);
+  getUserPermissions: (user: principal) -> (ApiResult_16);
   isCallerAdmin: () -> (bool) query;
   /// 管理员 only.
-  listAccounts: () -> (ApiResult_11);
+  listAccounts: () -> (ApiResult_15);
   /// 管理员 only; filter by operator, action, result and company.
-  listAuditLog: (filter: AuditFilter) -> (ApiResult_10);
+  listAuditLog: (filter: AuditFilter) -> (ApiResult_14);
+  /// Check items for an announcement; evidence only with 查看 on that company.
+  listCheckItems: (opportunityId: OpportunityId) -> (ApiResult_13);
   /// Only companies where the caller has 查看.
-  listCompanies: () -> (ApiResult_9);
+  listCompanies: () -> (ApiResult_12);
   /// Approved users only; the caller's notifications, newest first.
-  listNotifications: () -> (ApiResult_8) query;
+  listNotifications: () -> (ApiResult_11) query;
+  /// Approved members; drafts excluded except the caller's own. Filtered and sorted.
+  listOpportunities: (filter: OpportunityFilter) -> (ApiResult_10);
   /// Only records in companies where the caller has 查看.
-  listRecords: (filter: RecordFilter) -> (ApiResult_7);
-  markAllNotificationsRead: () -> (ApiResult_6);
-  markNotificationRead: (id: NotificationId) -> (ApiResult_6);
+  listRecords: (filter: RecordFilter) -> (ApiResult_9);
+  markAllNotificationsRead: () -> (ApiResult_8);
+  markNotificationRead: (id: NotificationId) -> (ApiResult_8);
   /// First sign-in registration with a display name. The first user becomes 管理员 and is approved; others wait as 待批准.
-  registerAccount: (displayName: text) -> (ApiResult_4);
+  registerAccount: (displayName: text) -> (ApiResult_6);
   /// 管理员 only.
-  rejectAccount: (user: principal) -> (ApiResult_4);
+  rejectAccount: (user: principal) -> (ApiResult_6);
   /// Requires 编辑; keeps older versions; record returns to 待核.
   replaceAttachment: (input: ReplaceAttachmentInput) -> (ApiResult_1);
   schema: () -> (text) query;
   /// 管理员 only, idempotent: 【虚构】 sample companies, records and attachments.
-  seedSampleData: () -> (ApiResult_5);
+  seedSampleData: () -> (ApiResult_7);
   /// 管理员 only: set an approved user's account role to 管理员 or 成员.
-  setAccountRole: (user: principal, role: AccountRole) -> (ApiResult_4);
+  setAccountRole: (user: principal, role: AccountRole) -> (ApiResult_6);
   /// 管理员 only: set 查看/编辑/核实/敏感下载 for a user on a company.
   setUserCompanyPermissions: (user: principal, companyId: CompanyId,
-   permissions: PermissionSet) -> (ApiResult_3);
+   permissions: PermissionSet) -> (ApiResult_5);
   /// Audits a sign-in; returns the caller's account or null when not registered yet.
   signIn: () -> (opt AccountView);
+  /// Creator only; moves a draft into the opportunity pool (待核对).
+  submitOpportunity: (id: OpportunityId) -> (ApiResult_2);
+  /// Requires 编辑 on the company; confirmed items are immutable.
+  updateCheckItem: (id: CheckItemId, change: CheckItemUpdate) ->
+   (ApiResult_4);
   /// Requires 编辑 on the company.
-  updateCompany: (id: CompanyId, input: CompanyInput) -> (ApiResult_2);
+  updateCompany: (id: CompanyId, input: CompanyInput) -> (ApiResult_3);
+  /// Creator only, draft only. Requires 编辑 on the company.
+  updateOpportunityDraft: (id: OpportunityId, change: OpportunityUpdate) ->
+   (ApiResult_2);
   /// Requires 编辑; expectedVersion must equal the stored version, else #conflict with the latest record.
   updateRecord: (id: RecordId, expectedVersion: nat, change: RecordUpdate) ->
    (ApiResult_1);

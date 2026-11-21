@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "seed-and-browse-pool",
+    "kind": "interactive",
+    "goal": "生成示例数据后，机会池出现带【虚构】标识的公告，列表显示剩余天数、预算与状态，并可按项目类型筛选且刷新后保持",
+    "requirementIndexes": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "acceptanceCriteriaIndexes": [
+      0,
+      2,
+      3,
+      11,
+      12,
+      13,
+      14
+    ],
+    "steps": [
+      "Sign in",
+      "Press 生成示例数据",
+      "Open 机会池",
+      "Filter by 项目类型 工程施工",
+      "Reload the page"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "【虚构】"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "机会池"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "已截止"
+      },
+      {
+        "afterStep": 3,
+        "expectText": "工程施工"
+      },
+      {
+        "afterStep": 4,
+        "expectText": "机会池"
+      }
+    ]
+  }
+}

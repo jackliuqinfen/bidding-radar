@@ -112,6 +112,12 @@ module {
       case (#viewDashboard) "查看看板";
       case (#viewAuditLog) "查看审计日志";
       case (#seedSampleData) "生成示例数据";
+      case (#createOpportunity) "录入公告";
+      case (#submitOpportunity) "提交公告";
+      case (#changeOpportunityStatus) "变更公告状态";
+      case (#createCheckItem) "新建核对结论";
+      case (#editCheckItem) "修改核对结论";
+      case (#confirmCheckItem) "确认核对结论";
     };
   };
 
@@ -132,6 +138,7 @@ module {
       case (#nearExpiry) "临近到期";
       case (#expired) "已过期";
       case (#verified) "记录已核实";
+      case (#checkItemConfirmed) "核对结论已确认";
     };
   };
 };

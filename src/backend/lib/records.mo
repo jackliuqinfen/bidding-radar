@@ -15,7 +15,6 @@ import NotificationsLib "notifications";
 import Labels "labels";
 
 module {
-  let DAY_NS : Int = 86_400_000_000_000;
   let NEAR_EXPIRY_NS : Int = 2_592_000_000_000_000;
 
   func isBlank(t : Text) : Bool = t.size() == 0;
@@ -124,8 +123,8 @@ module {
       return "********";
     };
     let head = chars.sliceToArray(0, 6);
-    let tail = chars.sliceToArray(n - 4, n);
-    let stars = Array.tabulate(n - 10, func (_ : Nat) : Char = '*');
+    let tail = chars.sliceToArray(n - 4 : Nat, n);
+    let stars = Array.tabulate(n - 10 : Nat, func (_ : Nat) : Char = '*');
     Text.fromArray(head.concat(stars).concat(tail));
   };
 
@@ -424,6 +423,7 @@ module {
                 ?updated.companyId,
                 ?updated.id,
                 null,
+                null,
               );
             };
             #ok(toView(state, caller, updated));
@@ -457,7 +457,7 @@ module {
     };
   };
 
-  func matchesFilter(state : State.State, record : Records.ArchiveRecord, filter : Records.RecordFilter, now : Common.Timestamp) : Bool {
+  func matchesFilter(_state : State.State, record : Records.ArchiveRecord, filter : Records.RecordFilter, now : Common.Timestamp) : Bool {
     let okCompany = switch (filter.companyId) {
       case (?c) record.companyId == c;
       case null true;
@@ -590,6 +590,7 @@ module {
               ?updated.companyId,
               ?updated.id,
               null,
+              null,
             );
             #ok(toView(state, caller, updated));
           };
@@ -695,6 +696,7 @@ module {
       "【" # companyName # "】记录 #" # updated.id.toText() # " 附件已变更，已重置为待核，请重新核实。",
       ?updated.companyId,
       ?updated.id,
+      null,
       null,
     );
     updated;

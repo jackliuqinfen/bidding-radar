@@ -15,13 +15,14 @@ module {
       message = n.message;
       companyId = n.companyId;
       recordId = n.recordId;
+      opportunityId = n.opportunityId;
       createdAt = n.createdAt;
       read = n.read;
     };
   };
 
   /// Adds one notification; when dedupKey is set and already used for this recipient, does nothing.
-  public func notify(state : State.State, recipient : Principal, kind : Notifications.NotificationKind, message : Text, companyId : ?Common.CompanyId, recordId : ?Common.RecordId, dedupKey : ?Text) {
+  public func notify(state : State.State, recipient : Principal, kind : Notifications.NotificationKind, message : Text, companyId : ?Common.CompanyId, recordId : ?Common.RecordId, opportunityId : ?Common.OpportunityId, dedupKey : ?Text) {
     switch (dedupKey) {
       case (?key) {
         let exists = state.notifications.values().any(func (n : Notifications.Notification) : Bool {
@@ -40,6 +41,7 @@ module {
       message;
       companyId;
       recordId;
+      opportunityId;
       createdAt = Time.now();
       read = false;
       dedupKey;
@@ -50,7 +52,7 @@ module {
   public func notifyAdmins(state : State.State, kind : Notifications.NotificationKind, message : Text, dedupKey : ?Text) {
     for (account in state.accounts.values()) {
       if (account.approval == #approved and isAdminAccount(state, account.principal)) {
-        notify(state, account.principal, kind, message, null, null, dedupKey);
+        notify(state, account.principal, kind, message, null, null, null, dedupKey);
       };
     };
   };
@@ -137,6 +139,7 @@ module {
             "【" # companyName # "】记录 #" # record.id.toText() # " 临近到期（30 天内），请及时更新。",
             ?record.companyId,
             ?record.id,
+            null,
             ?("nearExpiry:" # record.id.toText() # ":" # record.version.toText()),
           );
         };
@@ -152,6 +155,7 @@ module {
             "【" # companyName # "】记录 #" # record.id.toText() # " 已过期，请及时更新。",
             ?record.companyId,
             ?record.id,
+            null,
             ?("expired:" # record.id.toText() # ":" # record.version.toText()),
           );
         };

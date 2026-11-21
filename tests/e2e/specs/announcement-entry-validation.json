@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "announcement-entry-validation",
+    "kind": "interactive",
+    "goal": "录入公告时正文或来源链接为空会被拒绝并提示缺项，填写完整后提交即出现在机会池",
+    "requirementIndexes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "acceptanceCriteriaIndexes": [
+      0,
+      1
+    ],
+    "steps": [
+      "Sign in",
+      "Open 机会池",
+      "Press 录入公告",
+      "Save the announcement with an empty 公告正文, which the app rejects",
+      "Enter the project name 城东片区道路改造工程 and the source link https://example.com/notice/1 and the body 本项目要求市政公用工程施工总承包二级及以上资质，并提交"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "机会池"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "公告正文"
+      },
+      {
+        "afterStep": 3,
+        "expectText": "公告正文"
+      },
+      {
+        "afterStep": 4,
+        "assert": "The screen shows \"城东片区道路改造工程\""
+      }
+    ]
+  }
+}

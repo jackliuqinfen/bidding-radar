@@ -27,7 +27,20 @@ function AppShell({ account }: { account: AccountView }) {
           </div>
         </main>
         <footer className="hidden border-t border-border px-6 py-3 text-center text-xs text-muted-foreground lg:block">
-          © {new Date().getFullYear()} {APP_NAME} · 内部使用
+          <p>
+            © {new Date().getFullYear()} {APP_NAME} · 内部使用
+          </p>
+          <p className="mt-1">
+            Built with love using{" "}
+            <a
+              href="https://caffeine.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 transition-smooth hover:text-foreground"
+            >
+              caffeine.ai
+            </a>
+          </p>
         </footer>
       </div>
       <MobileTabBar isAdmin={isAdmin} />

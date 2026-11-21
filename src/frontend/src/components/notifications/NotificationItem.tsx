@@ -36,6 +36,8 @@ const KIND_STYLES: Record<NotificationKind, string> = {
     "bg-status-expired-soft text-status-expired-foreground border-status-expired-border",
   [NotificationKind.pendingUser]:
     "bg-status-pending-soft text-status-pending-foreground border-status-pending-border",
+  [NotificationKind.checkItemConfirmed]:
+    "bg-status-verified-soft text-status-verified-foreground border-status-verified-border",
 };
 
 const KIND_ICONS: Record<NotificationKind, typeof Bell> = {
@@ -47,6 +49,7 @@ const KIND_ICONS: Record<NotificationKind, typeof Bell> = {
   [NotificationKind.accountApproved]: UserCheck,
   [NotificationKind.accountRejected]: UserX,
   [NotificationKind.pendingUser]: Users,
+  [NotificationKind.checkItemConfirmed]: CircleCheck,
 };
 
 export function NotificationItem({

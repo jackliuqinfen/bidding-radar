@@ -1,10 +1,13 @@
 import { AppGate } from "@/components/layout/AppGate";
+import { parseOpportunitySearch } from "@/lib/opportunitySearch";
 import AuditPage from "@/pages/AuditPage";
 import CompaniesPage from "@/pages/CompaniesPage";
 import CompanyDetailPage from "@/pages/CompanyDetailPage";
 import DashboardPage from "@/pages/DashboardPage";
 import HomePage from "@/pages/HomePage";
 import NotificationsPage from "@/pages/NotificationsPage";
+import OpportunitiesPage from "@/pages/OpportunitiesPage";
+import OpportunityDetailPage from "@/pages/OpportunityDetailPage";
 import PersonDetailPage from "@/pages/PersonDetailPage";
 import PersonnelPage from "@/pages/PersonnelPage";
 import UsersPage from "@/pages/UsersPage";
@@ -47,6 +50,20 @@ const companyDetailRoute = createRoute({
   component: CompanyDetailPage,
 });
 
+const opportunitiesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities",
+  validateSearch: (search: Record<string, unknown>) =>
+    parseOpportunitySearch(search),
+  component: OpportunitiesPage,
+});
+
+const opportunityDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/$opportunityId",
+  component: OpportunityDetailPage,
+});
+
 const personnelRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/personnel",
@@ -82,6 +99,8 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   companiesRoute,
   companyDetailRoute,
+  opportunitiesRoute,
+  opportunityDetailRoute,
   personnelRoute,
   personDetailRoute,
   usersRoute,

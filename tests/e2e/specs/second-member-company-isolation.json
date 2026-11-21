@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "second-member-company-isolation",
+    "kind": "interactive",
+    "goal": "第二位成员打开同一公告时，看不到无权限公司的档案明细，只看到无权限提示",
+    "requirementIndexes": [
+      22,
+      23,
+      24
+    ],
+    "acceptanceCriteriaIndexes": [
+      7,
+      8,
+      14
+    ],
+    "persona": "second-member",
+    "steps": [
+      "Sign in",
+      "Open 机会池",
+      "Open the announcement 城东片区道路改造工程",
+      "Press 新增核对"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "机会池"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "城东片区道路改造工程"
+      },
+      {
+        "afterStep": 3,
+        "expectText": "核对项类别"
+      }
+    ]
+  }
+}

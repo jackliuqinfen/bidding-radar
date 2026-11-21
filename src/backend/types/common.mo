@@ -8,6 +8,9 @@ module {
   public type NotificationId = Nat;
   public type AuditId = Nat;
   public type HistoryId = Nat;
+  public type OpportunityId = Nat;
+  public type CheckItemId = Nat;
+  public type StatusChangeId = Nat;
 
   /// 查看, 编辑, 核实, 敏感下载 (independent, none implies another)
   public type Permission = { #view; #edit; #verify; #sensitiveDownload };

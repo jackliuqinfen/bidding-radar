@@ -4,5 +4,7 @@ module {
     companies : Nat;
     records : Nat;
     attachments : Nat;
+    opportunities : Nat;
+    checkItems : Nat;
   };
 };
