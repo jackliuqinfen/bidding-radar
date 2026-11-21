@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "spec": {
+    "id": "admin-audit-notifications",
+    "kind": "interactive",
+    "goal": "The admin opens user permissions, the audit log and the notification center",
+    "requirementIndexes": [
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "acceptanceCriteriaIndexes": [
+      13
+    ],
+    "steps": [
+      "Sign in",
+      "Open the 用户与权限 page from the navigation",
+      "Open the 审计日志 page from the navigation",
+      "Open the 通知中心 page from the navigation"
+    ],
+    "checks": [
+      {
+        "afterStep": 0,
+        "expectText": "投标雷达"
+      },
+      {
+        "afterStep": 1,
+        "expectText": "全部账号"
+      },
+      {
+        "afterStep": 2,
+        "expectText": "审计日志"
+      },
+      {
+        "afterStep": 3,
+        "expectText": "全部标为已读"
+      }
+    ]
+  }
+}

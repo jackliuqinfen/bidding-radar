@@ -1,0 +1,492 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__175655829<Principal, UserRole__91647283>
+  };
+type Account__1026151617 =
+  {
+    approval : ApprovalState__322262387;
+    decidedAt : ?Timestamp__301639476;
+    decidedBy : ?Principal;
+    displayName : Text;
+    principal : Principal;
+    registeredAt : Timestamp__301639476
+  };
+type Account__509884088 =
+  {
+    approval : ApprovalState__693649776;
+    decidedAt : ?Int;
+    decidedBy : ?Principal;
+    displayName : Text;
+    principal : Principal;
+    registeredAt : Int
+  };
+type ApprovalState__322262387 = {#approved; #pending; #rejected};
+type ApprovalState__693649776 = {#approved; #pending; #rejected};
+type ArchiveRecord__488729706 =
+  {
+    companyId : CompanyId__78853864;
+    createdAt : Timestamp__301639476;
+    createdBy : Principal;
+    data : RecordData__275589159;
+    id : RecordId__634517021;
+    lastModifiedAt : Timestamp__301639476;
+    lastModifiedBy : Principal;
+    maintainer : Principal;
+    remarks : Text;
+    verification : ?Verification__1025185870;
+    version : Nat
+  };
+type ArchiveRecord__829907480 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    createdBy : Principal;
+    data : RecordData__572047402;
+    id : Nat;
+    lastModifiedAt : Int;
+    lastModifiedBy : Principal;
+    maintainer : Principal;
+    remarks : Text;
+    verification : ?{verifiedAt : Int; verifier : Principal};
+    version : Nat
+  };
+type AttachmentId__640090544 = Nat;
+type AttachmentVersion__152671651 =
+  {
+    blob : ExternalBlob__220559234;
+    fileName : Text;
+    isSample : Bool;
+    note : Text;
+    uploadedAt : Int;
+    uploader : Principal;
+    version : Nat
+  };
+type AttachmentVersion__532876429 =
+  {
+    blob : ExternalBlob__220559234;
+    fileName : Text;
+    isSample : Bool;
+    note : Text;
+    uploadedAt : Timestamp__301639476;
+    uploader : Principal;
+    version : Nat
+  };
+type Attachment__652805751 =
+  {
+    companyId : Nat;
+    createdAt : Int;
+    id : Nat;
+    recordId : Nat;
+    sensitive : Bool;
+    versions : [AttachmentVersion__152671651]
+  };
+type Attachment__831262237 =
+  {
+    companyId : CompanyId__78853864;
+    createdAt : Timestamp__301639476;
+    id : AttachmentId__640090544;
+    recordId : RecordId__634517021;
+    sensitive : Bool;
+    versions : [AttachmentVersion__532876429]
+  };
+type AuditAction__1023686566 =
+  {
+    #approveAccount;
+    #approveAsAdmin;
+    #changeAccountRole;
+    #changePermissions;
+    #createCompany;
+    #createRecord;
+    #downloadAttachment;
+    #editCompany;
+    #editRecord;
+    #register;
+    #rejectAccount;
+    #replaceAttachment;
+    #resetToPending;
+    #seedSampleData;
+    #signIn;
+    #uploadAttachment;
+    #verifyRecord;
+    #viewAuditLog;
+    #viewCompany;
+    #viewDashboard;
+    #viewHistory;
+    #viewList;
+    #viewRecord;
+    #viewSensitive
+  };
+type AuditAction__595905663 =
+  {
+    #approveAccount;
+    #approveAsAdmin;
+    #changeAccountRole;
+    #changePermissions;
+    #createCompany;
+    #createRecord;
+    #downloadAttachment;
+    #editCompany;
+    #editRecord;
+    #register;
+    #rejectAccount;
+    #replaceAttachment;
+    #resetToPending;
+    #seedSampleData;
+    #signIn;
+    #uploadAttachment;
+    #verifyRecord;
+    #viewAuditLog;
+    #viewCompany;
+    #viewDashboard;
+    #viewHistory;
+    #viewList;
+    #viewRecord;
+    #viewSensitive
+  };
+type AuditEntry__60967837 =
+  {
+    action : AuditAction__595905663;
+    at : Timestamp__301639476;
+    companyId : ?CompanyId__78853864;
+    denialReason : ?Text;
+    id : AuditId__344307203;
+    operator : Principal;
+    result : AuditResult__58434283;
+    target : Text
+  };
+type AuditEntry__938417449 =
+  {
+    action : AuditAction__1023686566;
+    at : Int;
+    companyId : ?Nat;
+    denialReason : ?Text;
+    id : Nat;
+    operator : Principal;
+    result : {#denied; #success};
+    target : Text
+  };
+type AuditId__344307203 = Nat;
+type AuditResult__58434283 = {#denied; #success};
+type ChangeAction__505138649 =
+  {
+    #attachmentAdded;
+    #attachmentReplaced;
+    #create;
+    #resetToPending;
+    #update;
+    #verify
+  };
+type ChangeAction__555073091 =
+  {
+    #attachmentAdded;
+    #attachmentReplaced;
+    #create;
+    #resetToPending;
+    #update;
+    #verify
+  };
+type ChangeEntry__590166194 =
+  {
+    action : ChangeAction__505138649;
+    at : Timestamp__301639476;
+    changes : [FieldChange__399925595];
+    companyId : CompanyId__78853864;
+    editor : Principal;
+    id : HistoryId__837803635;
+    recordId : RecordId__634517021;
+    resultingVersion : Nat
+  };
+type ChangeEntry__867844235 =
+  {
+    action : ChangeAction__555073091;
+    at : Int;
+    changes : [{after : Text; before : Text; field : Text}];
+    companyId : Nat;
+    editor : Principal;
+    id : Nat;
+    recordId : Nat;
+    resultingVersion : Nat
+  };
+type CompanyId__78853864 = Nat;
+type CompanyTrackData__259161532 =
+  {
+    completionDate : ?Timestamp__301639476;
+    contractAmountFen : ?Nat;
+    owner : Text;
+    projectName : Text;
+    projectType : ?ProjectType__641202575
+  };
+type Company__458145639 =
+  {
+    contact : Text;
+    createdAt : Int;
+    createdBy : Principal;
+    creditCode : Text;
+    id : Nat;
+    maintainer : Principal;
+    name : Text;
+    registeredPlace : Text;
+    updatedAt : Int;
+    updatedBy : Principal
+  };
+type Company__89447538 =
+  {
+    contact : Text;
+    createdAt : Timestamp__301639476;
+    createdBy : Principal;
+    creditCode : Text;
+    id : CompanyId__78853864;
+    maintainer : Principal;
+    name : Text;
+    registeredPlace : Text;
+    updatedAt : Timestamp__301639476;
+    updatedBy : Principal
+  };
+type Counters__138551672 =
+  {
+    var nextAttachmentId : Nat;
+    var nextAuditId : Nat;
+    var nextCompanyId : Nat;
+    var nextHistoryId : Nat;
+    var nextNotificationId : Nat;
+    var nextRecordId : Nat;
+    var sampleSeeded : Bool
+  };
+type Data__1061330525<K, V> =
+  {var count : Nat__565224867; kvs : [var ?(K, V)]};
+type ExternalBlob__220559234 = Blob;
+type FieldChange__399925595 = {after : Text; before : Text; field : Text};
+type HistoryId__837803635 = Nat;
+type Internal__1060388275<K, V> =
+  {children : [var ?Node__1010487028<K, V>]; data : Data__1061330525<K, V>};
+type Leaf__8515789<K, V> = {data : Data__1061330525<K, V>};
+type LicenseData__313958216 =
+  {
+    category : Text;
+    issuingAuthority : Text;
+    name : Text;
+    number : Text;
+    validFrom : ?Timestamp__301639476;
+    validTo : ?Timestamp__301639476
+  };
+type List__837846721<T> = List__931548990<T>;
+type List__931548990<T> =
+  {
+    var blockIndex : Nat__565224867;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__565224867
+  };
+type Map__175655829<K, V> = Map__975833162<K, V>;
+type Map__925935234<K, V> =
+  {var root : Node__1010487028<K, V>; var size : Nat__565224867};
+type Map__975833162<K, V> = Map__925935234<K, V>;
+type Nat__565224867 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__769816496 =
+  {
+    accessControlState : AccessControlState__201339279;
+    accounts : Map__175655829<Principal, Account__509884088>;
+    attachments : Map__175655829<Nat, Attachment__652805751>;
+    auditLog : List__837846721<AuditEntry__938417449>;
+    companies : Map__175655829<Nat, Company__458145639>;
+    counters : Counters__138551672;
+    history : List__837846721<ChangeEntry__867844235>;
+    notifications : Map__175655829<Nat, Notification__561474068>;
+    permissions :
+      Map__175655829<Principal, Map__175655829<Nat, PermissionSet__93711593>>;
+    records : Map__175655829<Nat, ArchiveRecord__829907480>
+  };
+type Node__1010487028<K, V> =
+  {#internal : Internal__1060388275<K, V>; #leaf : Leaf__8515789<K, V>};
+type NotificationId__307495059 = Nat;
+type NotificationKind__631533211 =
+  {
+    #accountApproved;
+    #accountRejected;
+    #expired;
+    #nearExpiry;
+    #pendingUser;
+    #permissionChanged;
+    #resetToPending;
+    #verified
+  };
+type NotificationKind__660355567 =
+  {
+    #accountApproved;
+    #accountRejected;
+    #expired;
+    #nearExpiry;
+    #pendingUser;
+    #permissionChanged;
+    #resetToPending;
+    #verified
+  };
+type Notification__264708741 =
+  {
+    companyId : ?CompanyId__78853864;
+    createdAt : Timestamp__301639476;
+    dedupKey : ?Text;
+    id : NotificationId__307495059;
+    kind : NotificationKind__631533211;
+    message : Text;
+    read : Bool;
+    recipient : Principal;
+    recordId : ?RecordId__634517021
+  };
+type Notification__561474068 =
+  {
+    companyId : ?Nat;
+    createdAt : Int;
+    dedupKey : ?Text;
+    id : Nat;
+    kind : NotificationKind__660355567;
+    message : Text;
+    read : Bool;
+    recipient : Principal;
+    recordId : ?Nat
+  };
+type OldActor__512397517 = {};
+type PermissionSet__528301251 =
+  {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
+type PermissionSet__93711593 =
+  {edit : Bool; sensitiveDownload : Bool; verify : Bool; view : Bool};
+type PersonCertData__278336861 =
+  {
+    category : Text;
+    issuingAuthority : Text;
+    number : Text;
+    personId : RecordId__634517021;
+    validFrom : ?Timestamp__301639476;
+    validTo : ?Timestamp__301639476
+  };
+type PersonData__99305741 =
+  {idNumber : Text; name : Text; phone : Text; position : Text};
+type PersonTrackData__199920517 =
+  {
+    completionDate : ?Timestamp__301639476;
+    personId : RecordId__634517021;
+    projectName : Text;
+    role : Text
+  };
+type ProjectType__384943185 = {#construction; #goodsEquipment; #service};
+type ProjectType__641202575 = {#construction; #goodsEquipment; #service};
+type RecordData__275589159 =
+  {
+    #companyTrack : CompanyTrackData__259161532;
+    #license : LicenseData__313958216;
+    #person : PersonData__99305741;
+    #personCert : PersonCertData__278336861;
+    #personTrack : PersonTrackData__199920517
+  };
+type RecordData__572047402 =
+  {
+    #companyTrack :
+      {
+        completionDate : ?Int;
+        contractAmountFen : ?Nat;
+        owner : Text;
+        projectName : Text;
+        projectType : ?ProjectType__384943185
+      };
+    #license :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        name : Text;
+        number : Text;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #person : {idNumber : Text; name : Text; phone : Text; position : Text};
+    #personCert :
+      {
+        category : Text;
+        issuingAuthority : Text;
+        number : Text;
+        personId : Nat;
+        validFrom : ?Int;
+        validTo : ?Int
+      };
+    #personTrack :
+      {
+        completionDate : ?Int;
+        personId : Nat;
+        projectName : Text;
+        role : Text
+      }
+  };
+type RecordId__634517021 = Nat;
+type Timestamp__301639476 = Int;
+type UserRole__91647283 = {#admin; #guest; #user};
+type Verification__1025185870 =
+  {verifiedAt : Timestamp__301639476; verifier : Principal};
+{
+  "00000000_000000" : OldActor__512397517 -> NewActor__769816496
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__175655829<Principal, UserRole__91647283>
+    };
+  stable accounts :
+    {
+      var root : Node__1010487028<Principal, Account__1026151617>;
+      var size : Nat__565224867
+    };
+  stable attachments :
+    {
+      var root :
+        Node__1010487028<AttachmentId__640090544, Attachment__831262237>;
+      var size : Nat__565224867
+    };
+  stable auditLog :
+    {
+      var blockIndex : Nat__565224867;
+      var blocks : [var [var ?AuditEntry__60967837]];
+      var elementIndex : Nat__565224867
+    };
+  stable companies :
+    {
+      var root : Node__1010487028<CompanyId__78853864, Company__89447538>;
+      var size : Nat__565224867
+    };
+  stable counters :
+    {
+      var nextAttachmentId : Nat;
+      var nextAuditId : Nat;
+      var nextCompanyId : Nat;
+      var nextHistoryId : Nat;
+      var nextNotificationId : Nat;
+      var nextRecordId : Nat;
+      var sampleSeeded : Bool
+    };
+  stable history :
+    {
+      var blockIndex : Nat__565224867;
+      var blocks : [var [var ?ChangeEntry__590166194]];
+      var elementIndex : Nat__565224867
+    };
+  stable notifications :
+    {
+      var root :
+        Node__1010487028<NotificationId__307495059, Notification__264708741>;
+      var size : Nat__565224867
+    };
+  stable permissions :
+    {
+      var root :
+        Node__1010487028<Principal,
+                          Map__175655829<CompanyId__78853864,
+                                          PermissionSet__528301251>>;
+      var size : Nat__565224867
+    };
+  stable records :
+    {
+      var root :
+        Node__1010487028<RecordId__634517021, ArchiveRecord__488729706>;
+      var size : Nat__565224867
+    }
+};

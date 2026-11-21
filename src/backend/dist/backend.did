@@ -1,0 +1,679 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type VerificationView = 
+ record {
+   verifiedAt: Timestamp;
+   verifier: principal;
+   verifierName: text;
+ };
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserPermissions = 
+ record {
+   displayName: text;
+   grants: vec CompanyPermissionGrant;
+   user: principal;
+ };
+type Timestamp = int;
+type SampleReport = 
+ record {
+   alreadySeeded: bool;
+   attachments: nat;
+   companies: nat;
+   records: nat;
+ };
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type ReplaceAttachmentInput = 
+ record {
+   attachmentId: AttachmentId;
+   "blob": ExternalBlob;
+   expectedRecordVersion: nat;
+   fileName: text;
+   note: text;
+ };
+type RecordView = 
+ record {
+   attachments: vec AttachmentView;
+   companyId: CompanyId;
+   companyName: text;
+   createdAt: Timestamp;
+   createdBy: principal;
+   createdByName: text;
+   data: RecordData;
+   expiryFlag: opt ExpiryFlag;
+   expiryLabel: opt text;
+   id: RecordId;
+   kind: RecordKind;
+   kindLabel: text;
+   lastModifiedAt: Timestamp;
+   lastModifiedBy: principal;
+   lastModifiedByName: text;
+   maintainer: principal;
+   maintainerName: text;
+   remarks: text;
+   status: RecordStatus;
+   statusLabel: text;
+   title: text;
+   verification: opt VerificationView;
+   version: nat;
+ };
+type RecordUpdate = 
+ record {
+   data: RecordData;
+   maintainer: principal;
+   remarks: text;
+ };
+type RecordStatus = 
+ variant {
+   missing;
+   pendingReview;
+   verified;
+ };
+type RecordKind = 
+ variant {
+   companyTrack;
+   license;
+   person;
+   personCert;
+   personTrack;
+ };
+type RecordInput = 
+ record {
+   companyId: CompanyId;
+   data: RecordData;
+   maintainer: principal;
+   remarks: text;
+ };
+type RecordId = nat;
+type RecordFilter = 
+ record {
+   category: opt text;
+   companyId: opt CompanyId;
+   expiry: opt ExpiryFlag;
+   kind: opt RecordKind;
+   maintainer: opt principal;
+   personId: opt RecordId;
+   search: opt text;
+   status: opt RecordStatus;
+ };
+type RecordData = 
+ variant {
+   companyTrack: CompanyTrackData;
+   license: LicenseData;
+   person: PersonData;
+   personCert: PersonCertData;
+   personTrack: PersonTrackData;
+ };
+type ProjectType = 
+ variant {
+   construction;
+   goodsEquipment;
+   "service";
+ };
+type PersonTrackData = 
+ record {
+   completionDate: opt Timestamp;
+   personId: RecordId;
+   projectName: text;
+   role: text;
+ };
+type PersonData = 
+ record {
+   idNumber: text;
+   name: text;
+   phone: text;
+   position: text;
+ };
+type PersonCertData = 
+ record {
+   category: text;
+   issuingAuthority: text;
+   number: text;
+   personId: RecordId;
+   validFrom: opt Timestamp;
+   validTo: opt Timestamp;
+ };
+type PermissionSet = 
+ record {
+   edit: bool;
+   sensitiveDownload: bool;
+   verify: bool;
+   view: bool;
+ };
+type Permission = 
+ variant {
+   edit;
+   sensitiveDownload;
+   verify;
+   view;
+ };
+type NotificationView = 
+ record {
+   companyId: opt CompanyId;
+   createdAt: Timestamp;
+   id: NotificationId;
+   kind: NotificationKind;
+   kindLabel: text;
+   message: text;
+   read: bool;
+   recordId: opt RecordId;
+ };
+type NotificationKind = 
+ variant {
+   accountApproved;
+   accountRejected;
+   expired;
+   nearExpiry;
+   pendingUser;
+   permissionChanged;
+   resetToPending;
+   verified;
+ };
+type NotificationId = nat;
+type NewAttachmentInput = 
+ record {
+   "blob": ExternalBlob;
+   fileName: text;
+   note: text;
+   recordId: RecordId;
+   sensitive: bool;
+ };
+type LicenseData = 
+ record {
+   category: text;
+   issuingAuthority: text;
+   name: text;
+   number: text;
+   validFrom: opt Timestamp;
+   validTo: opt Timestamp;
+ };
+type HomeSummary = 
+ record {
+   myAttention: vec RecordView;
+   overview: vec CompanyGapRow;
+   pendingAccounts: vec AccountView;
+   role: AccountRole;
+   toVerify: vec RecordView;
+   unreadNotifications: nat;
+ };
+type HistoryId = nat;
+type GapCounts = 
+ record {
+   expired: nat;
+   missing: nat;
+   nearExpiry: nat;
+   pendingReview: nat;
+   verified: nat;
+ };
+type FieldChange = 
+ record {
+   after: text;
+   before: text;
+   field: text;
+ };
+type ExternalBlob = blob;
+type ExpiryFlag = 
+ variant {
+   expired;
+   nearExpiry;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DownloadInfo = 
+ record {
+   attachmentId: AttachmentId;
+   "blob": ExternalBlob;
+   fileName: text;
+   isSample: bool;
+   sensitive: bool;
+   version: nat;
+ };
+type CompanyView = 
+ record {
+   contact: text;
+   createdAt: Timestamp;
+   creditCode: text;
+   id: CompanyId;
+   maintainer: principal;
+   maintainerName: text;
+   name: text;
+   registeredPlace: text;
+   updatedAt: Timestamp;
+ };
+type CompanyTrackData = 
+ record {
+   completionDate: opt Timestamp;
+   contractAmountFen: opt nat;
+   owner: text;
+   projectName: text;
+   projectType: opt ProjectType;
+ };
+type CompanyPermissionGrant = 
+ record {
+   companyId: CompanyId;
+   companyName: text;
+   permissionLabels: vec text;
+   permissions: PermissionSet;
+ };
+type CompanyInput = 
+ record {
+   contact: text;
+   creditCode: text;
+   maintainer: principal;
+   name: text;
+   registeredPlace: text;
+ };
+type CompanyId = nat;
+type CompanyGapRow = 
+ record {
+   canView: bool;
+   companyId: CompanyId;
+   companyName: text;
+   counts: GapCounts;
+ };
+type CompanyDetail = 
+ record {
+   canView: bool;
+   company: opt CompanyView;
+   companyId: CompanyId;
+   companyName: text;
+   counts: GapCounts;
+   records: vec RecordView;
+ };
+type ChangeEntryView = 
+ record {
+   action: ChangeAction;
+   actionLabel: text;
+   at: Timestamp;
+   changes: vec FieldChange;
+   editor: principal;
+   editorName: text;
+   id: HistoryId;
+   recordId: RecordId;
+   resultingVersion: nat;
+ };
+type ChangeAction = 
+ variant {
+   attachmentAdded;
+   attachmentReplaced;
+   create;
+   resetToPending;
+   update;
+   verify;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AuditResult = 
+ variant {
+   denied;
+   success;
+ };
+type AuditPage = 
+ record {
+   entries: vec AuditEntryView;
+   total: nat;
+ };
+type AuditId = nat;
+type AuditFilter = 
+ record {
+   action: opt AuditAction;
+   companyId: opt CompanyId;
+   limit: nat;
+   offset: nat;
+   operator: opt principal;
+   result: opt AuditResult;
+ };
+type AuditEntryView = 
+ record {
+   action: AuditAction;
+   actionLabel: text;
+   at: Timestamp;
+   companyId: opt CompanyId;
+   companyName: opt text;
+   denialReason: opt text;
+   id: AuditId;
+   operator: principal;
+   operatorName: text;
+   result: AuditResult;
+   resultLabel: text;
+   target: text;
+ };
+type AuditAction = 
+ variant {
+   approveAccount;
+   approveAsAdmin;
+   changeAccountRole;
+   changePermissions;
+   createCompany;
+   createRecord;
+   downloadAttachment;
+   editCompany;
+   editRecord;
+   register;
+   rejectAccount;
+   replaceAttachment;
+   resetToPending;
+   seedSampleData;
+   signIn;
+   uploadAttachment;
+   verifyRecord;
+   viewAuditLog;
+   viewCompany;
+   viewDashboard;
+   viewHistory;
+   viewList;
+   viewRecord;
+   viewSensitive;
+ };
+type AttachmentView = 
+ record {
+   canDownload: bool;
+   companyId: CompanyId;
+   currentVersion: nat;
+   fileName: text;
+   id: AttachmentId;
+   recordId: RecordId;
+   sensitive: bool;
+   versions: vec AttachmentVersionMeta;
+ };
+type AttachmentVersionMeta = 
+ record {
+   fileName: text;
+   isSample: bool;
+   note: text;
+   uploadedAt: Timestamp;
+   uploader: principal;
+   uploaderName: text;
+   version: nat;
+ };
+type AttachmentId = nat;
+type ApprovalState = 
+ variant {
+   approved;
+   pending;
+   rejected;
+ };
+type ApiResult_9 = 
+ variant {
+   err: ApiError;
+   ok: vec CompanyView;
+ };
+type ApiResult_8 = 
+ variant {
+   err: ApiError;
+   ok: vec NotificationView;
+ };
+type ApiResult_7 = 
+ variant {
+   err: ApiError;
+   ok: vec RecordView;
+ };
+type ApiResult_6 = 
+ variant {
+   err: ApiError;
+   ok;
+ };
+type ApiResult_5 = 
+ variant {
+   err: ApiError;
+   ok: SampleReport;
+ };
+type ApiResult_4 = 
+ variant {
+   err: ApiError;
+   ok: AccountView;
+ };
+type ApiResult_3 = 
+ variant {
+   err: ApiError;
+   ok: CompanyPermissionGrant;
+ };
+type ApiResult_20 = 
+ variant {
+   err: ApiError;
+   ok: AttachmentView;
+ };
+type ApiResult_2 = 
+ variant {
+   err: ApiError;
+   ok: CompanyView;
+ };
+type ApiResult_19 = 
+ variant {
+   err: ApiError;
+   ok: DownloadInfo;
+ };
+type ApiResult_18 = 
+ variant {
+   err: ApiError;
+   ok: CompanyDetail;
+ };
+type ApiResult_17 = 
+ variant {
+   err: ApiError;
+   ok: vec CompanyGapRow;
+ };
+type ApiResult_16 = 
+ variant {
+   err: ApiError;
+   ok: HomeSummary;
+ };
+type ApiResult_15 = 
+ variant {
+   err: ApiError;
+   ok: vec CompanyPermissionGrant;
+ };
+type ApiResult_14 = 
+ variant {
+   err: ApiError;
+   ok: vec ChangeEntryView;
+ };
+type ApiResult_13 = 
+ variant {
+   err: ApiError;
+   ok: nat;
+ };
+type ApiResult_12 = 
+ variant {
+   err: ApiError;
+   ok: UserPermissions;
+ };
+type ApiResult_11 = 
+ variant {
+   err: ApiError;
+   ok: vec AccountView;
+ };
+type ApiResult_10 = 
+ variant {
+   err: ApiError;
+   ok: AuditPage;
+ };
+type ApiResult_1 = 
+ variant {
+   err: ApiError;
+   ok: RecordView;
+ };
+type ApiResult = 
+ variant {
+   err: ApiError;
+   ok: text;
+ };
+type ApiError = 
+ variant {
+   accountRejected;
+   adminOnly;
+   conflict: record {latest: RecordView;};
+   invalidInput: text;
+   invalidState: text;
+   notFound: text;
+   notRegistered;
+   notSignedIn;
+   pendingApproval;
+   permissionDenied:
+    record {
+      companyId: CompanyId;
+      message: text;
+      permission: Permission;
+    };
+   selfVerificationDenied: text;
+ };
+type AccountView = 
+ record {
+   approval: ApprovalState;
+   approvalLabel: text;
+   decidedAt: opt Timestamp;
+   decidedByName: opt text;
+   displayName: text;
+   "principal": principal;
+   registeredAt: Timestamp;
+   role: AccountRole;
+   roleLabel: text;
+ };
+type AccountRole = 
+ variant {
+   admin;
+   member;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  /// Requires 编辑. The blob comes from the object-storage upload.
+  addAttachment: (input: NewAttachmentInput) -> (ApiResult_20);
+  /// 管理员 only. role #admin = direct approval as 管理员 (audited as such).
+  approveAccount: (user: principal, role: AccountRole) -> (ApiResult_4);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  /// 管理员 only.
+  createCompany: (input: CompanyInput) -> (ApiResult_2);
+  /// Requires 编辑 on input.companyId.
+  createRecord: (input: RecordInput) -> (ApiResult_1);
+  /// Blob reference only for authorized callers; every attempt audited. version null = current.
+  downloadAttachment: (attachmentId: AttachmentId, version: opt nat) ->
+   (ApiResult_19);
+  execute: (qJson: text) -> (Result) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  /// Requires 查看; denial is audited.
+  getCompany: (id: CompanyId) -> (ApiResult_2);
+  /// Records need 查看; without it only counts are returned.
+  getCompanyDetail: (companyId: CompanyId, filter: RecordFilter) ->
+   (ApiResult_18);
+  /// Every company by name with counts only (zeros when empty). Also triggers expiry notifications.
+  getGapDashboard: () -> (ApiResult_17);
+  /// Role home data. Also triggers expiry notifications.
+  getHomeSummary: () -> (ApiResult_16);
+  /// Own profile and approval state; allowed for pending users.
+  getMyAccount: () -> (opt AccountView) query;
+  /// The caller's own grants.
+  getMyPermissions: () -> (ApiResult_15);
+  /// Requires 查看; denial audited. ID number masked.
+  getRecord: (id: RecordId) -> (ApiResult_1);
+  /// Requires 查看; ID numbers masked.
+  getRecordHistory: (id: RecordId) -> (ApiResult_14);
+  getUnreadCount: () -> (ApiResult_13) query;
+  /// 管理员 only.
+  getUserPermissions: (user: principal) -> (ApiResult_12);
+  isCallerAdmin: () -> (bool) query;
+  /// 管理员 only.
+  listAccounts: () -> (ApiResult_11);
+  /// 管理员 only; filter by operator, action, result and company.
+  listAuditLog: (filter: AuditFilter) -> (ApiResult_10);
+  /// Only companies where the caller has 查看.
+  listCompanies: () -> (ApiResult_9);
+  /// Approved users only; the caller's notifications, newest first.
+  listNotifications: () -> (ApiResult_8) query;
+  /// Only records in companies where the caller has 查看.
+  listRecords: (filter: RecordFilter) -> (ApiResult_7);
+  markAllNotificationsRead: () -> (ApiResult_6);
+  markNotificationRead: (id: NotificationId) -> (ApiResult_6);
+  /// First sign-in registration with a display name. The first user becomes 管理员 and is approved; others wait as 待批准.
+  registerAccount: (displayName: text) -> (ApiResult_4);
+  /// 管理员 only.
+  rejectAccount: (user: principal) -> (ApiResult_4);
+  /// Requires 编辑; keeps older versions; record returns to 待核.
+  replaceAttachment: (input: ReplaceAttachmentInput) -> (ApiResult_1);
+  schema: () -> (text) query;
+  /// 管理员 only, idempotent: 【虚构】 sample companies, records and attachments.
+  seedSampleData: () -> (ApiResult_5);
+  /// 管理员 only: set an approved user's account role to 管理员 or 成员.
+  setAccountRole: (user: principal, role: AccountRole) -> (ApiResult_4);
+  /// 管理员 only: set 查看/编辑/核实/敏感下载 for a user on a company.
+  setUserCompanyPermissions: (user: principal, companyId: CompanyId,
+   permissions: PermissionSet) -> (ApiResult_3);
+  /// Audits a sign-in; returns the caller's account or null when not registered yet.
+  signIn: () -> (opt AccountView);
+  /// Requires 编辑 on the company.
+  updateCompany: (id: CompanyId, input: CompanyInput) -> (ApiResult_2);
+  /// Requires 编辑; expectedVersion must equal the stored version, else #conflict with the latest record.
+  updateRecord: (id: RecordId, expectedVersion: nat, change: RecordUpdate) ->
+   (ApiResult_1);
+  /// Requires 核实; verifier must not be creator/last modifier of the current version.
+  verifyRecord: (id: RecordId, expectedVersion: nat) -> (ApiResult_1);
+  /// Full ID number of a 人员 record; requires 敏感下载; audited.
+  viewPersonIdNumber: (id: RecordId) -> (ApiResult);
+}

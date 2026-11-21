@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:45:33.151Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "tap",
+        "summary": "tap link \"通知中心\"",
+        "target": {
+          "role": "link",
+          "name": "通知中心"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "admin-audit-notifications.e2e.ts::admin-audit-notifications",
+      "targetId": "web",
+      "instructionDigest": "96f4720d7bae4e2cb4f8847603299672c33ab4ffa3216b1ae7df204ca8b33f7f",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Tapped 通知中心 in the navigation; the app navigated to /notifications showing the 通知中心 page (heading, 未读 6 条, 共 6 条通知, list of 6 unread notifications with 标为已读 buttons and 全部标为已读).",
+    "startPath": "/audit",
+    "endPath": "/notifications",
+    "endAnchors": [
+      {
+        "role": "heading",
+        "name": "通知中心"
+      },
+      {
+        "text": "到期提醒、核实与权限变更通知"
+      },
+      {
+        "role": "button",
+        "name": "全部标为已读"
+      },
+      {
+        "text": "未读 6 条"
+      },
+      {
+        "text": "共 6 条通知"
+      },
+      {
+        "text": "已过期"
+      },
+      {
+        "text": "未读"
+      },
+      {
+        "text": "【【虚构】恒信设备制造有限公司】记录 #8 已过期，请及时更新。"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "heading",
+        "name": "审计日志"
+      },
+      {
+        "text": "记录所有关键操作与拒绝访问，按时间倒序排列"
+      },
+      {
+        "text": "共 76 条"
+      },
+      {
+        "text": "操作人"
+      },
+      {
+        "text": "全部操作人"
+      },
+      {
+        "text": "操作类型"
+      },
+      {
+        "text": "全部操作"
+      },
+      {
+        "text": "结果"
+      }
+    ],
+    "endWaitMs": 10935,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

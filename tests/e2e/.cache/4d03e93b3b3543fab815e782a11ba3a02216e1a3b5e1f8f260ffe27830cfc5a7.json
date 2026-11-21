@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:41:12.352Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "tap",
+        "summary": "tap link \"公司档案\"",
+        "target": {
+          "role": "link",
+          "name": "公司档案"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "admin-sample-data-and-dashboard.e2e.ts::admin-sample-data-and-dashboard",
+      "targetId": "web",
+      "instructionDigest": "ab21fb518bb5bc3a53030347780cb7a0c424762137c26c6f942f5bee6d0d2a4b",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Tapped 公司档案 in the navigation; the app navigated to /companies and shows the 公司档案 page with 共 2 家公司 and the two sample companies (【虚构】宏远建设有限公司, 【虚构】恒信设备制造有限公司).",
+    "startPath": "/",
+    "endPath": "/companies",
+    "endAnchors": [
+      {
+        "role": "heading",
+        "name": "公司档案"
+      },
+      {
+        "text": "集团各成员公司的证照资质与企业业绩档案"
+      },
+      {
+        "role": "button",
+        "name": "新建公司"
+      },
+      {
+        "role": "searchbox",
+        "name": "搜索公司",
+        "placeholder": "搜索公司名称、信用代码或责任人"
+      },
+      {
+        "text": "共 2 家公司"
+      },
+      {
+        "text": "公司名称"
+      },
+      {
+        "text": "统一社会信用代码"
+      },
+      {
+        "text": "维护责任人"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "heading",
+        "name": "首页"
+      },
+      {
+        "text": "管理员工作台 · 资质、人员、业绩档案审计系统"
+      },
+      {
+        "role": "button",
+        "name": "生成示例数据"
+      },
+      {
+        "role": "heading",
+        "name": "待批准用户"
+      },
+      {
+        "text": "新注册的成员需管理员批准后才能使用系统。"
+      },
+      {
+        "role": "link",
+        "name": "用户管理"
+      },
+      {
+        "text": "暂无待批准用户"
+      },
+      {
+        "text": "有新的注册申请时会出现在这里。"
+      }
+    ],
+    "endWaitMs": 11373,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

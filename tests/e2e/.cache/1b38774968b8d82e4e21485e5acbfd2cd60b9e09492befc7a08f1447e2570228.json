@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:45:33.146Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "tap",
+        "summary": "tap button \"Sign in with Internet Identity\" in \"完善账号信息\"",
+        "target": {
+          "role": "button",
+          "name": "Sign in with Internet Identity",
+          "within": "完善账号信息"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "admin-audit-notifications.e2e.ts::admin-audit-notifications",
+      "targetId": "web",
+      "instructionDigest": "eaca505bde0c293026d5fd1553aa908ddb928190cc9d8902dbe237dab2268f2f",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Signed in with Internet Identity; the app now shows the signed-in home page with the 测试管理员 管理员 account button, navigation (首页, 缺口看板, 公司档案, 人员档案, 通知中心, 用户与权限, 审计日志) and 6 unread notifications.",
+    "startPath": "/",
+    "endPath": "/",
+    "endAnchors": [
+      {
+        "text": "投标雷达"
+      },
+      {
+        "text": "资质、人员、业绩档案审计系统"
+      },
+      {
+        "text": "首页"
+      },
+      {
+        "text": "缺口看板"
+      },
+      {
+        "text": "公司档案"
+      },
+      {
+        "text": "人员档案"
+      },
+      {
+        "text": "通知中心"
+      },
+      {
+        "text": "用户与权限"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "heading",
+        "name": "完善账号信息"
+      },
+      {
+        "text": "首次登录 投标雷达，请填写您的显示名称。"
+      },
+      {
+        "text": "显示名称"
+      },
+      {
+        "role": "textbox",
+        "name": "显示名称",
+        "placeholder": "如：李建国"
+      },
+      {
+        "role": "button",
+        "name": "提交"
+      },
+      {
+        "role": "button",
+        "name": "Sign in with Internet Identity"
+      },
+      {
+        "role": "region",
+        "name": "注册账号"
+      }
+    ],
+    "endWaitMs": 20899,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

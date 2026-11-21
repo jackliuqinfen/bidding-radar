@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "flows": {
+    "admin-audit-notifications": {
+      "plan": [
+        "5f48b20c1050c794",
+        "ad8a9c0e2e756c04",
+        "d1e4cd8e1b87b48e",
+        "d793e5b54f8796dc",
+        "e7f78ab207dff451",
+        "f2f1c5f497f13ea3"
+      ],
+      "last": "passed"
+    },
+    "admin-sample-data-and-dashboard": {
+      "plan": [
+        "15739b85d0cbfe68",
+        "16207568216740a4",
+        "2089bdcb139933a8",
+        "2f6540c8366f2340",
+        "40ae851efe897210",
+        "4c5b19aa19d44509",
+        "58373ee1ea812ebd",
+        "58ad847b973de7b3",
+        "624c4439019fd668",
+        "7accb16bf122a29a",
+        "7c99d7d488d793cb",
+        "8817532d97bdfeb4",
+        "8edfe1f1f4fdabee",
+        "9c322b20186cee75",
+        "9e0f3dec1c0a39fa",
+        "9f36b733b027164c",
+        "a6ff950fa3956f97",
+        "ac065f15720da0ff",
+        "bac6e30a4d6dd322",
+        "beee0fa42d450624",
+        "e6325abdbe4e3aee",
+        "e6c5b6f4f007ac34"
+      ],
+      "last": "passed"
+    },
+    "second-user-pending": {
+      "plan": [
+        "8c9dee9a7ab60a5f",
+        "d0fbbc59cd34c1e3"
+      ],
+      "last": "passed"
+    }
+  },
+  "order": [
+    "admin-sample-data-and-dashboard",
+    "second-user-pending",
+    "admin-audit-notifications"
+  ]
+}

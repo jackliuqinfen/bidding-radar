@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:41:12.348Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "tap",
+        "summary": "tap button \"Sign in with Internet Identity\" in \"完善账号信息\"",
+        "target": {
+          "role": "button",
+          "name": "Sign in with Internet Identity",
+          "within": "完善账号信息"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "admin-sample-data-and-dashboard.e2e.ts::admin-sample-data-and-dashboard",
+      "targetId": "web",
+      "instructionDigest": "b59bf887bb2d93e372ac4b2642dfb69b755d5af753b8d9e5dbddeb3e47db4769",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Signed in via \"Sign in with Internet Identity\"; the app now shows a \"Sign out\" control and the first-login display-name form (显示名称 field with 提交 button) is still open.",
+    "startPath": "/",
+    "endPath": "/",
+    "endAnchors": [
+      {
+        "role": "button",
+        "name": "Sign out"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "button",
+        "name": "Sign in with Internet Identity"
+      }
+    ],
+    "endWaitMs": 23545,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

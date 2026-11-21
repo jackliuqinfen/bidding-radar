@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:45:50.070Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "type",
+        "summary": "type \"测试成员\" into textbox \"显示名称\" in \"完善账号信息\"",
+        "target": {
+          "role": "textbox",
+          "name": "显示名称",
+          "placeholder": "如：李建国",
+          "within": "完善账号信息"
+        },
+        "value": "测试成员"
+      },
+      {
+        "name": "tap",
+        "summary": "tap button \"提交\" in \"完善账号信息\"",
+        "target": {
+          "role": "button",
+          "name": "提交",
+          "within": "完善账号信息"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "second-user-pending.e2e.ts::second-user-pending",
+      "targetId": "web",
+      "instructionDigest": "d5abfd7483ba95293731fcdcaded952f57c4923e8a5f18a49d041480cda75bab",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Entered 测试成员 in the display-name field and pressed 提交. The app accepted it and now shows \"等待管理员批准\" with the message that 测试成员's account was submitted and awaits admin approval.",
+    "startPath": "/",
+    "endPath": "/",
+    "endAnchors": [
+      {
+        "role": "heading",
+        "name": "等待管理员批准"
+      },
+      {
+        "text": "测试成员，您的账号已提交，正在等待管理员批准。批准后即可访问 投标雷达。"
+      },
+      {
+        "role": "region",
+        "name": "等待批准"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "heading",
+        "name": "完善账号信息"
+      },
+      {
+        "text": "首次登录 投标雷达，请填写您的显示名称。"
+      },
+      {
+        "text": "显示名称"
+      },
+      {
+        "role": "textbox",
+        "name": "显示名称",
+        "placeholder": "如：李建国"
+      },
+      {
+        "role": "button",
+        "name": "提交"
+      },
+      {
+        "role": "region",
+        "name": "注册账号"
+      }
+    ],
+    "endWaitMs": 11277,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "trace-1",
+  "createdAt": "2026-11-21T03:45:33.150Z",
+  "payload": {
+    "actions": [
+      {
+        "name": "tap",
+        "summary": "tap link \"审计日志\"",
+        "target": {
+          "role": "link",
+          "name": "审计日志"
+        }
+      }
+    ],
+    "executor": {
+      "name": "e2e-default-agent",
+      "version": "2"
+    },
+    "recordedFor": {
+      "testId": "admin-audit-notifications.e2e.ts::admin-audit-notifications",
+      "targetId": "web",
+      "instructionDigest": "d765e1fea0d35620dd7956d36996a1f4eae1b2cc1e4611e390020ef628b7bcf9",
+      "paramsDigest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "callIndex": 0,
+      "agent": "default"
+    },
+    "recordedBy": {
+      "provider": "caffeine-inference.chat",
+      "model": "deepseek-v4.1-flash"
+    },
+    "summary": "Tapped 审计日志 in the navigation; the app navigated to /audit showing the 审计日志 page with filters (操作人, 操作类型, 结果, 公司), 共 76 条, and a log table (first row: 2026-11-21 03:45 测试管理员 查看审计日志 审计日志 — 成功), paginated 1–25 of 76.",
+    "startPath": "/users",
+    "endPath": "/audit",
+    "endAnchors": [
+      {
+        "role": "heading",
+        "name": "审计日志"
+      },
+      {
+        "text": "记录所有关键操作与拒绝访问，按时间倒序排列"
+      },
+      {
+        "text": "共 76 条"
+      },
+      {
+        "text": "操作人"
+      },
+      {
+        "text": "全部操作人"
+      },
+      {
+        "text": "操作类型"
+      },
+      {
+        "text": "全部操作"
+      },
+      {
+        "text": "结果"
+      }
+    ],
+    "goneAnchors": [
+      {
+        "role": "heading",
+        "name": "用户与权限"
+      },
+      {
+        "text": "批准账号、设置角色，并按公司分配查看、编辑、核实与敏感下载权限"
+      },
+      {
+        "text": "共 1 个账号"
+      },
+      {
+        "role": "heading",
+        "name": "全部账号"
+      },
+      {
+        "text": "暂无已处理的账号。"
+      }
+    ],
+    "endWaitMs": 11629,
+    "keyedBy": {
+      "cacheSchema": "trace-1",
+      "policyVersion": "conservative/6",
+      "project": "403fcccf39e2650a7e389bda5a9246bfe8c725769a98b3a749be67a096c16423",
+      "platform": "web",
+      "engineName": "web",
+      "engineSpiVersion": 1,
+      "appIdentity": "aec5acc8a8d7ba14d388c35095196d67ae7ad7199ff1168a3230addcf190cf8d",
+      "agentContextDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

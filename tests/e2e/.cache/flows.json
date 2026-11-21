@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "flows": {
+    "admin-audit-notifications": {
+      "flowId": "admin-audit-notifications",
+      "specDigest": "431ed1a088467e09a3a7412ec3411fd993ca817ff5eb3238be5f4af3b7591c4a",
+      "status": "recorded",
+      "recordedAt": "2026-11-21T03:45:50.139Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": [
+        "1b38774968b8d82e4e21485e5acbfd2cd60b9e09492befc7a08f1447e2570228.json",
+        "9f55efdf4643d65e053c6627c12b15150b37bbb36f93beeddccb35394b4bf720.json",
+        "ec4a02411183de114f73b8add43ba8b4b1723e4582fb160315da0b424dc0314b.json",
+        "265889d7eecbacaf430dc90389dfb3faf99e57997cc1ff88f7fb843b8a02f841.json"
+      ],
+      "ranAfter": [
+        "admin-sample-data-and-dashboard"
+      ],
+      "ranWith": [
+        "admin-sample-data-and-dashboard"
+      ]
+    },
+    "admin-sample-data-and-dashboard": {
+      "flowId": "admin-sample-data-and-dashboard",
+      "specDigest": "62942936655b47ce9c8b1069c9b2ddc679be0d8be32b92649f39277f336f9550",
+      "status": "recorded",
+      "recordedAt": "2026-11-21T03:42:17.092Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": [
+        "44b6a8086824593c9597295f6484d690f5466d971ef0f426843527048b15be85.json",
+        "81c9d1298cf4e593f2104386a5d1a3ed5bdfa9754b2d503723e6410a55da30f9.json",
+        "46c909c7debb57c0f61ebbab18f087b4f33f3f63b4ef1b61e961c4bd06ffa502.json",
+        "4d03e93b3b3543fab815e782a11ba3a02216e1a3b5e1f8f260ffe27830cfc5a7.json",
+        "e0ec04d46509e536bfc4323611c274344542840ac82bf661a6669afc52242ea4.json",
+        "8ff68a8481b9374c071bc2d96a120c987b51298a9bd80df0a038a85492eda6f6.json"
+      ],
+      "ranAfter": [],
+      "ranWith": [],
+      "passedTree": "5c418c08d3188ded34993c18d30f1b2f094c6c0d",
+      "visitedPaths": [
+        "/",
+        "/companies",
+        "/dashboard"
+      ]
+    },
+    "second-user-pending": {
+      "flowId": "second-user-pending",
+      "specDigest": "57e3a9067d3b146274fda6ecd64e6b7881ede45668d4c53ff69d6b2d58b3776c",
+      "status": "recorded",
+      "recordedAt": "2026-11-21T03:45:50.138Z",
+      "recordedBy": "deepseek-v4.1-flash",
+      "entries": [
+        "0803ffc60c1bf600f2d413a93167091ab226d500566f1b2db250f6afd1fb02e3.json",
+        "7568555d1e23550f218ea89c4765e098a04e679a5b846a642b71535d27dea492.json"
+      ],
+      "ranAfter": [
+        "admin-audit-notifications",
+        "admin-sample-data-and-dashboard"
+      ],
+      "ranWith": [
+        "admin-audit-notifications",
+        "admin-sample-data-and-dashboard"
+      ]
+    }
+  }
+}
